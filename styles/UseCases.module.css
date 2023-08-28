@@ -1,0 +1,74 @@
+.main {
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+    height: 100vh;
+    background-color: white;
+}
+
+.content {
+    display: flex;
+    max-width: 1075px;
+    min-width: 800px;
+    -webkit-box-align: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 80px auto 100px;
+}
+
+.title {
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    line-height: 1.5;
+    text-align: center;
+    font-size: 45px;
+    margin-bottom: 20px;
+}
+
+.cardList{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    margin-bottom: 56px;
+}
+
+.card {
+    width: calc(50% - 27px);
+    gap: 24px;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.cardImage{
+    width: 86px;
+    height: 86px;
+    background-position: center center;
+    background-size: cover;
+    flex-shrink: 0;
+}
+
+.cardContent{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cardContent > div:first-child {
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.cardContent > div:last-child{
+    text-align: left;
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 1.5;
+}

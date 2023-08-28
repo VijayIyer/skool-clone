@@ -1,12 +1,14 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import TestButton from "@/components/button";
+import styles from "@/styles/Entry.module.css";
+import Header from "../components/Header/Header";
+import Footer from "@/components/Footer/Footer";
+import ControllerBar from "@/components/ControllerBar/ControllerBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Entry() {
   return (
     <>
       <Head>
@@ -16,9 +18,19 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <TestButton size='large' disabled={false}>
-          Test Button
-        </TestButton>
+        <Header />
+        <div className={styles.content}>
+          <div className={styles.title}>Community platform for creators</div>
+          <div className={styles.description}>Part community, part game, part business, part learning. Earn a living bringing people together to collaborate on shared goals and interests. Make friends, hangout, earn money, and have fun!</div>
+          <ControllerBar />
+          <div className={styles.banner}>
+            <img className={styles.image} src="https://assets.skool.com/skool/4a532a8d526a43faa120e4c42bb9463c.png" alt="Turn your passion"/>
+            <img className={styles.image} src="https://assets.skool.com/skool/f7863e11e92a4ad796e44841e5c4371e.png" alt="Into a Community" />
+            <img className={styles.image} src="https://assets.skool.com/skool/d1f2c4971b6f440ab6f24823468e8607.png" alt="Learn Together" />
+            <img className={styles.image} src="https://assets.skool.com/skool/6f1bb511462644009de19e949b8b2c20.png" alt="Make Money" />
+          </div>
+        </div>
+        <Footer />
       </main>
     </>
   );

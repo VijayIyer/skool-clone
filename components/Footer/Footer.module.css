@@ -1,0 +1,8 @@
+.footer {
+    width: 100%;
+    display: flex;
+    gap: 32px;
+    -webkit-box-pack: center;
+    justify-content: center;
+    padding-bottom: 32px;
+}
