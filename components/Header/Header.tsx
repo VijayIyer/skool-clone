@@ -4,7 +4,7 @@ import styles from "./Header.module.css";
 export default function Header() {
     return (
     <div className={styles.header} data-testid="header">
-        <Link href="/">
+        <Link href="/" data-testid="logo">
             <div className="logo" style={{width: "104px"}}>
                 <svg viewBox="0 0 2783 905" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.logoSvg}>
                     <path d="M429 403.6C424.6 410.4 420 415.4 415.2 418.6C410.8 421.4 404.6 422.8 396.6 422.8C388.6 422.8 380.4 420.8 372 416.8C363.6 412.8 354.2 408.6 343.8 404.2C333.4 399.4 321.4 395 307.8 391C294.6 387 279.2 385 261.6 385C234.8 385 214 390.6 199.2 401.8C184.4 412.6 177 427 177 445C177 457.4 181.2 467.8 189.6 476.2C198 484.6 209 492 222.6 498.4C236.6 504.4 252.4 510.2 270 515.8C287.6 521 305.6 526.8 324 533.2C342.8 539.6 361 547 378.6 555.4C396.2 563.8 411.8 574.4 425.4 587.2C439.4 599.6 450.6 614.8 459 632.8C467.4 650.4 471.6 671.8 471.6 697C471.6 727 466 754.8 454.8 780.4C444 805.6 428 827.4 406.8 845.8C385.6 864.2 359.2 878.6 327.6 889C296 899.4 259.6 904.6 218.4 904.6C197.2 904.6 176.2 902.6 155.4 898.6C134.6 895 114.8 889.8 96 883C77.2 875.8 59.6 867.6 43.2 858.4C26.8 849.2 12.6 839.2 0.600001 828.4L39 766.6C43.4 759.4 48.8 753.8 55.2 749.8C62 745.8 70.6 743.8 81 743.8C91 743.8 100.2 746.4 108.6 751.6C117 756.4 126.4 761.8 136.8 767.8C147.2 773.4 159.4 778.8 173.4 784C187.8 788.8 205.6 791.2 226.8 791.2C242.8 791.2 256.6 789.4 268.2 785.8C279.8 782.2 289.2 777.4 296.4 771.4C303.6 765 308.8 758 312 750.4C315.6 742.4 317.4 734.2 317.4 725.8C317.4 712.2 313 701.2 304.2 692.8C295.8 684 284.6 676.4 270.6 670C257 663.6 241.2 657.8 223.2 652.6C205.2 647.4 186.8 641.6 168 635.2C149.6 628.8 131.4 621.2 113.4 612.4C95.8 603.6 80 592.6 66 579.4C52.4 565.8 41.2 549.2 32.4 529.6C24 510 19.8 486.2 19.8 458.2C19.8 432.6 24.8 408.4 34.8 385.6C44.8 362.4 59.8 342 79.8 324.4C99.8 306.8 124.6 292.8 154.2 282.4C184.2 272 218.8 266.8 258 266.8C302 266.8 342 274 378 288.4C414 302.8 443.6 321.6 466.8 344.8L429 403.6Z" fill="#263397"></path>
@@ -15,10 +15,10 @@ export default function Header() {
                 </svg>
             </div>
         </Link>
-        <div className={styles.navbar}>
-            <Link className={styles.navbarItem} href="/use-cases" color="inherit" underline="none">Use cases</Link>
-            <Link className={styles.navbarItem} href="/signup" color="inherit" underline="none">Sign up</Link>
-            <Link className={styles.navbarItem} href="/login" color="inherit" underline="none">Log in</Link>
+        <div className={styles.navbar} data-testid="navbar">
+            <Link className={styles.navbarItem} href="/use-cases" color="inherit" underline="none" data-testid="link-use-cases">Use cases</Link>
+            <Link className={styles.navbarItem} href="/signup" color="inherit" underline="none" data-testid="link-signup">Sign up</Link>
+            <Link className={styles.navbarItem} href="/login" color="inherit" underline="none" data-testid="link-login">Log in</Link>
         </div>
     </div>
     )
