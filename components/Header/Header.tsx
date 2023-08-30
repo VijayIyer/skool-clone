@@ -3,7 +3,7 @@ import styles from "./Header.module.css";
 
 export default function Header() {
     return (
-    <div className={styles.header}>
+    <div className={styles.header} data-testid="header">
         <Link href="/">
             <div className="logo" style={{width: "104px"}}>
                 <svg viewBox="0 0 2783 905" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.logoSvg}>

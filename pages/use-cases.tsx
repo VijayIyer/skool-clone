@@ -18,8 +18,8 @@ export default function UseCases() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <Header />
-        <div className={styles.content}>
+        <Header/>
+        <div className={styles.content} data-testid="content">
           <div className={styles.title}>How people use Skool</div>
           <ControllerBar />
           <div className={styles.cardList}>
@@ -104,7 +104,7 @@ export default function UseCases() {
             </div>
           </div>
         </div>
-        <Footer />
+        <Footer/>
       </main>
     </>
   );

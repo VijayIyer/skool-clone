@@ -19,7 +19,7 @@ export default function Entry() {
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <Header />
-        <div className={styles.content}>
+        <div className={styles.content} data-testid="content">
           <div className={styles.title}>Community platform for creators</div>
           <div className={styles.description}>Part community, part game, part business, part learning. Earn a living bringing people together to collaborate on shared goals and interests. Make friends, hangout, earn money, and have fun!</div>
           <ControllerBar />
