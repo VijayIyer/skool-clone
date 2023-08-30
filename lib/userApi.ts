@@ -7,8 +7,6 @@ export async function createUser(
   password: String
 ) {
   try {
-    //create user option 1
-
     const newUser = new User({
       firstname: firstName,
       lastname: lastName,
@@ -16,15 +14,6 @@ export async function createUser(
       password,
     });
     const user = await newUser.save();
-
-    //create user option 2
-
-    // const user = await User.create({
-    //   firstname: firstName,
-    //   lastname: lastName,
-    //   email,
-    //   password,
-    // });
 
     return { success: true, message: user };
   } catch (error) {

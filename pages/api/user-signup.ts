@@ -3,21 +3,19 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { generateHashPassword } from '../../lib/hashPassword';
 import { createUser } from '../../lib/userApi';
 // import User from '../../models/User';
+import dbConnect from '@/lib/dbConnect';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  await dbConnect();
+
   switch (req.method) {
-    case 'GET':
-      console.log('sign up get api');
-      break;
     case 'POST':
       try {
         const user = JSON.parse(req.body);
         const hashedPassword = await generateHashPassword(user.password);
-        // console.log(hashedPassword);
-        // console.log(user);
         const dbRes = await createUser(
           user.first_name,
           user.last_name,
@@ -25,17 +23,9 @@ export default async function handler(
           hashedPassword
         );
 
-        // const newUser = new User({
-        //   firstname: user.first_name,
-        //   lastname: user.last_name,
-        //   email: user.email,
-        //   password: hashedPassword,
-        // });
-        // const message = await newUser.save();
-
         res.status(201).json({ data: dbRes });
       } catch (error) {
-        res.status(500).json({ message: 'Error creating user' });
+        res.status(500).json({ message: 'Unablle to  sign up' });
       }
       break;
     default:
