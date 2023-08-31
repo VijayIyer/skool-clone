@@ -1,3 +1,5 @@
+import { findUserByEmail } from './userApi';
+
 const bcrypt = require('bcrypt');
 
 export async function generateHashPassword(password: String) {
@@ -6,8 +8,9 @@ export async function generateHashPassword(password: String) {
   return hashedPassword;
 }
 
-export async function compareHashPasswordWith(password: String) {
-  //todo get hashed password from database
-  const savedPassword = '';
+//create this function for login api
+export async function compareHashPasswordWith(email: String, password: String) {
+  const user = await findUserByEmail(email);
+  const savedPassword = user[0].password;
   return await bcrypt.compare(password, savedPassword);
 }

@@ -1,5 +1,6 @@
 import User from '../models/User';
 
+//User CRUD function below can only be invoke when server connects with database, such as code like  "await dbConnect();" from lib/dbConnect.ts is invoked
 export async function createNewUser(
   firstName: String,
   lastName: String,
@@ -28,8 +29,11 @@ export async function isUserEmailTook(email: String) {
   return false;
 }
 
-export async function findPasswordByEmail(email: String) {
+//provide this function to login api
+export async function findUserByEmail(email: String) {
   try {
+    const user = await User.find({ email }).exec();
+    return user;
   } catch (error) {
     console.log('database error:unable to find this user \n', error);
     throw error;

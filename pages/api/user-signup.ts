@@ -2,20 +2,19 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { generateHashPassword } from '../../lib/hashPassword';
 import { createNewUser, isUserEmailTook } from '../../lib/userApi';
-// import User from '../../models/User';
 import dbConnect from '@/lib/dbConnect';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  //connect with MongoDB database
   await dbConnect();
 
   switch (req.method) {
     case 'POST':
       try {
         const user = JSON.parse(req.body);
-
         if (await isUserEmailTook(user.email)) {
           res
             .status(200)
@@ -30,11 +29,10 @@ export default async function handler(
           user.email,
           hashedPassword
         );
+
         res.status(201).json({ success: false, data: dbRes });
       } catch (error) {
-        res
-          .status(500)
-          .send({ success: false, message: 'Unablle to  sign up' });
+        res.status(500).send({ success: false, message: 'Unablle to sign up' });
       }
       break;
     default:
