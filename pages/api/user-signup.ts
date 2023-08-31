@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { generateHashPassword } from '../../lib/hashPassword';
-import { createUser } from '../../lib/userApi';
+import { createNewUser, isUserEmailTook } from '../../lib/userApi';
 // import User from '../../models/User';
 import dbConnect from '@/lib/dbConnect';
 
@@ -15,17 +15,26 @@ export default async function handler(
     case 'POST':
       try {
         const user = JSON.parse(req.body);
+
+        if (await isUserEmailTook(user.email)) {
+          res
+            .status(200)
+            .json({ success: false, mesage: 'A user already used this email' });
+          return;
+        }
+
         const hashedPassword = await generateHashPassword(user.password);
-        const dbRes = await createUser(
+        const dbRes = await createNewUser(
           user.first_name,
           user.last_name,
           user.email,
           hashedPassword
         );
-
-        res.status(201).json({ data: dbRes });
+        res.status(201).json({ success: false, data: dbRes });
       } catch (error) {
-        res.status(500).json({ message: 'Unablle to  sign up' });
+        res
+          .status(500)
+          .send({ success: false, message: 'Unablle to  sign up' });
       }
       break;
     default:

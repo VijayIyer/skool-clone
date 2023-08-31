@@ -19,7 +19,10 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Please provide a password for this user']
-  }
+  },
+
+}, {
+  timestamps: true, // this will add createdAt and updatedAt timestamps
 });
 
 export default mongoose.models.User || mongoose.model('User', UserSchema)

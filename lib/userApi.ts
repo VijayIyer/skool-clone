@@ -1,6 +1,6 @@
 import User from '../models/User';
 
-export async function createUser(
+export async function createNewUser(
   firstName: String,
   lastName: String,
   email: String,
@@ -14,11 +14,24 @@ export async function createUser(
       password,
     });
     const user = await newUser.save();
-
-    return { success: true, message: user };
+    return user;
   } catch (error) {
-    console.log('database error:unable to create new user \n', error);
     throw error;
   }
-  // console.log(message);
+}
+
+export async function isUserEmailTook(email: String) {
+  const user = await User.find({ email }).exec();
+  if (user.length > 0) {
+    return true;
+  }
+  return false;
+}
+
+export async function findPasswordByEmail(email: String) {
+  try {
+  } catch (error) {
+    console.log('database error:unable to find this user \n', error);
+    throw error;
+  }
 }
