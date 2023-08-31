@@ -80,22 +80,47 @@ export default function Comment({
           >
             <CardHeader
               action={
-                <IconButton>
-                  <MoreHorizIcon onClick={handleClick} />
+                <IconButton onClick={handleClick}>
+                  <MoreHorizIcon />
                 </IconButton>
               }
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "1em",
-                }}
-              ></Box>
-            </CardHeader>
+              title={
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                  }}
+                >
+                  {/* user name goes here */}
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      marginRight: "2px",
+                    }}
+                  >
+                    User Name
+                  </Typography>
+                  {/* no of hours/days ago goes here */}
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      color: "grey",
+                    }}
+                  >
+                    &#x2022; 1h ago
+                  </Typography>
+                </Box>
+              }
+            ></CardHeader>
 
             <CardContent>
-              <Typography component={"p"} gutterBottom>
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                }}
+                component={"p"}
+                gutterBottom
+              >
                 {comment.text}
               </Typography>
             </CardContent>
@@ -131,6 +156,7 @@ export default function Comment({
             <Button
               sx={{
                 color: "grey",
+                textTransform: "none", // to remove capitalization
               }}
             >
               Reply
