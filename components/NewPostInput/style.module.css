@@ -1,0 +1,112 @@
+.NewPostInputCardDefault {
+    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.32),
+    0 2px 6px rgba(60, 64, 67, 0.15), 0 1px 8px rgba(0, 0, 0, 0.1);
+}
+
+.NewPostInputCardHeaderDefault {
+    cursor: pointer;
+    color: rgb(144, 144, 144);
+    padding: 10px 16px;
+}
+
+.NewPostInputCardEditing {
+    padding: 16px 16px 8px 16px;
+    overflow: visible;
+}
+
+.NewPostInputCardHeaderEditing {
+    padding: 0;
+    margin-bottom: 8px;
+}
+
+.NewPostInputCardContentEditing {
+    padding: 0;
+}
+
+.NewPostTitleInputTextField {
+    border: none;
+}
+
+.IconButtonGroup {
+    display: flex;
+}
+
+.uploadItemDiv {
+    width: 210px;
+    height: 210px;
+    overflow: hidden;
+}
+
+.uploadPreviewContainer {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.addLinkPopUpContainerBackground {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.addPopUpContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+}
+
+.pickerContainer {
+    position: relative;
+    float: left;
+}
+
+.emojiPicker {
+    position: absolute;
+    z-index: 9999999;
+}
+
+.emojiPickerContainerBackground {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.gifPicker {
+    z-index: 9999999;
+    position: absolute;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px;
+    height: 396px;
+    width: 281px;
+    background-color: white;
+    overflow: hidden;
+}
+
+.gifLoadingContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.selectCategorySelector {
+    height: 40px;
+}
+
+.postToolContainer {
+    display: flex;
+    justify-content: space-between;
+}
