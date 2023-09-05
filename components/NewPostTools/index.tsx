@@ -5,12 +5,11 @@ import SubscriptionsOutlinedIcon from "@mui/icons-material/SubscriptionsOutlined
 import PollOutlinedIcon from "@mui/icons-material/PollOutlined";
 import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
 import GifOutlinedIcon from "@mui/icons-material/GifOutlined";
-import React, {FC, RefObject} from "react";
+import React, {FC, useRef} from "react";
 import {v4 as uuid} from "uuid";
 import {fileObj} from "@/interfaces/NewPostInput";
 
 interface newPostToolsPropsType {
-    attachmentInputRef: RefObject<HTMLInputElement>,
     setUploadArr: (oldFileObj: (pre: fileObj[]) => fileObj[]) => void,
     setIsAddingLink: (state: boolean) => void,
     setIsAddingVideo: (state: boolean) => void,
@@ -21,8 +20,9 @@ interface newPostToolsPropsType {
     postCategory: string,
 }
 const NewPostTools: FC<newPostToolsPropsType> = (props) => {
+    const attachmentInputRef = useRef<HTMLInputElement | null>(null);
+
     const {
-        attachmentInputRef,
         setUploadArr,
         setIsAddingLink,
         setIsAddingVideo,
@@ -56,7 +56,6 @@ const NewPostTools: FC<newPostToolsPropsType> = (props) => {
             tempUploadArr.push(temp);
             return tempUploadArr;
         })
-        // setUploadArr([...uploadArr, temp]);
     };
 
     const handleInputFileClick = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -103,11 +102,13 @@ const NewPostTools: FC<newPostToolsPropsType> = (props) => {
                 >
                     <div>
                         <IconButton
+                            data-testid='add-attachment-icon-button'
                             onClick={e => handleAttachmentClick(e)}
                         >
                             <AttachFileOutlinedIcon/>
                         </IconButton>
                         <input
+                            data-testid="file-input"
                             ref={attachmentInputRef}
                             onClick={(e) => handleInputFileClick(e)}
                             onChange={handleFileUpload}
@@ -123,6 +124,7 @@ const NewPostTools: FC<newPostToolsPropsType> = (props) => {
                     arrow
                 >
                     <IconButton
+                        data-testid='add-link-icon-button'
                         onClick={e => handleAddLinkClick(e)}
                     >
                         <InsertLinkOutlinedIcon/>
@@ -130,11 +132,12 @@ const NewPostTools: FC<newPostToolsPropsType> = (props) => {
                 </Tooltip>
 
                 <Tooltip
-                    title="Add YouTube"
+                    title="Add Video"
                     placement="top"
                     arrow
                 >
                     <IconButton
+                        data-testid='add-video-icon-button'
                         onClick={e => handleAddVideoClick(e)}
                     >
                         <SubscriptionsOutlinedIcon/>
@@ -147,6 +150,7 @@ const NewPostTools: FC<newPostToolsPropsType> = (props) => {
                     arrow
                 >
                     <IconButton
+                        data-testid='add-poll-icon-button'
                         onClick={e => handleAddPollClick(e)}
                     >
                         <PollOutlinedIcon/>
@@ -159,6 +163,7 @@ const NewPostTools: FC<newPostToolsPropsType> = (props) => {
                     arrow
                 >
                     <IconButton
+                        data-testid='add-emoji-icon-button'
                         onClick={e => handleAddEmojiClick(e)}
                     >
                         <EmojiEmotionsOutlinedIcon/>
@@ -171,6 +176,7 @@ const NewPostTools: FC<newPostToolsPropsType> = (props) => {
                     arrow
                 >
                     <IconButton
+                        data-testid='add-gif-icon-button'
                         onClick={e => handleAddGifClick(e)}
                     >
                         <GifOutlinedIcon/>
@@ -179,6 +185,7 @@ const NewPostTools: FC<newPostToolsPropsType> = (props) => {
 
                 <div>
                     <Select
+                        data-testid="select-category"
                         value={postCategory}
                         onChange={(e) => handleCategoryChange(e)}
                         displayEmpty

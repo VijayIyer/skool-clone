@@ -136,11 +136,13 @@ const GifPicker: FC<gifPickerPropsType> = (props) => {
 
     return (
         <div
+            data-testid="gif-image-container"
             className={styles.gifPickerContainer}
             onScroll={(e) => handleGifContainerScroll(e)}
         >
             <div className={styles.gifSearchContainer}>
                 <OutlinedInput
+                    data-testid="gif-search-input"
                     value={gifSearchData}
                     onChange={handleGifSearchInput}
                     sx={{
@@ -162,7 +164,7 @@ const GifPicker: FC<gifPickerPropsType> = (props) => {
                     }
                 />
             </div>
-            <div>
+            <div data-testid="gif-images">
                 {gifData.gifArr.map((el, index) => {
                     if (index % 2 === 0) {
                         return (<div key={el.id} className={styles.gifContainer}>

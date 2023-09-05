@@ -1,13 +1,15 @@
 .uploadVideoDiv {
-    width: 367px;
+    min-width: 367px;
     height: 210px;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 .uploadItemDiv {
-    width: 210px;
+    min-width: 210px;
     height: 210px;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 .uploadSelectIconDiv, .uploadProgressDiv, .uploadResult {
@@ -33,9 +35,8 @@
     overflow: hidden;
 }
 
-.uploadResult button {
+.detailIconButton, .deleteIconButton {
     position: absolute;
-    right: 5px;
     top: 5px;
     width: 40px;
     height: 40px;
@@ -43,11 +44,19 @@
     border: transparent;
     border-radius: 50%;
     color: rgba(0, 0, 0, 0.54);
-    background-color: rgb(144, 144, 144, 0.2);
+    background-color: rgb(144, 144, 144, 0.7);
     cursor: pointer;
 }
 
-.uploadResult button:hover {
-    background-color: rgb(144, 144, 144, 0.6);
-    transition: all 0.3s;
+.detailIconButton {
+    left: 5px;
 }
+
+.deleteIconButton {
+    right: 5px;
+}
+
+/*.uploadResult button:hover {*/
+/*    background-color: rgb(144, 144, 144, 0.6);*/
+/*    transition: all 0.3s;*/
+/*}*/

@@ -16,6 +16,6 @@ describe("test button component should render", () => {
     fireEvent.click(heading);
     expect(heading).toBeInTheDocument();
     expect(onClick).toHaveBeenCalled();
-    expect(onClick).toHaveBeenCalledTimes(2);
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 });

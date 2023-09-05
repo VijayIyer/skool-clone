@@ -66,12 +66,14 @@ const AddPopUpContainer: FC<addPopUpContainerPropsType> = ({title, subTitle="", 
                 {errorMessage? (<p className={styles.addLinkErrorMessage}>{errorMessage}</p>) : null}
                 <div className={styles.addLinkButtonGroup}>
                     <Button
+                        data-testid='pop-up-container-cancel-button'
                         color='cancelColor'
                         onClick={e => handleCancelButtonClick(e)}
                     >
                         <b>CANCEL</b>
                     </Button>
                     <Button
+                        data-testid='pop-up-container-link-button'
                         color='linkColor'
                         variant='contained'
                         onClick={handleLinkButtonClick}

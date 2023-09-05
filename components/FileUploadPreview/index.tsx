@@ -1,13 +1,16 @@
 import styles from "./index.module.css"
-import {CircularProgress} from "@mui/material";
+import {CircularProgress, IconButton} from "@mui/material";
 import Image from "next/image";
 import React, {FC, useEffect, useRef, useState} from "react";
 import { v4 as uuid } from 'uuid';
 import {fileObj} from "@/interfaces/NewPostInput";
+import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export interface FileUploadPreviewProps {
     fileObj?: fileObj;
     setUploadArr: (oldFileObj: (pre: fileObj[]) => fileObj[]) => void,
+    setIsShowingDetail: (fileObj: fileObj) => void,
 }
 
 const defaultFileObj = {
@@ -17,7 +20,7 @@ const defaultFileObj = {
     data: null,
 }
 
-const FileUploadPreview: FC<FileUploadPreviewProps> = ({setUploadArr, fileObj=defaultFileObj}) => {
+const FileUploadPreview: FC<FileUploadPreviewProps> = ({setIsShowingDetail, setUploadArr, fileObj=defaultFileObj}) => {
     const {type, fileId, uploadState, data} = fileObj;
     const [imageFile, setImageFile] = useState(data);
 
@@ -53,8 +56,9 @@ const FileUploadPreview: FC<FileUploadPreviewProps> = ({setUploadArr, fileObj=de
 
     const handleInputFileClick = (e: React.MouseEvent<HTMLInputElement>) => {
         const { target } = e;
-        // @ts-ignore
-        target.value = "";
+        if (target instanceof HTMLInputElement) {
+            target.value = "";
+        }
     };
 
     const handleFileRead = () => {
@@ -80,7 +84,7 @@ const FileUploadPreview: FC<FileUploadPreviewProps> = ({setUploadArr, fileObj=de
                     setImageFile(result as string);
                 }
 
-            }, 2000)
+            }, 1000)
         };
         reader.readAsDataURL(imageFile as File)
     }
@@ -150,6 +154,7 @@ const FileUploadPreview: FC<FileUploadPreviewProps> = ({setUploadArr, fileObj=de
                 <div className={styles.uploadSelectIconDiv} onClick={handleAttachmentClick}>
                     <span>+</span>
                     <input
+                        data-testid="preview-input-file"
                         ref={attachmentInputRef}
                         onChange={handleFileUpload}
                         onClick={(e) => handleInputFileClick(e)}
@@ -165,7 +170,19 @@ const FileUploadPreview: FC<FileUploadPreviewProps> = ({setUploadArr, fileObj=de
             ):null}
             {uploadState === 'preview'? (
                 <div className={styles.uploadResult}>
-                    <button onClick={e => handleFileDelete(e)}>X</button>
+                    <IconButton
+                        onClick={() => setIsShowingDetail(fileObj)}
+                        className={styles.detailIconButton}
+                    >
+                        <SearchIcon />
+                    </IconButton>
+                    <IconButton
+                        onClick={e => handleFileDelete(e)}
+                        className={styles.deleteIconButton}
+                    >
+                        <ClearIcon />
+                    </IconButton>
+                    {/*<button onClick={e => handleFileDelete(e)}>X</button>*/}
                     {imageFile && (type === 'video') && (
                         <Image src={imageFile as string} width={367} height={210} style={{objectFit: "cover"}} alt="uploaded image" />
                     )}

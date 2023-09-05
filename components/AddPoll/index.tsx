@@ -47,6 +47,7 @@ const AddPoll:FC<addPollPropsType> = ({pollOptions, setPollOptions, setIsAddingP
             <div className={styles.pollTitleContainer}>
                 <p>Poll</p>
                 <Button
+                    data-testid="poll-remove-btn"
                     onClick={handleRemoveClick}
                     size='small'
                     color='info'
@@ -82,6 +83,7 @@ const AddPoll:FC<addPollPropsType> = ({pollOptions, setPollOptions, setIsAddingP
 
             <div>
                 <Button
+                    data-testid="poll-add-option-btn"
                     variant="outlined"
                     onClick={handleAddOption}
                     className={styles.pollAddOptionButton}

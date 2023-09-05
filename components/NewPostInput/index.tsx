@@ -13,6 +13,7 @@ import NewPostTools from "@/components/NewPostTools";
 import GifPicker from "@/components/GifPicker";
 
 import {fileObj, gifDataType, pollOptionsArrType} from "@/interfaces/NewPostInput";
+import FileUploadContainer from "@/components/FileUploadContainer";
 
 // const ReactQuill = dynamic(
 //     async () => {
@@ -54,8 +55,6 @@ const NewPostInput: FC = () => {
     const [isAddingVideo, setIsAddingVideo] = useState(false);
     const [isAddingEmoji, setIsAddingEmoji] = useState(false);
     const [isAddingGif, setIsAddingGif] = useState(false);
-
-    const attachmentInputRef = useRef<HTMLInputElement | null>(null);
 
     const handleNewPostInputCardClick = () => {
         setOnEditing(true);
@@ -163,13 +162,14 @@ const NewPostInput: FC = () => {
     return (
         <div>
             {onEditing ? (
-                <Card className={styles.NewPostInputCardEditing}>
+                <Card className={styles.NewPostInputCardEditing} data-testid="new-post-input-onEditing">
 
                     {/**
                      * Username in title should get from the backend server
                      * Group name in title should get from the backend server
                      */}
                     <CardHeader
+                        data-testid="new-post-card-header"
                         className={styles.NewPostInputCardHeaderEditing}
                         avatar={
                             <Avatar
@@ -263,28 +263,25 @@ const NewPostInput: FC = () => {
                                 </>
                             )}
 
-                            <div>
-                                {uploadArr.length > 0 ? (
-                                    <div className={styles.uploadPreviewContainer}>
-                                        {uploadArr.map(fileObj => (
-                                            <FileUploadPreview
-                                                key={fileObj.fileId}
-                                                fileObj={fileObj}
-                                                setUploadArr={setUploadArr}
-                                            />
-                                        ))}
+                            {uploadArr.length > 0 ? (
+                                <FileUploadContainer data-testid="file-upload-preview-container">
+                                    {uploadArr.map(fileObj => (
                                         <FileUploadPreview
+                                            key={fileObj.fileId}
+                                            fileObj={fileObj}
                                             setUploadArr={setUploadArr}
                                         />
-                                    </div>
-                                ) : null}
-                            </div>
+                                    ))}
+                                    <FileUploadPreview
+                                        setUploadArr={setUploadArr}
+                                    />
+                                </FileUploadContainer>
+                            ) : null}
 
                             <div>
                                 <div className={styles.postToolContainer}>
-                                    <div className={styles.IconButtonGroup}>
+                                    <div className={styles.IconButtonGroup} data-testid="new-post-tools-container">
                                         <NewPostTools
-                                            attachmentInputRef={attachmentInputRef}
                                             setUploadArr={setUploadArr}
                                             setIsAddingLink={setIsAddingLink}
                                             setIsAddingVideo={setIsAddingVideo}
@@ -357,6 +354,7 @@ const NewPostInput: FC = () => {
                             <>
                                 <div
                                     className={styles.emojiPicker}
+                                    data-testid="emoji-container"
                                 >
                                     <EmojiPicker
                                         width={288}
@@ -375,6 +373,7 @@ const NewPostInput: FC = () => {
                             <>
                                 <div
                                     className={styles.gifPicker}
+                                    data-testid="gif-container"
                                 >
                                     {("gifArr" in gifData && gifData.gifArr) ? (
                                         <GifPicker
@@ -385,7 +384,7 @@ const NewPostInput: FC = () => {
                                             setUploadArr={setUploadArr}
                                             setIsAddingGif={setIsAddingGif}
                                         />
-                                    ):(<div className={styles.gifLoadingContainer}>
+                                    ):(<div data-testid='gif-loading-container' className={styles.gifLoadingContainer}>
                                         <CircularProgress />
                                     </div>)}
                                 </div>
