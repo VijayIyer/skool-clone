@@ -42,7 +42,7 @@ describe("Testing Component EntryPageFooter", () => {
     test("should render footer link button", () => {
         render(<EntryPageFooter />);
         const links = screen.getAllByRole("link");
-        expect(links).toHaveLength(7);
+        expect(links).toHaveLength(footerItems.length);
         expect(links[0]).toHaveAttribute('href', footerItems[0].url);
         expect(links[1]).toHaveAttribute('href', footerItems[1].url);
         expect(links[2]).toHaveAttribute('href', footerItems[2].url);

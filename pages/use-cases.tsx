@@ -97,7 +97,7 @@ export default function UseCases() {
                 {cardData.map(item => {
                   return (
                     <Grid key={item.title} xs={6}>
-                      <Card sx={{ display: 'flex', border: "none" }}>
+                      <Card sx={{ display: 'flex', alignItems: 'center', boxShadow: 'none' }}>
                         <CardMedia
                           component="img"
                           sx={{ width: "86px", height: "86px" }}

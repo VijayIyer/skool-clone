@@ -20,7 +20,8 @@ const StyledButton = styled(Button)`
   font-weight: bold;
   font-style: normal;
   font-size: 16px;
-  line-height: 1.5
+  line-height: 1.5;
+  padding: 0.75rem 2rem;
   `}
 `;
 

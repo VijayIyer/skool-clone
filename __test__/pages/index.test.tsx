@@ -31,7 +31,7 @@ describe("Testing Entry Page", () => {
     test("should render images on the page", () => {
         render(<Entry />);
         const images = screen.getAllByRole("img");
-        expect(images).toHaveLength(4);
+        expect(images).toHaveLength(imgData.length);
         expect(images[0]).toHaveAttribute('src', imgData[0].img);
         expect(images[1]).toHaveAttribute('src', imgData[1].img);
         expect(images[2]).toHaveAttribute('src', imgData[2].img);
