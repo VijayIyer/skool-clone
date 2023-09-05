@@ -36,21 +36,3 @@
     line-height: 1.5;
     font-size: 18px;
 }
-
-.controller {
-    margin-bottom: 100px;
-    display: flex;
-    gap: 24px;
-}
-
-.banner {
-    display: flex;
-    gap: 8px;
-}
-
-.image {
-    height: 253px;
-    width: 324px;
-}
-
-
