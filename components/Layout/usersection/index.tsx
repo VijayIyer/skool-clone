@@ -58,7 +58,7 @@ export default function UserSection() {
   function renderNotificationDialog() {
     return (
       <Dialog open={isNotificationOpen} onClose={closeNotificationDialog}>
-        <DialogTitle></DialogTitle>
+        <DialogTitle>Notifications</DialogTitle>
       </Dialog>
     );
   }

@@ -3,7 +3,6 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import TestButton from "@/components/button";
-import Community from "./community"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +19,6 @@ export default function Home() {
         {/* <TestButton size='large' disabled={false}>
           Test Button
         </TestButton> */}
-        {/* <Community/> */}
       </main>
     </>
   );

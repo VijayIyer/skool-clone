@@ -7,7 +7,11 @@ import {
   DialogTitle,
   ListItem,
   ListItemButton,
+  ListItemIcon,
   ListItemText,
+  Menu,
+  MenuItem,
+  Divider,
 } from "@mui/material";
 import ArrowUp from "@mui/icons-material/KeyboardArrowUp";
 import ArrowDown from "@mui/icons-material/KeyboardArrowDown";
@@ -15,26 +19,39 @@ import AddIcon from "@mui/icons-material/Add";
 
 export default function GroupSwitch() {
   const [isOpen, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   function toggleOpen() {
+    setOpen(!isOpen);
+  }
+
+  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+    if (isOpen) {
+      setAnchorEl(null);
+    } else {
+      setAnchorEl(event.currentTarget);
+    }
+    console.log(anchorEl);
     setOpen(!isOpen);
   }
 
   return (
     <Box sx={{ display: " flex", flexDirection: "row" }}>
       <Typography>Community</Typography>
-      <IconButton onClick={toggleOpen}>
+      <IconButton onClick={handleClick}>
         {isOpen ? <ArrowDown /> : <ArrowUp />}
       </IconButton>
-      <Dialog open={isOpen} onClose={toggleOpen}>
-        <DialogTitle> Switch Groups</DialogTitle>
-        <ListItem>
-          <ListItemButton onClick={toggleOpen}>
+      <Menu anchorEl={anchorEl} open={isOpen} onClose={toggleOpen}>
+        <MenuItem> Switch Groups</MenuItem>
+        <Divider />
+
+        <MenuItem onClick={toggleOpen}>
+          <ListItemIcon>
             <AddIcon />
-            <ListItemText primary="Create a Groups" />
-          </ListItemButton>
-        </ListItem>
-      </Dialog>
+          </ListItemIcon>
+          <ListItemText>Create a group</ListItemText>
+        </MenuItem>
+      </Menu>
     </Box>
   );
 }
