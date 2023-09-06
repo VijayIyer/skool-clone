@@ -6,11 +6,12 @@ import { v4 as uuid } from 'uuid';
 import {fileObj} from "@/interfaces/NewPostInput";
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 export interface FileUploadPreviewProps {
     fileObj?: fileObj;
     setUploadArr: (oldFileObj: (pre: fileObj[]) => fileObj[]) => void,
-    setIsShowingDetail: (fileObj: fileObj) => void,
+    setIsShowingDetail?: (fileObj: fileObj) => void,
 }
 
 const defaultFileObj = {
@@ -113,14 +114,9 @@ const FileUploadPreview: FC<FileUploadPreviewProps> = ({setIsShowingDetail, setU
     }
 
     const validateFile = (file: File) => {
-        const sizeLimit = 5 * 1024 * 1024;
         const legalExts = ['.jpg', '.jpeg', '.bmp', '.webp', '.gif', '.png'];
         if (!file) {
             return
-        }
-        if (file.size > sizeLimit) {
-            alert('The maximum size of each file is 5MB');
-            return false;
         }
         const name = file.name.toLowerCase();
         if (!legalExts.some(ext => name.endsWith(ext))) {
@@ -151,7 +147,11 @@ const FileUploadPreview: FC<FileUploadPreviewProps> = ({setIsShowingDetail, setU
     return (
         <div className={(type === 'video') ? styles.uploadVideoDiv : styles.uploadItemDiv}>
             {(uploadState === 'selection') && (
-                <div className={styles.uploadSelectIconDiv} onClick={handleAttachmentClick}>
+                <div
+                    data-testid='new-attachment-div'
+                    className={styles.uploadSelectIconDiv}
+                    onClick={handleAttachmentClick}
+                >
                     <span>+</span>
                     <input
                         data-testid="preview-input-file"
@@ -171,20 +171,28 @@ const FileUploadPreview: FC<FileUploadPreviewProps> = ({setIsShowingDetail, setU
             {uploadState === 'preview'? (
                 <div className={styles.uploadResult}>
                     <IconButton
-                        onClick={() => setIsShowingDetail(fileObj)}
+                        data-testid='preview-full-screen-button'
+                        onClick={() => setIsShowingDetail ? setIsShowingDetail(fileObj as fileObj) : null}
                         className={styles.detailIconButton}
                     >
                         <SearchIcon />
                     </IconButton>
                     <IconButton
+                        data-testid='preview-delete-button'
                         onClick={e => handleFileDelete(e)}
                         className={styles.deleteIconButton}
                     >
                         <ClearIcon />
                     </IconButton>
-                    {/*<button onClick={e => handleFileDelete(e)}>X</button>*/}
                     {imageFile && (type === 'video') && (
-                        <Image src={imageFile as string} width={367} height={210} style={{objectFit: "cover"}} alt="uploaded image" />
+                        <>
+                            <Image src={imageFile as string} width={367} height={210} style={{objectFit: "cover"}} alt="uploaded image" />
+                            <div className={styles.videoStartIcon}>
+                                <PlayArrowIcon style={{fontSize: '70px', color: 'white'}} />
+                            </div>
+
+                        </>
+
                     )}
                     {imageFile && (type === 'attachment') && (
                         <Image src={imageFile as string} width={210} height={210} style={{objectFit: "cover"}} alt="uploaded image" />

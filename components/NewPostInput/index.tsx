@@ -264,7 +264,7 @@ const NewPostInput: FC = () => {
                             )}
 
                             {uploadArr.length > 0 ? (
-                                <FileUploadContainer data-testid="file-upload-preview-container">
+                                <FileUploadContainer>
                                     {uploadArr.map(fileObj => (
                                         <FileUploadPreview
                                             key={fileObj.fileId}

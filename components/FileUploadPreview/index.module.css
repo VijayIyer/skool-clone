@@ -56,7 +56,6 @@
     right: 5px;
 }
 
-/*.uploadResult button:hover {*/
-/*    background-color: rgb(144, 144, 144, 0.6);*/
-/*    transition: all 0.3s;*/
-/*}*/
+.videoStartIcon {
+    position: absolute;
+}
