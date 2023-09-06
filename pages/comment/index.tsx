@@ -1,34 +1,10 @@
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import CommentList from "@/components/Comments";
+import styles from "@/styles/UseCases.module.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
-  const comments = [
-    {
-      id: 1,
-      text: "comment 1",
-    },
-    {
-      id: 2,
-      text: "comment 2",
-    },
-    {
-      id: 3,
-      text: "comment 3",
-    },
-    {
-      id: 4,
-      text: "comment 4",
-    },
-    {
-      id: 5,
-      text: "comment 5",
-    },
-  ];
+export default function Comment() {
   return (
     <>
       <Head>
@@ -38,7 +14,7 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <CommentList comments={comments} />
+        <></>
       </main>
     </>
   );
