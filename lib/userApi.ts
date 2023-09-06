@@ -21,7 +21,7 @@ export async function createNewUser(
   }
 }
 
-export async function isUserEmailTook(email: String) {
+export async function isUserEmailTaken(email: String) {
   const user = await User.find({ email }).exec();
   if (user.length > 0) {
     return true;
