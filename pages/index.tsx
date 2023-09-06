@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import TestButton from "@/components/button";
+import Community from "./community"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,9 +17,10 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <TestButton size='large' disabled={false}>
+        {/* <TestButton size='large' disabled={false}>
           Test Button
-        </TestButton>
+        </TestButton> */}
+        {/* <Community/> */}
       </main>
     </>
   );

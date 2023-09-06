@@ -12,7 +12,7 @@ interface ButtonProps {
 export default function TestButton(props: ButtonProps) {
   const {
     children,
-    size = "small",
+    size= "small",
     disabled = false,
     onClick = () => {},
   } = props;
