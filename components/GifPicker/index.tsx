@@ -72,7 +72,7 @@ const GifPicker: FC<gifPickerPropsType> = (props) => {
 
     const handleGifClick = (imgURL: string) => {
         const temp: fileObj = {
-            type: 'attachment',
+            type: 'gif',
             fileId: uuid(),
             uploadState: 'preview',
             data: imgURL,
@@ -168,8 +168,8 @@ const GifPicker: FC<gifPickerPropsType> = (props) => {
                 {gifData.gifArr.map((el, index) => {
                     if (index % 2 === 0) {
                         return (<div key={el.id} className={styles.gifContainer}>
-                            <img onClick={() => handleGifClick(el.images.fixed_height.url)} src={el.images.fixed_height.url} />
-                            {gifData.gifArr[index + 1] && <img onClick={() => handleGifClick(gifData.gifArr[index + 1].images.fixed_height.url)} src={gifData.gifArr[index + 1].images.fixed_height.url} />}
+                            <img onClick={() => handleGifClick(el.images.fixed_height.url)} src={el.images.fixed_height.url} alt="gif image" />
+                            {gifData.gifArr[index + 1] && <img onClick={() => handleGifClick(gifData.gifArr[index + 1].images.fixed_height.url)} src={gifData.gifArr[index + 1].images.fixed_height.url} alt="gif image" />}
                         </div>)
                     }
                 })}

@@ -194,7 +194,7 @@ const FileUploadPreview: FC<FileUploadPreviewProps> = ({setIsShowingDetail, setU
                         </>
 
                     )}
-                    {imageFile && (type === 'attachment') && (
+                    {imageFile && ((type === 'attachment') || (type === 'gif')) && (
                         <Image src={imageFile as string} width={210} height={210} style={{objectFit: "cover"}} alt="uploaded image" />
                     )}
                 </div>

@@ -39,6 +39,17 @@ const AddPoll:FC<addPollPropsType> = ({pollOptions, setPollOptions, setIsAddingP
     }
 
     const handleRemoveClick = () => {
+        const optionArr = [
+            {
+                optionId: uuid(),
+                content: '',
+            },
+            {
+                optionId: uuid(),
+                content: '',
+            }
+        ]
+        setPollOptions(optionArr);
         setIsAddingPoll(false);
     }
 

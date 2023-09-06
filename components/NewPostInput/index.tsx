@@ -1,6 +1,6 @@
 import {Avatar, Card, CardContent, CardHeader, CircularProgress, TextField, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
-import React, {FC, useEffect, useRef, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {v4 as uuid} from "uuid";
 import dynamic from "next/dynamic";
 import axios from "axios";
@@ -12,18 +12,8 @@ import AddPoll from "@/components/AddPoll";
 import NewPostTools from "@/components/NewPostTools";
 import GifPicker from "@/components/GifPicker";
 
-import {fileObj, gifDataType, pollOptionsArrType} from "@/interfaces/NewPostInput";
+import {fileObj, gifDataType, pollOptionsArrType, postDataType} from "@/interfaces/NewPostInput";
 import FileUploadContainer from "@/components/FileUploadContainer";
-
-// const ReactQuill = dynamic(
-//     async () => {
-//         const { default: RQ } = await import("react-quill-2");
-//         return ({ forwardedRef, ...props }) => <RQ ref={forwardedRef} {...props} />;
-//     },
-//     {
-//         ssr: false
-//     }
-// );
 
 const EmojiPicker = dynamic(() => {
     return import('emoji-picker-react')
@@ -74,26 +64,6 @@ const NewPostInput: FC = () => {
     //     autoLinkifyText();
     // };
     //
-    // const autoLinkifyText = () => {
-    //     console.log(newPostContent);
-    //     const linkRegex = /((https?|ftp|smtp):\/\/)?(www\.)[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?/gi;
-    //         const isLink = newPostContent.match(linkRegex);
-    //         // console.log(isLink);
-    //         // if (isLink) {
-    //         //     const styledHtml = newPostContent.replace(linkRegex, (match) => {
-    //         //         if (newPostContent.charAt(newPostContent.indexOf(match) + match.length + 2) !== 'a') {
-    //         //             return `<p><a href="${match}" style="color: blue; text-decoration: underline;">${match}</a></p>`;
-    //         //         }
-    //         //     });
-    //         //     // const editor = quillRef.current.getEditor();
-    //         //     // const range = editor.getSelection();
-    //         //     // const position = range ? range.index : 0;
-    //         //     // return styledHtml
-    //         //     // setNewPostContent(styledHtml);
-    //         // }
-    // }
-
-
 
     const handleBackgroundClick = () => {
         setIsAddingLink(false);
@@ -141,6 +111,69 @@ const NewPostInput: FC = () => {
 
     const handleCancelButtonClick = () => {
         setOnEditing(false);
+    }
+
+    const handlePostButtonClick = () => {
+        if (newPostTitle && newPostContent && postCategory) {
+            const data: postDataType = {
+                category: "",
+                comments: [],
+                content: "",
+                likes: [],
+                title: "",
+                user_id: "",
+                user_name: ""
+            }
+            data.title = newPostTitle;
+            data.content = JSON.stringify(newPostContent);
+            data.category = postCategory;
+            data.user_name = localStorage.getItem('user_name');
+            data.user_id = localStorage.getItem('ObjectID');
+
+            for (const pollOption of pollOptions) {
+                if (pollOption.content) {
+                    if (!data.poll) {
+                        data.poll = [
+                            {
+                                option: pollOption.content,
+                                votes: [],
+                            }
+                        ]
+                    } else {
+                        data.poll.push({
+                            option: pollOption.content,
+                            votes: [],
+                        })
+                    }
+                }
+            }
+
+            if (uploadArr.length > 0) {
+                for (const uploadElement of uploadArr) {
+                    if (!data.attachments) {
+                        data.attachments = [
+                            {
+                                id: uploadElement.fileId,
+                                fileName: "",
+                                fileType: uploadElement.type,
+                                url: uploadElement.data as string,
+                            }
+                        ]
+                    } else {
+                        data.attachments.push({
+                            id: uploadElement.fileId,
+                            fileName: "",
+                            fileType: uploadElement.type,
+                            url: uploadElement.data as string,
+                        })
+                    }
+                }
+            }
+
+            console.log(data)
+        } else {
+            alert("Please enter title, content and category.")
+        }
     }
 
     useEffect(() => {
@@ -311,6 +344,7 @@ const NewPostInput: FC = () => {
                                         </Button>
                                         {(newPostContent && newPostTitle) ? (
                                             <Button
+                                                onClick={handlePostButtonClick}
                                                 sx={{
                                                     fontSize: '16px',
                                                     padding: '12px 24px',
