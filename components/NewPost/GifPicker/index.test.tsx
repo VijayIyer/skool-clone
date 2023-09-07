@@ -1,6 +1,6 @@
 import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import '@testing-library/jest-dom'
-import NewPostInput from "@/components/NewPostInput";
+import NewPostInput from "../NewPostInput";
 import {wait} from "next/dist/build/output/log";
 
 describe("Gif picker should be functional", () => {

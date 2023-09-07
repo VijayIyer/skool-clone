@@ -2,7 +2,7 @@ import {act, fireEvent, prettyDOM, render, screen, waitFor} from "@testing-libra
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 
-import NewPostInput from "@/components/NewPostInput/index";
+import NewPostInput from "@/components/NewPost/NewPostInput";
 import {wait} from "next/dist/build/output/log";
 
 describe('New post component should render', function () {

@@ -1,7 +1,7 @@
 import {fireEvent, render, screen} from "@testing-library/react";
 import '@testing-library/jest-dom'
 
-import NewPostInput from "@/components/NewPostInput/index";
+import NewPostInput from "@/components/NewPost/NewPostInput/index";
 
 describe("New post component should render", () => {
     test("It should show avatar", () => {

@@ -1,7 +1,7 @@
 import {act, fireEvent, queryByTestId, render, screen, waitFor} from "@testing-library/react";
 import '@testing-library/jest-dom'
 
-import NewPostInput from "@/components/NewPostInput/index";
+import NewPostInput from "@/components/NewPost/NewPostInput";
 
 describe("File upload preview container should render", () => {
     test("it should not be rendered when no attachment is added", () => {

@@ -6,14 +6,14 @@ import dynamic from "next/dynamic";
 import axios from "axios";
 
 import styles from './style.module.css';
-import FileUploadPreview from "@/components/FileUploadPreview";
+import FileUploadPreview from "../FileUploadPreview";
 import AddPopUpContainer from "../AddPopUpContainer";
-import AddPoll from "@/components/AddPoll";
-import NewPostTools from "@/components/NewPostTools";
-import GifPicker from "@/components/GifPicker";
+import AddPoll from "../AddPoll";
+import NewPostTools from "@/components/NewPost/NewPostTools";
+import GifPicker from "../GifPicker";
 
 import {fileObj, gifDataType, pollOptionsArrType, postDataType} from "@/interfaces/NewPostInput";
-import FileUploadContainer from "@/components/FileUploadContainer";
+import FileUploadContainer from "../FileUploadContainer";
 
 const EmojiPicker = dynamic(() => {
     return import('emoji-picker-react')
@@ -221,7 +221,7 @@ const NewPostInput: FC = () => {
                                 <span>
                                     <strong>Abc Acc </strong>
                                     posting in
-                                    <strong>NextJS</strong>
+                                    <strong> NextJS</strong>
                                 </span>
                             </Typography>
                         }

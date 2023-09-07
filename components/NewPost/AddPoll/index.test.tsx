@@ -1,5 +1,5 @@
 import {fireEvent, render, screen} from "@testing-library/react";
-import NewPostInput from "@/components/NewPostInput";
+import NewPostInput from "../NewPostInput";
 import '@testing-library/jest-dom'
 
 describe("Poll component should render", () => {
