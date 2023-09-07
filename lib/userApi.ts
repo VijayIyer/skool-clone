@@ -39,3 +39,15 @@ export async function findUserByEmail(email: String) {
     throw error;
   }
 }
+
+//create for deleting test database
+export async function deleteUsers() {
+  try {
+    // Use the deleteMany method to remove all documents from the User collection
+    const result = await User.deleteMany({});
+    return result;
+  } catch (error) {
+    console.error('Error deleting users:', error);
+    throw error;
+  }
+}

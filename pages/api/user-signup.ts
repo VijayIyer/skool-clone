@@ -2,7 +2,11 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '@/lib/dbConnect';
 import { validateUserSignUpInput } from '../../lib/validation';
 import { generateHashPassword } from '../../lib/hashPassword';
-import { createNewUser, isUserEmailTaken } from '../../lib/userApi';
+import {
+  createNewUser,
+  isUserEmailTaken,
+  deleteUsers,
+} from '../../lib/userApi';
 
 export default async function signUpHandler(
   req: NextApiRequest,
@@ -10,11 +14,14 @@ export default async function signUpHandler(
 ) {
   // Connect with MongoDB database
   await dbConnect();
+  // deleteUsers();
 
   switch (req.method) {
     case 'POST':
       try {
         const user = JSON.parse(req.body);
+        console.log('user:', user);
+
         const validationResult = validateUserSignUpInput(user);
 
         if (!validationResult.success) {

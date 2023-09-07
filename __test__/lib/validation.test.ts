@@ -3,7 +3,7 @@ import {
   validateEmail,
   validatePassword,
   validateName,
-} from '../lib/validation'; // Update with the correct path
+} from '../../lib/validation'; // Update with the correct path
 
 describe('validateUserSignUpInput', () => {
   it('should return success when input is valid', () => {
