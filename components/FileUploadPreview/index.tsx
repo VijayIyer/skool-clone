@@ -128,7 +128,6 @@ const FileUploadPreview: FC<FileUploadPreviewProps> = ({setIsShowingDetail, setU
 
     const handleFileDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        console.log(fileId);
         setUploadArr(pre => {
             let tempUploadArr = [...pre];
             tempUploadArr = tempUploadArr.filter(fileObj => fileObj.fileId !== fileId);

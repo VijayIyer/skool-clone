@@ -71,10 +71,6 @@ const FileUploadContainer: FC<FileUploadContainerProps> = ({children}) => {
         }
     }, [scrollPosition]);
 
-
-    console.log(fileUploadContainerRef);
-
-
     return (
         <div className={styles.carouselPreviewContainer} data-testid="file-upload-preview-container">
             {(scrollPosition > 0) && (

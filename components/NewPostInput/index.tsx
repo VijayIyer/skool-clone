@@ -186,7 +186,6 @@ const NewPostInput: FC = () => {
         const fetchGifData = async () => {
             if (isAddingGif && !!gifData) {
                 const gifArr = await fetchGif();
-                console.log(typeof gifArr[0].images);
                 const gifData = {
                     type: 'trending',
                     gifArr,
