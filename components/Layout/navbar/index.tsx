@@ -11,7 +11,7 @@ import { useState } from "react";
 // }
 
 export default function NavBar() {
-  const [isLogedIn, setIsLogedIn] = useState(true);
+  const [isLogedIn, setIsLogedIn] = useState(false);
 
   return (
     <AppBar>

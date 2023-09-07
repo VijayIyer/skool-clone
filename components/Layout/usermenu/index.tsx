@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from "react";
 import {
   Button,
+  Divider,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
+  Menu,
+  MenuItem,
+  Link,
 } from "@mui/material";
-interface UserDialogProps {
-    //implement use information later
+interface UserMenuProps {
+  //implement use information later
   open: boolean;
+  anchorEl: HTMLElement | null;
   onClose: () => void;
 }
 
-export default function UserDialog(props: UserDialogProps) {
-  const { open, onClose } = props;
+export default function UserMenu(props: UserMenuProps) {
+  const { open, anchorEl, onClose } = props;
 
   const [isLogOutOpen, setLogOutOpen] = useState(false);
 
@@ -30,7 +31,7 @@ export default function UserDialog(props: UserDialogProps) {
   function closLogOut() {
     setLogOutOpen(false);
   }
-  
+
   function handleLogOut() {
     //sign out
     setLogOutOpen(false);
@@ -55,21 +56,18 @@ export default function UserDialog(props: UserDialogProps) {
 
   return (
     <>
-      <Dialog open={open} onClose={onClose}>
-        <DialogTitle>{"useremail@google.com"}</DialogTitle>
-        <List>
-          <ListItem>
-            <ListItemButton href="profile">profile</ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton href="settings">Settings</ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton onClick={openLogOut}>Log out</ListItemButton>
-          </ListItem>
-        </List>
-      </Dialog>
-
+      <Menu open={open} anchorEl={anchorEl} onClose={onClose}>
+        <MenuItem>{"useremail@google.com"}</MenuItem>
+        <Divider />
+        <MenuItem>
+          <Link href="profile" underline="none" color="inherit">Profile</Link>
+        </MenuItem>
+        <MenuItem>
+          <Link href="setting" underline="none" color="inherit">Setting</Link>
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={openLogOut}>Log Out</MenuItem>
+      </Menu>
       {renderLogOut()}
     </>
   );

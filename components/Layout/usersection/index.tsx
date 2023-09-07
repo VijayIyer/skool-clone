@@ -2,17 +2,13 @@ import React, { useState, useEffect } from "react";
 import ChatIcon from "@mui/icons-material/ChatBubbleOutline";
 import NotificationIcon from "@mui/icons-material/NotificationsNone";
 import AccontCircle from "@mui/icons-material/AccountCircleOutlined";
-import UserDialog from "../userDialog";
+import UserMenu from "../usermenu";
+import ChatMenu from "../chats";
+import NotificationMenu from "../notifications";
 import {
   Box,
   Badge,
   IconButton,
-  Dialog,
-  DialogTitle,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
 } from "@mui/material";
 
 export default function UserSection() {
@@ -21,77 +17,84 @@ export default function UserSection() {
   const [isUserOpen, setUserOpen] = useState(false);
   const [newChatNumber, setNewChatNumber] = useState(5);
   const [newNotificationNumber, setNotificationNumber] = useState(6);
+  const [userMenuAnchor, setUserMenuAnchor] = useState< null | HTMLElement>(null);
+  const [chatMenuAnchor, setChatMenuAnchor] = useState< null | HTMLElement>(null);
+  const [notificationMenuAnchor, setNotificationMenuAnchor] = useState< null | HTMLElement>(null);
 
-  function openChatDialog() {
+
+
+  function openChatMenu(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     setNewChatNumber(0);
+    setChatMenuAnchor(event.currentTarget);
     setChatOpen(true);
   }
-  function closeChatDialog() {
+  function closeChatMenu() {
     setChatOpen(false);
+    setChatMenuAnchor(null);
   }
 
-  function openNotificationDialog() {
+  function openNotificationMenu(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     setNotificationNumber(0);
+    setNotificationMenuAnchor(event.currentTarget);
     setNotificationOpen(true);
   }
 
-  function closeNotificationDialog() {
+  function closeNotificationMenu() {
     setNotificationOpen(false);
+    setNotificationMenuAnchor(null);
   }
 
-  function openUserDialog() {
+  function openUserMenu(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    setUserMenuAnchor(event.currentTarget)
     setUserOpen(true);
   }
 
-  function closeUserDialog() {
+  function closeUserMenu() {
     setUserOpen(false);
+    setUserMenuAnchor(null);
   }
 
-  function renderChatDialog() {
+  function renderChatMenu() {
     return (
-      <Dialog open={isChatOpen} onClose={closeChatDialog}>
-        <DialogTitle>Will implement Chat system later.</DialogTitle>
-      </Dialog>
+      <ChatMenu anchorEl={chatMenuAnchor} open={isChatOpen} onClose={closeChatMenu}/>
     );
   }
 
-  function renderNotificationDialog() {
+  function renderNotificationMenu() {
     return (
-      <Dialog open={isNotificationOpen} onClose={closeNotificationDialog}>
-        <DialogTitle>Notifications</DialogTitle>
-      </Dialog>
+      <NotificationMenu anchorEl={notificationMenuAnchor} open={isNotificationOpen} onClose={closeNotificationMenu}/>
     );
   }
 
-  function renderUserDialog() {
+  function renderUserMenu() {
     return (
-      <UserDialog open = {isUserOpen} onClose={closeUserDialog}/>
+      <UserMenu open = {isUserOpen} anchorEl={userMenuAnchor} onClose={closeUserMenu}/>
     );
   }
 
   return (
     <>
       <Box>
-        <IconButton onClick={openChatDialog}>
+        <IconButton onClick={(e)=>openChatMenu(e)}>
           <Badge badgeContent={newChatNumber} color="error">
             <ChatIcon />
           </Badge>
         </IconButton>
-        <IconButton onClick={openNotificationDialog}>
+        <IconButton onClick={(e)=>openNotificationMenu(e)}>
           <Badge badgeContent={newNotificationNumber} color="error">
             <NotificationIcon />
           </Badge>
         </IconButton>
-        <IconButton onClick={openUserDialog}>
+        <IconButton onClick={(e)=>openUserMenu(e)}>
           <Badge>
             <AccontCircle />
           </Badge>
         </IconButton>
       </Box>
 
-      {renderChatDialog()}
-      {renderNotificationDialog()}
-      {renderUserDialog()}
+      {renderChatMenu()}
+      {renderNotificationMenu()}
+      {renderUserMenu()}
     </>
   );
 }

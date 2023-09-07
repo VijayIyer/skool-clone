@@ -4,9 +4,6 @@ import {
   TextField,
   Typography,
   Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
   DialogTitle,
   FormControl,
   Link,
@@ -33,7 +30,7 @@ export default function LogInDialog(props: LogInDialogProps) {
   }
 
   return (
-    <Dialog open>
+    <Dialog open={isOpen}>
       <Typography>
         <Link href="/">logo</Link>
       </Typography>
