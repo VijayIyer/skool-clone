@@ -14,28 +14,30 @@ export function validateUserSignUpInput({
   if (!validateName(first_name)) {
     return {
       success: false,
-      message: 'First Name must be only an alphabetical string',
+      message:
+        'Validation error: First Name must be only an alphabetical string',
     };
   }
 
   if (!validateName(last_name)) {
     return {
       success: false,
-      message: 'Last Name must be only an alphabetical string',
+      message:
+        'Validation error: Last Name must be only an alphabetical string',
     };
   }
 
   if (!validateEmail(email)) {
     return {
       success: false,
-      message: 'Invalid email address format',
+      message: 'Validation error: Invalid email address format',
     };
   }
 
   if (!validatePassword(password)) {
     return {
       success: false,
-      message: 'Password must be at least 5 characters',
+      message: 'Validation error: Password must be at least 5 characters',
     };
   }
 

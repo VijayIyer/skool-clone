@@ -13,14 +13,19 @@ export default async function signUpHandler(
   res: NextApiResponse
 ) {
   // Connect with MongoDB database
-  await dbConnect();
-  // deleteUsers();
+  try {
+    await dbConnect();
+  } catch (e) {
+    console.log('fail to connect', e);
+    // console.error(e);
+  }
+  // // deleteUsers();
 
   switch (req.method) {
     case 'POST':
       try {
         const user = JSON.parse(req.body);
-        console.log('user:', user);
+        // console.log('user:', user);
 
         const validationResult = validateUserSignUpInput(user);
 
@@ -48,9 +53,10 @@ export default async function signUpHandler(
         return res.status(201).json({ success: true, data: dbRes });
       } catch (error) {
         console.error('Error during sign-up:', error);
-        return res
-          .status(500)
-          .json({ success: false, message: 'Unable to sign up' });
+        return res.status(500).json({
+          success: false,
+          message: 'Unable to create an account in the database',
+        });
       }
     default:
       return res.status(405).send('Method Not Allowed');
