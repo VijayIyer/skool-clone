@@ -22,7 +22,16 @@ const theme = createTheme({
     }
 });
 
-const AddPopUpContainer: FC<addPopUpContainerPropsType> = ({title, subTitle="", inputLabel, defaultValue, handleCancelClick, handleErrorMessage, handleLinkClick}) => {
+const AddPopUpContainer: FC<addPopUpContainerPropsType> = (props) => {
+    const {
+        title,
+        subTitle="",
+        inputLabel,
+        defaultValue,
+        handleCancelClick,
+        handleErrorMessage,
+        handleLinkClick
+    } = props;
     const [inputValue, setInputValue] = useState(defaultValue);
     const [errorMessage, setErrorMessage] = useState('');
 

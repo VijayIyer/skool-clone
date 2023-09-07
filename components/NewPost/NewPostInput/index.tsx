@@ -1,6 +1,6 @@
 import {Avatar, Card, CardContent, CardHeader, CircularProgress, TextField, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useEffect, useRef, useState} from "react";
 import {v4 as uuid} from "uuid";
 import dynamic from "next/dynamic";
 import axios from "axios";
@@ -14,6 +14,8 @@ import GifPicker from "../GifPicker";
 
 import {fileObj, gifDataType, pollOptionsArrType, postDataType} from "@/interfaces/NewPostInput";
 import FileUploadContainer from "../FileUploadContainer";
+import TextEditor, {TextEditorRef} from "@/components/TextEditor";
+import {useAddLink} from "@/components/TextEditor/hooks";
 
 const EmojiPicker = dynamic(() => {
     return import('emoji-picker-react')
@@ -38,6 +40,7 @@ const NewPostInput: FC = () => {
     const [postCategory, setPostCategory] = useState('');
     const [gifData, setGifData] = useState<gifDataType | {}>({});
     const [gifSearchData, setGifSearchData] = useState('');
+    const { isAddLinkDisabled, addLink } = useAddLink("post-editor");
 
     const [onEditing, setOnEditing] = useState(false);
     const [isAddingLink, setIsAddingLink] = useState(false);
@@ -45,6 +48,8 @@ const NewPostInput: FC = () => {
     const [isAddingVideo, setIsAddingVideo] = useState(false);
     const [isAddingEmoji, setIsAddingEmoji] = useState(false);
     const [isAddingGif, setIsAddingGif] = useState(false);
+
+    const editorRef = useRef<TextEditorRef | null>(null);
 
     const handleNewPostInputCardClick = () => {
         setOnEditing(true);
@@ -85,8 +90,18 @@ const NewPostInput: FC = () => {
         return "";
     }
 
-    const handleAddLinkLinkClick = () => {
+    const handleAddLinkLinkClick = (linkAddress: string) => {
+        console.log(linkAddress);
+        addLink(linkAddress)
+    }
 
+    // @ts-ignore
+    const handleEmojiClick = (emojiObj) => {
+        if (editorRef.current) {
+            editorRef.current.insertEmoji(emojiObj.unified);
+            editorRef.current.focus();
+            setIsAddingEmoji(false);
+        }
     }
 
     const handleAddVideoErrorMessage = (inputValue : string) => {
@@ -246,16 +261,13 @@ const NewPostInput: FC = () => {
                                     onChange={e => handleNewPostTitleChange(e)}
                                 />
                             </div>
-                            <div className={`${styles['react-quill-container']}`}>
-                                {/*<ReactQuill*/}
-                                {/*    forwardedRef={quillRef}*/}
-                                {/*    onChange={() => handleNewPostContentChange(newPostContent)}*/}
-                                {/*    onKeyUp={handleNewPostContentKeyPress}*/}
-                                {/*    modules={{toolbar: false,}}*/}
-                                {/*    placeholder='Write something...'*/}
-                                {/*    className={styles['quill-editor']}*/}
-                                {/*    value={newPostContent}*/}
-                                {/*/>*/}
+                            <div className={styles.postTextEditor}>
+                                <TextEditor
+                                    id="post-editor"
+                                    placeholder="Write Something..."
+                                    ariaLabel="add post"
+                                    ref={editorRef}
+                                />
 
                             </div>
 
@@ -327,6 +339,7 @@ const NewPostInput: FC = () => {
                                             emoji={true}
                                             gif={true}
                                             select={true}
+                                            isAddLinkDisabled={isAddLinkDisabled}
                                             setUploadArr={setUploadArr}
                                             setIsAddingLink={setIsAddingLink}
                                             setIsAddingVideo={setIsAddingVideo}
@@ -405,6 +418,7 @@ const NewPostInput: FC = () => {
                                     data-testid="emoji-container"
                                 >
                                     <EmojiPicker
+                                        onEmojiClick={handleEmojiClick}
                                         width={288}
                                         height={370}
                                         previewConfig={{showPreview: false}}

@@ -8,6 +8,7 @@ import GifOutlinedIcon from "@mui/icons-material/GifOutlined";
 import React, {FC, useRef} from "react";
 import {v4 as uuid} from "uuid";
 import {fileObj} from "@/interfaces/NewPostInput";
+import {useAddLink} from "@/components/TextEditor/hooks";
 
 interface newPostToolsPropsType {
     attachment?: boolean,
@@ -17,6 +18,7 @@ interface newPostToolsPropsType {
     emoji?: boolean,
     gif?: boolean,
     select?: boolean,
+    isAddLinkDisabled?: boolean,
     setUploadArr?: (oldFileObj: (pre: fileObj[]) => fileObj[]) => void,
     setIsAddingLink?: (state: boolean) => void,
     setIsAddingVideo?: (state: boolean) => void,
@@ -37,6 +39,7 @@ const NewPostTools: FC<newPostToolsPropsType> = (props) => {
         emoji = false,
         gif = false,
         select = false,
+        isAddLinkDisabled = false,
         setUploadArr,
         setIsAddingLink,
         setIsAddingVideo,
@@ -156,6 +159,7 @@ const NewPostTools: FC<newPostToolsPropsType> = (props) => {
                     >
                         <IconButton
                             data-testid='add-link-icon-button'
+                            disabled={isAddLinkDisabled}
                             onClick={e => handleAddLinkClick(e)}
                         >
                             <InsertLinkOutlinedIcon/>

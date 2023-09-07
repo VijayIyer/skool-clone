@@ -27,11 +27,12 @@ const GifPicker: FC<gifPickerPropsType> = (props) => {
         setIsAddingGif,
     } = props;
 
-    const debouncedValue = useDebounce(gifSearchData, 1000);
+    const debouncedValue = useDebounce(gifSearchData, 500);
 
     const handleGifContainerScroll = async (e: React.SyntheticEvent<HTMLDivElement>) => {
         const container = e.target as HTMLDivElement;
         if (container.scrollHeight - container.scrollTop === container.clientHeight) {
+            console.log(1);
             const {type, gifArr, offset} = gifData;
             if (type === 'trending') {
                 const newGifArr = await fetchGif(offset);

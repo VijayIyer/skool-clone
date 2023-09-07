@@ -104,3 +104,9 @@
     display: flex;
     justify-content: space-between;
 }
+
+.postTextEditor {
+    width: 100%;
+    margin: 10px 0;
+}
+
