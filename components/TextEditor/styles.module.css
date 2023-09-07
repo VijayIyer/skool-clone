@@ -1,0 +1,19 @@
+.container {
+  position: relative;
+  width: 500px;
+}
+
+.editor {
+  width: 100%;
+  min-height: 200px;
+  padding: 0.5rem;
+}
+
+.placeholder {
+  user-select: none;
+  pointer-events: none;
+  position: absolute;
+  color: #909090;
+  top: 0.5rem;
+  left: 0.5rem;
+}
