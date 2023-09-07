@@ -25,7 +25,7 @@ const theme = createTheme({
 const AddPopUpContainer: FC<addPopUpContainerPropsType> = (props) => {
     const {
         title,
-        subTitle="",
+        subTitle= "",
         inputLabel,
         defaultValue,
         handleCancelClick,

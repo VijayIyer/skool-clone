@@ -34,7 +34,6 @@ const optionArr = [
 
 const NewPostInput: FC = () => {
     const [newPostTitle, setNewPostTitle] = useState('');
-    const [newPostContent, setNewPostContent] = useState('test');
     const [uploadArr, setUploadArr] = useState<fileObj[]>([]);
     const [pollOptions, setPollOptions] = useState<pollOptionsArrType>(optionArr);
     const [postCategory, setPostCategory] = useState('');
@@ -59,17 +58,6 @@ const NewPostInput: FC = () => {
         setNewPostTitle(e.target.value)
     }
 
-    // const handleNewPostContentChange = (newContent) => {
-    //     console.log(newContent);
-    //     setNewPostContent(newContent)
-    // }
-    //
-    // const handleNewPostContentKeyPress = (e) => {
-    //     if (e.code !== "Enter" && e.code !== "Space") return;
-    //     autoLinkifyText();
-    // };
-    //
-
     const handleBackgroundClick = () => {
         setIsAddingLink(false);
         setIsAddingVideo(false);
@@ -86,7 +74,12 @@ const NewPostInput: FC = () => {
         return gifs.data.data;
     }
 
-    const handleAddLinkErrorMessage = () => {
+    const handleAddLinkErrorMessage = (inputValue: string) => {
+        //regex test whether the input is a valid URL
+        const regex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+        if (!inputValue.match(regex)) {
+            return 'Please input valid URL'
+        }
         return "";
     }
 
@@ -125,11 +118,17 @@ const NewPostInput: FC = () => {
     }
 
     const handleCancelButtonClick = () => {
+        setNewPostTitle('');
+        setUploadArr([]);
+        setPollOptions(optionArr);
+        setPostCategory('');
+        setGifData({});
+        setGifSearchData('');
         setOnEditing(false);
     }
 
     const handlePostButtonClick = () => {
-        if (newPostTitle && newPostContent && postCategory) {
+        if (newPostTitle && postCategory && editorRef.current.getData()) {
             const data: postDataType = {
                 category: "",
                 comments: [],
@@ -140,7 +139,7 @@ const NewPostInput: FC = () => {
                 user_name: ""
             }
             data.title = newPostTitle;
-            data.content = JSON.stringify(newPostContent);
+            data.content = JSON.stringify(editorRef.current.getData());
             data.category = postCategory;
             data.user_name = localStorage.getItem('user_name');
             data.user_id = localStorage.getItem('ObjectID');
@@ -184,8 +183,9 @@ const NewPostInput: FC = () => {
                     }
                 }
             }
+
+            console.log(data);
             setNewPostTitle('');
-            setNewPostContent('');
             setUploadArr([]);
             setPollOptions(optionArr);
             setPostCategory('');
@@ -368,7 +368,7 @@ const NewPostInput: FC = () => {
                                         >
                                             CANCEL
                                         </Button>
-                                        {(newPostContent && newPostTitle) ? (
+                                        {(postCategory && newPostTitle) ? (
                                             <Button
                                                 data-testid="post-button"
                                                 onClick={handlePostButtonClick}
