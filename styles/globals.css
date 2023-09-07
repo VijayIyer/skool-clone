@@ -105,3 +105,15 @@ a {
     color-scheme: dark;
   }
 }
+
+
+/* This is for the Text Editor Link */
+.text-editor__link,
+.text-editor__link:visited {
+  color: #2E6EF5;
+  text-decoration: none;
+}
+
+.text-editor__link:hover {
+  text-decoration: underline;
+}
