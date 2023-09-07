@@ -1,4 +1,4 @@
-import CommentList from "../CommentList";
+import CommentList from "../CommentItem";
 import styles from "./CommentSection.module.css";
 
 interface CommentProps {
@@ -15,7 +15,7 @@ interface CommentSectionProps {
 export default function CommentSection() {
     return (
         <div className={styles.commentSection}>
-            <CommentList/>
+            {/* <CommentList/> */}
             {/* {comments.map(comment => {
                 return (
                     <Comment />

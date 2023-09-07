@@ -1,6 +1,7 @@
 import { CommentType } from "./comment";
 import { Box } from "@mui/material";
-import Comment from "./comment";
+import CommentItem from "../CommentItem";
+import CommentBar from "../CommentBar";
 interface CommentListProps {
   comments: Array<CommentType>;
 }
@@ -11,11 +12,14 @@ export default function CommentList({ comments }: CommentListProps) {
         display: "flex",
         flexDirection: "column",
         gap: 2,
+        width: "791px",
+        padding: "8px 32px"
       }}
     >
       {comments.map((comment: CommentType) => (
-        <Comment key={comment.id} comment={comment} profileImg='' />
+        <CommentItem key={comment.id} comment={comment} profileImg='' />
       ))}
+      <CommentBar/>
     </Box>
   );
 }

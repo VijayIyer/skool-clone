@@ -11,18 +11,66 @@ export default function Home() {
     {
       id: 1,
       text: "comment 1",
+      replies: [
+        {
+          id: 1001,
+          text: "comment 4001"
+        },
+        {
+          id: 1002,
+          text: "comment 4002"
+        },
+        {
+          id: 1003,
+          text: "comment 4002"
+        },
+        {
+          id: 1004,
+          text: "comment 4002"
+        }
+      ]
     },
     {
       id: 2,
       text: "comment 2",
+      replies: [
+        {
+          id: 4001,
+          text: "comment 4001"
+        },
+        {
+          id: 4002,
+          text: "comment 4002"
+        }
+      ]
     },
     {
       id: 3,
       text: "comment 3",
+      replies: [
+        {
+          id: 4001,
+          text: "comment 4001"
+        },
+      ]
     },
     {
       id: 4,
       text: "comment 4",
+      replies: [
+        {
+          id: 4001,
+          text: "comment 4001"
+        },
+        {
+          id: 4002,
+          text: "comment 4002"
+        },
+        {
+          id: 4003,
+          text: "comment 4003"
+        }
+      ]
     },
     {
       id: 5,

@@ -9,12 +9,19 @@ import {
   ImageList,
   Typography,
   Button,
+  Stack,
   IconButton,
   Menu,
   MenuItem,
 } from "@mui/material";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import CommentBar from "../CommentBar";
+
+export interface ReplyType {
+  id: number;
+  text: string;
+}
 
 export interface CommentType {
   id: number;
@@ -22,6 +29,7 @@ export interface CommentType {
   by?: string;
   numberOfLikes?: number;
   numberOfReplies?: number;
+  replies?: Array<ReplyType>; 
 }
 
 export interface CommentProps {
@@ -32,6 +40,7 @@ export default function Comment({
   profileImg,
   comment,
 }: CommentProps): JSX.Element | null {
+  const [isReply, setIsReply] = useState<Boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -70,15 +79,18 @@ export default function Comment({
           sx={{
             display: "flex",
             flexDirection: "column",
+            width: "100%"
           }}
         >
           <Card
             sx={{
               borderRadius: "10px",
-              width: "20em",
+              padding: "8px 13px",
+              bgcolor: "rgb(248, 247, 245)"
             }}
           >
             <CardHeader
+              sx={{padding: "0px"}}
               action={
                 <IconButton onClick={handleClick}>
                   <MoreHorizIcon />
@@ -113,7 +125,7 @@ export default function Comment({
               }
             ></CardHeader>
 
-            <CardContent>
+            <CardContent sx={{padding: "0px"}}>
               <Typography
                 sx={{
                   fontSize: "16px",
@@ -158,10 +170,25 @@ export default function Comment({
                 color: "grey",
                 textTransform: "none", // to remove capitalization
               }}
+              onClick={()=>setIsReply(true)}
             >
               Reply
             </Button>
           </Box>
+          {isReply ? (
+            <Stack spacing={2} sx={{mt: 2}}>
+              <CommentBar/>
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="center"
+                spacing={1}
+              >
+                <Button size="large" variant="text" onClick={() => setIsReply(false)}>Cancel</Button>
+                <Button size="large" variant="contained">Reply</Button>
+              </Stack>
+            </Stack>
+          ) : null}
         </Box>
       </Box>
       <Menu
