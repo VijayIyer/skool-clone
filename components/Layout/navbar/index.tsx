@@ -12,6 +12,14 @@ import { useState } from "react";
 
 export default function NavBar() {
   const [isLogedIn, setIsLogedIn] = useState(false);
+  let tabs = [
+    {name: "Community", number: 1},
+    {name: "Classroom", number: 1},
+    {name: "Calendar", number: 1},
+    {name: "Members", number: 1},
+    {name: "LeaderBoard", number: 1},
+    {name: "About", number: 1},
+  ]
 
   return (
     <AppBar>
@@ -20,7 +28,7 @@ export default function NavBar() {
         <Search />
         {isLogedIn ? <UserSection /> : <LoginSignUpBar />}
       </Toolbar>
-      <Tabs />
+      <Tabs tabList={tabs}/>
     </AppBar>
   );
 }
