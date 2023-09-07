@@ -1,7 +1,9 @@
-import {fireEvent, render, screen} from "@testing-library/react";
+import {act, fireEvent, prettyDOM, render, screen, waitFor} from "@testing-library/react";
 import '@testing-library/jest-dom'
+import userEvent from '@testing-library/user-event'
 
 import NewPostInput from "@/components/NewPostInput/index";
+import {wait} from "next/dist/build/output/log";
 
 describe('New post component should render', function () {
     test("It should have add attachment IconButtons", () => {
@@ -12,6 +14,8 @@ describe('New post component should render', function () {
         fireEvent.mouseOver(addAttachmentIconButton)
         const tooltip = screen.getByLabelText('Add attachment')
         expect(tooltip).toBeInTheDocument();
+        const cancelBtn = screen.getByTestId('cancel-button');
+        fireEvent.click(cancelBtn);
     })
 
     test("It should have add link IconButtons", () => {
@@ -129,14 +133,59 @@ describe("IconButtons should be functional", () => {
         const addGifContainer = screen.getByTestId('gif-container');
         expect(addGifContainer).toBeInTheDocument();
     })
+})
 
-    // test("should show emoji component", async () => {
-    //     render(<NewPostInput />);
-    //     const avatarElement = screen.getByAltText('Avatar');
-    //     fireEvent.click(avatarElement);
-    //     const addEmojiIconButton = screen.getByTestId('add-emoji-icon-button');
-    //     fireEvent.click(addEmojiIconButton);
-    //     const addEmojiContainer = screen.getByTestId('emoji-container');
-    //     expect(addEmojiContainer).toBeInTheDocument();
-    // })
+describe("Post button should be functional", () => {
+    test("should allow user post content", async () => {
+        const {container} = render(<NewPostInput/>)
+        const avatarElement = screen.getByAltText('Avatar')
+        fireEvent.click(avatarElement);
+        const addVideoIconButton = screen.getByTestId('add-video-icon-button');
+        act(() => {
+            addVideoIconButton.click();
+        })
+        const addVideoInput = container.querySelector('.MuiOutlinedInput-input');
+        // @ts-ignore
+        fireEvent.change(addVideoInput, {target: {value: 'https://www.youtube.com/watch?v=WCCovrKvAtU&ab_channel=rainbeary'}});
+        // @ts-ignore
+        expect(addVideoInput.value).toBe('https://www.youtube.com/watch?v=WCCovrKvAtU&ab_channel=rainbeary');
+        const linkBtn = screen.getByTestId('pop-up-container-link-button');
+        fireEvent.click(linkBtn);
+
+        const addAttachmentIconButton = screen.getByTestId('add-attachment-icon-button');
+        fireEvent.click(addAttachmentIconButton);
+        const fileInput = screen.getByTestId('file-input');
+        const file = new File(['file content'], 'example.jpg', { type: 'image/jpeg' })
+        fireEvent.change(fileInput, { target: { files: [file] } });
+
+        let addGifIconButton = screen.getByTestId('add-gif-icon-button');
+        fireEvent.click(addGifIconButton);
+        const addGifContainer = screen.getByTestId('gif-loading-container');
+        expect(addGifContainer).toBeInTheDocument();
+        await waitFor(() => {
+            const gifImageContainer = screen.getByTestId("gif-image-container");
+            expect(gifImageContainer).toBeInTheDocument();
+            const newGifElements = gifImageContainer.querySelectorAll('.gifContainer');
+            expect(newGifElements.length).toBeLessThanOrEqual(10)
+        })
+        const firstImgElement = screen.getByTestId('gif-images').querySelector('img');
+        // @ts-ignore
+        fireEvent.click(firstImgElement);
+
+        const pollIconBtn = screen.getByTestId('add-poll-icon-button');
+        fireEvent.click(pollIconBtn);
+        const inputElement = screen.getByPlaceholderText('Option 1');
+        fireEvent.change(inputElement, {target: {value: 'Test 1'}})
+        const titleInput = screen.getByPlaceholderText('Title');
+        fireEvent.change(titleInput, {target: {value: 'Test 1'}})
+        const select = screen.getByTestId('select-category');
+        fireEvent.mouseDown(select);
+        const categoryOption = screen.getByTestId('category-option')
+        expect(categoryOption).toBeInTheDocument();
+        fireEvent.click(categoryOption)
+        const postBtn = screen.getByTestId('post-button');
+        fireEvent.click(postBtn);
+        const postDefault = screen.getByTestId('post-default');
+        expect(postDefault).toBeInTheDocument();
+    })
 })

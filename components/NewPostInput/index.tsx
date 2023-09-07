@@ -169,8 +169,14 @@ const NewPostInput: FC = () => {
                     }
                 }
             }
-
-            console.log(data)
+            setNewPostTitle('');
+            setNewPostContent('');
+            setUploadArr([]);
+            setPollOptions(optionArr);
+            setPostCategory('');
+            setGifData({});
+            setGifSearchData('');
+            setOnEditing(false);
         } else {
             alert("Please enter title, content and category.")
         }
@@ -315,6 +321,13 @@ const NewPostInput: FC = () => {
                                 <div className={styles.postToolContainer}>
                                     <div className={styles.IconButtonGroup} data-testid="new-post-tools-container">
                                         <NewPostTools
+                                            attachment={true}
+                                            link={true}
+                                            video={true}
+                                            poll={true}
+                                            emoji={true}
+                                            gif={true}
+                                            select={true}
                                             setUploadArr={setUploadArr}
                                             setIsAddingLink={setIsAddingLink}
                                             setIsAddingVideo={setIsAddingVideo}
@@ -328,6 +341,7 @@ const NewPostInput: FC = () => {
 
                                     <div>
                                         <Button
+                                            data-testid="cancel-button"
                                             onClick={handleCancelButtonClick}
                                             sx={{
                                                 fontSize: '16px',
@@ -344,6 +358,7 @@ const NewPostInput: FC = () => {
                                         </Button>
                                         {(newPostContent && newPostTitle) ? (
                                             <Button
+                                                data-testid="post-button"
                                                 onClick={handlePostButtonClick}
                                                 sx={{
                                                     fontSize: '16px',
@@ -432,6 +447,7 @@ const NewPostInput: FC = () => {
                 </Card>
             ) : (
                 <Card
+                    data-testid='post-default'
                     className={styles.NewPostInputCardDefault}
                     onClick={handleNewPostInputCardClick}
                 >
