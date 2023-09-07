@@ -1,45 +1,47 @@
 // pages/api/posts.ts
+import type { NextApiRequest, NextApiResponse } from 'next';
+import Post, { IPost } from '@/models/Post';
+import connectDb from '@/lib/dbConnect';
 
-import { NextApiRequest, NextApiResponse } from 'next';
-import Post from '../models/Post';
-import authMiddleware from '../middlewares/auth';
+connectDb();
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-
-  switch(req.method) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  switch (req.method) {
     case 'POST':
-      await createPost(req, res);
+      await handlePostRequest(req, res);
+      break;
+
+    default:
+      res.status(405).send(`Method ${req.method} not allowed`);
       break;
   }
+}
 
-};
+async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
+  const { title, content, categories, attachments, poll } = req.body;
 
-export default authMiddleware(handler);
-
-const createPost = async (req: NextApiRequest, res: NextApiResponse) => {
-
-  // Validate input
-  if(!req.body.content) {
-    return res.status(400).json({message: 'Content is required'});
+  if (!title || !content || !categories) {
+    return res.status(422).send('Title, content, and categories are required');
   }
 
-  // Get authenticated user
-  const userId = req.userId; 
+  const newPost: IPost = new Post({
+    title,
+    content,
+    author: req.body.firstname,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    categories,
+    attachments,
+    poll,
+    likes: [],
+    comments: [],
+  });
 
   try {
-    // Create new post
-    const post = await Post.create({
-      content: req.body.content,
-      userId,
-      likes: 0, 
-      comments: []
-    });
-
-    res.status(201).json(post);
-
+    const savedPost = await newPost.save();
+    res.status(201).send(savedPost._id);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({message: 'Error creating post'});
+    console.error('Error creating post:', error);
+    res.status(500).send('Error creating post');
   }
-
-};
+}
