@@ -1,0 +1,17 @@
+{
+    "presets": ["next/babel", "@babel/preset-typescript"],
+    "plugins": [
+      [
+        "module-resolver",
+        {
+          "root": ["./"],
+          "alias": {
+            "@/lib": "./lib",
+            "@/models": "./models"
+            // ... any other aliases you have
+          }
+        }
+      ]
+    ]
+  }
+  
