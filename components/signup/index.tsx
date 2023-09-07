@@ -1,4 +1,4 @@
-import { FormEvent, MouseEvent, useState } from "react";
+import { MouseEvent, useState } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
 import skoolLogo from "/public/skool.svg";
@@ -28,6 +28,7 @@ type SignupFormInput = {
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [statusText, setStatusText] = useState("");
   const router = useRouter();
 
   const handleClickShowPassword = (event: MouseEvent<HTMLButtonElement>) => {
@@ -44,12 +45,14 @@ export default function SignUpForm() {
     },
   });
 
+  const allowedCharRegex = /^[A-Za-z0-9 ]+$/;
+
   const onSubmit: SubmitHandler<SignupFormInput> = async (data, e) => {
     e?.preventDefault();
-    console.log(data);
-    let response
+    setStatusText("");
+    let response;
     try {
-       response = await fetch("/api/signup", {
+      response = await fetch("/api/signup", {
         method: "POST",
         mode: "same-origin",
         headers: {
@@ -58,12 +61,12 @@ export default function SignUpForm() {
         body: JSON.stringify(data),
       });
     } catch (err) {
-      console.log(err);
+      setStatusText(`Error: ${err} Please try again.`);
     } finally {
-      // router.back();
-      console.log(response)
       if (response?.ok === true) {
-        router.back();
+        router.push("/login");
+      } else if (response?.status === 400) {
+        setStatusText(`${response.statusText} Please try again.`);
       }
     }
   };
@@ -71,12 +74,32 @@ export default function SignUpForm() {
   const { field: firstName, fieldState: firstNameState } = useController({
     name: "firstName",
     control,
-    rules: { required: true },
+    rules: {
+      required: true,
+      maxLength: {
+        value: 20,
+        message: "First name can be up to 20 characters",
+      },
+      pattern: {
+        value: allowedCharRegex,
+        message: "Please use a valid name",
+      },
+    },
   });
   const { field: lastName, fieldState: lastNameState } = useController({
     name: "lastName",
     control,
-    rules: { required: true },
+    rules: {
+      required: true,
+      maxLength: {
+        value: 20,
+        message: "Last name can be up to 20 characters",
+      },
+      pattern: {
+        value: allowedCharRegex,
+        message: "Please use a valid name",
+      },
+    },
   });
   const { field: email, fieldState: emailState } = useController({
     name: "email",
@@ -97,6 +120,10 @@ export default function SignUpForm() {
       minLength: {
         value: 5,
         message: "Password must be at least 5 characters",
+      },
+      maxLength: {
+        value: 72,
+        message: "Password can be up to 72 characters",
       },
     },
   });
@@ -120,7 +147,9 @@ export default function SignUpForm() {
         >
           <div className={styles.signup_inputs}>
             <FormControl variant="outlined" fullWidth>
-              <InputLabel htmlFor="first_name">First name</InputLabel>
+              <InputLabel htmlFor="first_name" error={firstNameState.invalid}>
+                First name
+              </InputLabel>
               <OutlinedInput
                 id="first_name"
                 data-testid="input-component"
@@ -146,7 +175,9 @@ export default function SignUpForm() {
               )}
             </FormControl>
             <FormControl variant="outlined" fullWidth>
-              <InputLabel htmlFor="last_name">Last name</InputLabel>
+              <InputLabel htmlFor="last_name" error={lastNameState.invalid}>
+                Last name
+              </InputLabel>
               <OutlinedInput
                 id="last_name"
                 data-testid="input-component"
@@ -162,7 +193,7 @@ export default function SignUpForm() {
               />
               {lastNameState.error && (
                 <FormHelperText
-                  id="first-name-error-message"
+                  id="last-name-error-message"
                   error={lastNameState.invalid}
                   className={styles.signup_error}
                 >
@@ -256,6 +287,11 @@ export default function SignUpForm() {
           >
             Sign Up
           </Button>
+          {!!statusText && (
+            <FormHelperText error={true} className={styles.signup_error}>
+              {statusText}
+            </FormHelperText>
+          )}
           <Typography className={styles.signup_agreement}>
             <span>By signing up, you accept our </span>
             <NextLink

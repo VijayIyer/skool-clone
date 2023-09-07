@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import SignUpForm from "./index";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
@@ -12,7 +12,45 @@ function setup(jsx: ReactElement) {
   };
 }
 
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      route: "/",
+      pathname: "",
+      query: "",
+      asPath: "",
+      push: jest.fn(),
+      events: {
+        on: jest.fn(),
+        off: jest.fn(),
+      },
+      beforePopState: jest.fn(() => null),
+      prefetch: jest.fn(() => null),
+    };
+  },
+}));
+
 describe("SignUpForm", () => {
+  beforeEach(() => {
+    jest.restoreAllMocks();
+
+    const useRouter = jest.spyOn(require("next/router"), "useRouter");
+
+    useRouter.mockImplementation(() => ({
+      route: "/",
+      pathname: "",
+      query: "",
+      asPath: "",
+      push: jest.fn(),
+      events: {
+        on: jest.fn(),
+        off: jest.fn(),
+      },
+      beforePopState: jest.fn(() => null),
+      prefetch: jest.fn(() => null),
+    }));
+  });
+
   it("should render sign up form with input fields for first name, last name, email and password", () => {
     const wrapper = render(<SignUpForm />);
     const inputElements = wrapper.getAllByTestId("input-component");
@@ -88,5 +126,73 @@ describe("SignUpForm", () => {
     expect(passwordInput).toHaveAttribute("type", "text");
     await user.click(toggleVisibilityButton);
     expect(passwordInput).toHaveAttribute("type", "password");
+  });
+
+  it("inputs should be within length limits", async () => {
+    const { user, wrapper } = setup(<SignUpForm />);
+    const firstNameInput = wrapper.getByLabelText("First name");
+    const lastNameInput = wrapper.getByLabelText("Last name");
+    const emailInput = wrapper.getByLabelText("Email");
+    const passwordInput = wrapper.getByLabelText("Password");
+    const submitButton = wrapper.getByTestId("sign-up-btn");
+
+    await user.type(firstNameInput, "hello".repeat(5));
+    await user.type(lastNameInput, "hello".repeat(5));
+    await user.type(emailInput, "test@test.com");
+    await user.type(passwordInput, "hello".repeat(15));
+    await user.click(submitButton);
+    expect(firstNameInput).toHaveAccessibleErrorMessage(
+      "First name can be up to 20 characters"
+    );
+    expect(lastNameInput).toHaveAccessibleErrorMessage(
+      "Last name can be up to 20 characters"
+    );
+    expect(passwordInput).toHaveAccessibleErrorMessage(
+      "Password can be up to 72 characters"
+    );
+  });
+
+  it("inputs should be not contain invalid characters", async () => {
+    const { user, wrapper } = setup(<SignUpForm />);
+    const firstNameInput = wrapper.getByLabelText("First name");
+    const lastNameInput = wrapper.getByLabelText("Last name");
+    const emailInput = wrapper.getByLabelText("Email");
+    const passwordInput = wrapper.getByLabelText("Password");
+    const submitButton = wrapper.getByTestId("sign-up-btn");
+
+    await user.type(firstNameInput, "*&*(&*(");
+    await user.type(lastNameInput, "*<>SLDKKS>");
+    await user.type(emailInput, "test@test.com");
+    await user.type(passwordInput, "test");
+    await user.click(submitButton);
+    expect(firstNameInput).toHaveAccessibleErrorMessage(
+      "Please use a valid name"
+    );
+    expect(lastNameInput).toHaveAccessibleErrorMessage(
+      "Please use a valid name"
+    );
+  });
+
+  it("should handle submit correctly", async () => {
+    global.fetch = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        ok: true,
+        status: 200,
+      } as Response)
+    );
+    let fetchMock = jest.spyOn(global, "fetch");
+
+    const { user, wrapper } = setup(<SignUpForm />);
+    const firstNameInput = wrapper.getByLabelText("First name");
+    const lastNameInput = wrapper.getByLabelText("Last name");
+    const emailInput = wrapper.getByLabelText("Email");
+    const passwordInput = wrapper.getByLabelText("Password");
+    const submitButton = wrapper.getByTestId("sign-up-btn");
+    await user.type(firstNameInput, "Jane");
+    await user.type(lastNameInput, "Doe");
+    await user.type(emailInput, "test@test.com");
+    await user.type(passwordInput, "testing");
+    await user.click(submitButton);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });
