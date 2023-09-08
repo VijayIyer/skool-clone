@@ -7,12 +7,13 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
+import style from '@/styles/Navbar.module.css'
 
 export default function Search() {
   const [searchToken, setSearchToken] = useState<string | null>(null);
   function handleChange() {}
   return (
-    <FormControl sx={{ flexGrow: "1" }}>
+    <FormControl className={`${style.navbar_search}`}>
       <TextField
         variant="outlined"
         placeholder="Search..."

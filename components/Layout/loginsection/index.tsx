@@ -34,7 +34,7 @@ export default function LoginSignUpBar() {
         <Button
           variant="outlined"
           onClick={toggleLogIn}
-          className={`${style.Navbar_btn}`}
+          className={`${style.navbar_btn}`}
         >
           <Typography>
             LOG IN
@@ -43,7 +43,7 @@ export default function LoginSignUpBar() {
         <Button
           variant="outlined"
           onClick={toggleSignUp}
-          className={`${style.Navbar_btn}`}
+          className={`${style.navbar_btn}`}
         >
           <Typography>
             SIGN UP
