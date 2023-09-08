@@ -7,7 +7,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
-import style from '@/styles/Navbar.module.css'
+import style from "@/styles/Navbar.module.css";
 
 export default function Search() {
   const [searchToken, setSearchToken] = useState<string | null>(null);
@@ -25,7 +25,7 @@ export default function Search() {
           ),
           endAdornment: (
             <InputAdornment position="end">
-                <CloseIcon />
+              <CloseIcon />
             </InputAdornment>
           ),
         }}

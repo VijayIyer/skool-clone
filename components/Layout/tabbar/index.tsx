@@ -21,11 +21,7 @@ export default function Tabs(props: tabsProps) {
       }}
     >
       {tabs.map((tab) => {
-        return (
-            <ListItem key={tab.name}>
-                {renderTab(tab.name)}
-            </ListItem>
-        )
+        return <ListItem key={tab.name}>{renderTab(tab.name)}</ListItem>;
       })}
     </List>
   );

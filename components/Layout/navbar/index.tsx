@@ -14,7 +14,7 @@ interface NavBarProps {
 
 export default function NavBar(props: NavBarProps) {
   const { className } = props;
-  const [isLogedIn, setIsLogedIn] = useState(false);
+  const [isLogedIn, setIsLogedIn] = useState(true);
 
   let tabs = [
     { name: "Community", number: 1 },
