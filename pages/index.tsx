@@ -6,6 +6,7 @@ import TestButton from "@/components/button";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Stack } from "@mui/material";
+import { PostData, createPost } from "@/modules/PostFunctions";
 
 const inter = Inter({ subsets: ["latin"] });
 interface Task {
@@ -18,63 +19,76 @@ interface Task {
 }
 
 export default function Home() {
-  const [task, setTask] = useState<Task[]>([]);
-  const [findById, setFindById] = useState<Task>();
-  const fetchTasks = () => {
-    axios.get("api/get_post").then((res) => {
-      setTask(res.data);
-    });
-  };
-  useEffect(() => {
-    fetchTasks();
-  }, []);
-  const handlePostOne = () => {
+  // const [task, setTask] = useState<Task[]>([]);
+  // const [findById, setFindById] = useState<Task>();
+  // const fetchTasks = () => {
+  //   axios.get("api/get_post").then((res) => {
+  //     setTask(res.data);
+  //   });
+  // };
+  // useEffect(() => {
+  //   fetchTasks();
+  // }, []);
+  // const handlePostOne = () => {
+  //   axios
+  //     .post(`/api/set_post`, {
+  //       // userId: userId,
+  //       title: "POST ONE MORE",
+  //       content: "TEST POST ONE MORE",
+  //     })
+  //     .then((res) => {
+  //       fetchTasks();
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+  // const handelDeleteLastOne = () => {
+  //   console.log(task[task.length - 1]);
+  //   axios
+  //     .delete("/api/delete_post", { data: { id: task[task.length - 1]._id } })
+  //     .then((res) => {
+  //       console.log("id", task[task.length - 1]._id);
+  //       fetchTasks();
+  //     });
+  // };
+  // const handleUpdate = () => {
+  //   const changeConter = task[task.length - 1];
+
+  //   changeConter.title = "test update";
+  //   changeConter.content = "test the update last one";
+  //   console.log(changeConter);
+  //   axios
+  //     .put("/api/update_post", {
+  //       id: changeConter._id,
+  //       updateData: changeConter,
+  //     })
+  //     .then((res) => {
+  //       fetchTasks();
+  //     });
+  // };
+  // const handleGetLastOne = () => {
+  //   // const changeConter = task[task.length - 1];
+
+  //   // axios
+  //   //   .delete("/api/get_post_byId", { data: { id: task[task.length - 1]._id } })
+  //   //   .then((res) => {
+  //   //     console.log(res);
+  //   //     setFindById(res.data[0]);
+  //   //   });
+  // };
+  const handleTestButton = () => {
+    let post: PostData = {
+      title: "test",
+      content: "its a test",
+      category: "test",
+      user_name: "test",
+    };
     axios
-      .post(`/api/set_post`, {
-        // userId: userId,
-        title: "POST ONE MORE",
-        content: "TEST POST ONE MORE",
-      })
+      .post(`/api/set_post`, post)
       .then((res) => {
-        fetchTasks();
+        console.log(res);
       })
       .catch((err) => console.log(err));
   };
-  const handelDeleteLastOne = () => {
-    console.log(task[task.length - 1]);
-    axios
-      .delete("/api/delete_post", { data: { id: task[task.length - 1]._id } })
-      .then((res) => {
-        console.log("id", task[task.length - 1]._id);
-        fetchTasks();
-      });
-  };
-  const handleUpdate = () => {
-    const changeConter = task[task.length - 1];
-
-    changeConter.title = "test update";
-    changeConter.content = "test the update last one";
-    console.log(changeConter);
-    axios
-      .put("/api/update_post", {
-        id: changeConter._id,
-        updateData: changeConter,
-      })
-      .then((res) => {
-        fetchTasks();
-      });
-  };
-  const handleGetLastOne = () => {
-    const changeConter = task[task.length - 1];
-
-    axios
-      .delete("/api/get_post_byId", { data: { id: task[task.length - 1]._id } })
-      .then((res) => {
-        console.log(res);
-        setFindById(res.data[0]);
-      });
-  };
-  console.log(findById?.title);
   return (
     <>
       <Head>
@@ -87,7 +101,7 @@ export default function Home() {
         {/* <TestButton size="large" disabled={false}>
           Test Button
         </TestButton> */}
-        {task.map((each) => {
+        {/* {task.map((each) => {
           return (
             <Stack key={each._id} id={each._id}>
               <Stack key={each._id} flexDirection={"column"}>
@@ -100,13 +114,14 @@ export default function Home() {
         <button onClick={handlePostOne}>post one</button>
         <button onClick={handelDeleteLastOne}>delete last one</button>
         <button onClick={handleUpdate}>update the last one to new post</button>
-        <button onClick={handleGetLastOne}>get last one </button>
-        {findById !== undefined && (
+        <button onClick={handleGetLastOne}>get last one </button> */}
+        {/* {findById !== undefined && (
           <Stack>
             <Stack>{findById.title}</Stack>
             <Stack>{findById.content}</Stack>
           </Stack>
-        )}
+        )}*/}
+        <button onClick={handleTestButton}> TestButton</button>
       </main>
     </>
   );
