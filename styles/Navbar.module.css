@@ -1,0 +1,120 @@
+/* @import './globals.css'; */
+
+.header {
+  top: 0px;
+  width: 100%;
+  z-index: 1100;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  background: rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(228, 228, 228);
+  color: #202124;
+}
+
+.navbar_root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-width: 1075px;
+  min-width: 768px;
+  position: relative;
+  justify-content: space-between;
+  padding: 8px, 0px, 0px;
+  color: #202124;
+  background-color: inherit;
+}
+
+.navbar_toolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.navbar_groupswitcher {
+  display: flex;
+  height: 100%;
+  gap: 8px;
+}
+
+.navbar_groupswitcher_community {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  padding: 4px, 8px, 4px, 0px;
+  transition: background 150ms ease-in-out;
+  margin-right: 8px;
+  border-radius: 10px;
+}
+
+.navbar_groupswitcher_childwrapper {
+  overflow: visible;
+  flex-grow: 0;
+  border: none;
+  margin-right: 8px;
+}
+
+.navbar_groupswitcher_avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: rgb(255, 185, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.navbar_groupswitcher_typography {
+  font-weight: 500;
+  font-size: 1.125rem;
+}
+
+.navbar_groupswitcher_switch {
+  width: 48px;
+  height: 48px;
+}
+
+.navbar_groupswitcher_menu {
+  border: 1px solid #e4e4e4;
+  min-width: 192px;
+  box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.32),
+    0px 2px 6px rgba(60, 64, 67, 0.15), 0px 1px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  transition-duration: 0s !important;
+}
+
+.navbar_divider {
+}
+
+.navbar_menu {
+}
+
+.navbar_search {
+    flex: 1 1 0%;
+    padding: 0px, 8px;
+}
+
+.navbar_btn {
+    color: #909090;
+    border: 1px solid #E4E4E4;
+    height: auto;
+    padding-top: 11px;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 11px;
+    text-transform: uppercase;
+    background-color: #FFFFFF;
+    border-color: #909090;
+}
+
+.navbar_btn:hover {
+    color: #202124;
+}
+
+@meida (min-width: 701px) and (max-width: 1120px) {
+}
