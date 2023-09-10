@@ -1,13 +1,22 @@
-import Layout from '@/components/Layout'
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import Layout from "@/components/Layout";
+import "@/styles/globals.css";
+import type { AppProps } from "next/app";
+import { ReactElement, ReactNode } from "react";
+import type { NextPage } from "next";
 
-export default function App({ Component, pageProps }: AppProps) {
-  // return <Component {...pageProps} />
+export type PageWithoutSearchBar<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
 
-  return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
-  )
+type AppPropsWithLayout = AppProps & {
+  Component: PageWithoutSearchBar;
+};
+
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
+  //setting default layout
+  function defaultLayout(page: ReactElement) {
+    return <Layout>{page}</Layout>;
+  }
+  const getLayout = Component.getLayout ?? ((page) => defaultLayout(page));
+  return getLayout(<Component {...pageProps} />);
 }

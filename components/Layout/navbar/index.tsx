@@ -10,10 +10,12 @@ import style from "@/styles/Navbar.module.css";
 
 interface NavBarProps {
   className?: string;
+  isDisplayTabs?: boolean;
+  isDisplaySearch?: boolean;
 }
 
 export default function NavBar(props: NavBarProps) {
-  const { className } = props;
+  const { className, isDisplayTabs, isDisplaySearch } = props;
   const [isLogedIn, setIsLogedIn] = useState(true);
 
   let tabs = [
@@ -30,10 +32,10 @@ export default function NavBar(props: NavBarProps) {
       <AppBar className={`${style.navbar_root}`}>
         <Toolbar className={`${style.navbar_toolbar}`}>
           <GroupSwitch />
-          <Search />
+          {isDisplaySearch ? <Search /> : <></>}
           {isLogedIn ? <UserSection /> : <LoginSignUpBar />}
         </Toolbar>
-        <Tabs tabList={tabs} />
+        {isDisplayTabs ? <Tabs tabList={tabs} /> : <></>}
       </AppBar>
     </StyledEngineProvider>
   );
