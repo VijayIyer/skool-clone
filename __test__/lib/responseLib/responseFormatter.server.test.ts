@@ -1,9 +1,4 @@
-import {
-  SuccessResponse,
-  ErrorResponse,
-  Response,
-  responseFormatter,
-} from '../../../lib/responseLib/responseFormatter'; // Replace 'your-module' with the actual module path
+import { responseFormatter } from '../../../lib/responseLib/responseFormatter'; // Replace 'your-module' with the actual module path
 
 describe('responseFormatter', () => {
   it('should create a SuccessResponse when success is true', () => {
@@ -34,34 +29,6 @@ describe('responseFormatter', () => {
       success: false,
       data: null,
       errorMessage: '',
-    });
-  });
-});
-
-describe('Response interfaces', () => {
-  it('should correctly type SuccessResponse', () => {
-    const data: SuccessResponse<string> = {
-      success: true,
-      data: 'Success',
-    };
-
-    expect(data).toEqual({
-      success: true,
-      data: 'Success',
-    });
-  });
-
-  it('should correctly type ErrorResponse', () => {
-    const data: ErrorResponse = {
-      success: false,
-      data: null,
-      errorMessage: 'An error occurred',
-    };
-
-    expect(data).toEqual({
-      success: false,
-      data: null,
-      errorMessage: 'An error occurred',
     });
   });
 });
