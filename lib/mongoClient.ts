@@ -25,7 +25,7 @@ async function dbConnect(): Promise<Mongoose> {
     };
 
     if (!MONGODB_URI) {
-      throw new Error("...");
+      throw new Error("Failed to load MONGODB_URI from your .env.local or .env.test.local");
     }
 
     cached.promise = mongoose
