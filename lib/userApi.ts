@@ -29,17 +29,6 @@ export async function isUserEmailTaken(email: String) {
   return false;
 }
 
-//provide this function to login api
-// export async function findUserByEmail(email: String) {
-//   try {
-//     const user = await User.findOne({ email }).exec();
-//     return user;
-//   } catch (error) {
-//     console.log('database error:unable to find this user \n', error);
-//     throw error;
-//   }
-// }
-
 //create for deleting test database
 export async function deleteUsers() {
   try {
