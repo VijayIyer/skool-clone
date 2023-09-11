@@ -12,8 +12,10 @@ export default async function signUpHandler(
   try {
     await dbConnect();
   } catch (e) {
-    console.log('fail to connect', e);
-    // console.error(e);
+    console.log('fail to connect with database', e);
+    return res
+      .status(500)
+      .json({ success: false, message: 'Internal Server Error' });
   }
   // // deleteUsers();
 

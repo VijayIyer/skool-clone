@@ -3,9 +3,9 @@
 //and add--> const { TextEncoder, TextDecoder } = require('util') under the 'use Strict'
 
 import httpMocks from 'node-mocks-http';
-import signUpHandler from '../../pages/api/user-signup'; // Replace with the actual path
+import signUpHandler from '../../../pages/api/user-signup'; // Replace with the actual path
 import dbConnect from '@/lib/dbConnect';
-import { deleteUsers } from '../../lib/userApi';
+import { deleteUsers } from '../../../lib/userApi';
 
 beforeAll(async () => {
   await dbConnect();
