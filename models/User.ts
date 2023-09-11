@@ -31,13 +31,13 @@ const UserSchema = new mongoose.Schema(
   },
   {
     timestamps: true, // this will add createdAt and updatedAt timestamps
-    // virtuals: {
-    //   fullName: {
-    //     get() {
-    //       return this.firstName + ' ' + this.lastName;
-    //     }
-    //   }
-    // }
+    virtuals: {
+      fullName: {
+        get() {
+          return this.firstName + ' ' + this.lastName;
+        },
+      },
+    },
   }
 );
 

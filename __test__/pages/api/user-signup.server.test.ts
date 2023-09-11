@@ -65,7 +65,7 @@ describe('POST /api/signup', () => {
     expect(res.statusCode).toBe(400);
     const responseBody = JSON.parse(res._getData());
     expect(responseBody.success).toBe(false);
-    expect(responseBody.message).toContain('Validation error');
+    expect(responseBody.errorMessage).toContain('Validation error');
   });
 
   // Test case 3: User email already taken
@@ -91,6 +91,6 @@ describe('POST /api/signup', () => {
     expect(res.statusCode).toBe(400);
     const responseBody = JSON.parse(res._getData());
     expect(responseBody.success).toBe(false);
-    expect(responseBody.message).toContain('user already used this email');
+    expect(responseBody.errorMessage).toContain('user already used this email');
   });
 });

@@ -7,6 +7,7 @@ import {
   isUserEmailTaken,
   deleteUsers,
 } from '../../lib/userLib';
+import { responseFormatter } from '@/lib/responseLib';
 
 export default async function signUpHandler(
   req: NextApiRequest,
@@ -17,9 +18,12 @@ export default async function signUpHandler(
     await dbConnect();
   } catch (e) {
     console.log('fail to connect with database', e);
-    return res
-      .status(500)
-      .json({ success: false, message: 'Internal Server Error' });
+    return (
+      res
+        .status(500)
+        // .json({ success: false, message: 'Internal Server Error' });
+        .json(responseFormatter(false, null, 'Internal Server Error'))
+    );
   }
   // // deleteUsers();
 
@@ -33,16 +37,24 @@ export default async function signUpHandler(
         const validationResult = validateUserSignUpInput(user);
 
         if (!validationResult.success) {
-          return res
-            .status(400)
-            .json({ success: false, message: validationResult.message });
+          return (
+            res
+              .status(400)
+              // .json({ success: false, message: validationResult.message });
+              .json(responseFormatter(false, null, validationResult.message))
+          );
         }
 
         if (await isUserEmailTaken(user.email)) {
-          return res.status(400).json({
-            success: false,
-            message: 'A user already used this email',
-          });
+          // return res.status(400).json({
+          //   success: false,
+          //   message: 'A user already used this email',
+          // });
+          return res
+            .status(400)
+            .json(
+              responseFormatter(false, null, 'A user already used this email')
+            );
         }
 
         const hashedPassword = await generateHashPassword(user.password);
@@ -54,15 +66,23 @@ export default async function signUpHandler(
         );
 
         // return res.status(201).json({ success: true, data: { id: dbRes._id } });
-        return res.status(201).json({ success: true, data: dbRes });
+        return res.status(201).json(responseFormatter(true, { id: dbRes._id }));
       } catch (error) {
         console.error('Error during sign-up:', error);
-        return res.status(500).json({
-          success: false,
-          message: 'Unable to create an account in the database',
-        });
+        return res
+          .status(500)
+
+          .json(
+            responseFormatter(
+              false,
+              null,
+              'Unable to create an account in the database'
+            )
+          );
       }
     default:
-      return res.status(405).send('Method Not Allowed');
+      return res
+        .status(405)
+        .json(responseFormatter(false, null, 'Method Not Allowed'));
   }
 }
