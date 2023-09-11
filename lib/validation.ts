@@ -15,7 +15,7 @@ export function validateUserSignUpInput({
     return {
       success: false,
       message:
-        'Validation error: First Name must be only an alphabetical string',
+        'Validation error: First Name must be only an alphabetical string and length should be less or equal 20 charachters',
     };
   }
 
@@ -23,7 +23,7 @@ export function validateUserSignUpInput({
     return {
       success: false,
       message:
-        'Validation error: Last Name must be only an alphabetical string',
+        'Validation error: Last Name must be only an alphabetical string and length should be less or equal 20 charachters',
     };
   }
 
@@ -53,6 +53,12 @@ export function validatePassword(password: string) {
 }
 
 export function validateName(name: string) {
+  if (!name) {
+    return false;
+  }
+  if (name.length > 20) {
+    return false;
+  }
   const regName = /^[A-Za-z]+$/;
   return regName.test(name);
 }
