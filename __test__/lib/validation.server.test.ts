@@ -3,13 +3,13 @@ import {
   validateEmail,
   validatePassword,
   validateName,
-} from '../../lib/validation'; // Update with the correct path
+} from '../../lib/userLib'; // Update with the correct path
 
 describe('validateUserSignUpInput', () => {
   it('should return success when input is valid', () => {
     const input = {
-      first_name: 'John',
-      last_name: 'Doe',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'john@example.com',
       password: 'password123',
     };
@@ -19,8 +19,8 @@ describe('validateUserSignUpInput', () => {
 
   it('should return an error message when first name is invalid', () => {
     const input = {
-      first_name: '123', // Invalid first name
-      last_name: 'Doe',
+      firstName: '123', // Invalid first name
+      lastName: 'Doe',
       email: 'john@example.com',
       password: 'password123',
     };
@@ -28,14 +28,14 @@ describe('validateUserSignUpInput', () => {
     expect(result).toEqual({
       success: false,
       message:
-        'Validation error: First Name must be only an alphabetical string',
+        'Validation error: First Name must be only an alphabetical string and length should be less or equal 20 charachters',
     });
   });
 
   it('should return an error message when last name is invalid', () => {
     const input = {
-      first_name: 'John',
-      last_name: '123', // Invalid last name
+      firstName: 'John',
+      lastName: '123', // Invalid last name
       email: 'john@example.com',
       password: 'password123',
     };
@@ -43,14 +43,14 @@ describe('validateUserSignUpInput', () => {
     expect(result).toEqual({
       success: false,
       message:
-        'Validation error: Last Name must be only an alphabetical string',
+        'Validation error: Last Name must be only an alphabetical string and length should be less or equal 20 charachters',
     });
   });
 
   it('should return an error message when email is invalid', () => {
     const input = {
-      first_name: 'John',
-      last_name: 'Doe',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'invalid-email', // Invalid email
       password: 'password123',
     };
@@ -63,8 +63,8 @@ describe('validateUserSignUpInput', () => {
 
   it('should return an error message when password is too short', () => {
     const input = {
-      first_name: 'John',
-      last_name: 'Doe',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'john@example.com',
       password: '1234', // Password too short
     };
