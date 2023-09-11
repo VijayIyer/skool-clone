@@ -2,11 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '@/lib/dbConnect';
 import { validateUserSignUpInput } from '../../lib/validation';
 import { generateHashPassword } from '../../lib/hashPassword';
-import {
-  createNewUser,
-  isUserEmailTaken,
-  deleteUsers,
-} from '../../lib/userApi';
+import { createUser, isUserEmailTaken, deleteUsers } from '../../lib/userApi';
 
 export default async function signUpHandler(
   req: NextApiRequest,
@@ -43,7 +39,7 @@ export default async function signUpHandler(
         }
 
         const hashedPassword = await generateHashPassword(user.password);
-        const dbRes = await createNewUser(
+        const dbRes = await createUser(
           user.first_name,
           user.last_name,
           user.email,

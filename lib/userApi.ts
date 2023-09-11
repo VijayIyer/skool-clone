@@ -1,7 +1,7 @@
 import User from '../models/User';
 
 //User CRUD function below can only be invoke when server connects with database, such as code like  "await dbConnect();" from lib/dbConnect.ts is invoked
-export async function createNewUser(
+export async function createUser(
   firstName: String,
   lastName: String,
   email: String,
