@@ -1,4 +1,4 @@
-import { responseFormatter } from '../../../lib/responseLib/responseFormatter'; // Replace 'your-module' with the actual module path
+import { responseFormatter } from '../../../lib/responseLib/responseFormatter';
 
 describe('responseFormatter', () => {
   it('should create a SuccessResponse when success is true', () => {

@@ -1,9 +1,5 @@
-//in order to run this test, you have to set the encoder and decoder in the
-// open the file in the following link /node_modules/whatwg-url/lib/encoding.js
-//and add--> const { TextEncoder, TextDecoder } = require('util') under the 'use Strict'
-
 import httpMocks from 'node-mocks-http';
-import signUpHandler from '../../../pages/api/user-signup'; // Replace with the actual path
+import signUpHandler from '../../../pages/api/user-signup';
 import dbConnect from '@/lib/dbConnect';
 import { deleteUsers } from '../../../lib/userLib';
 
