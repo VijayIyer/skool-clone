@@ -1,8 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '@/lib/dbConnect';
-import { validateUserSignUpInput } from '../../lib/validation';
-import { generateHashPassword } from '../../lib/hashPassword';
-import { createUser, isUserEmailTaken, deleteUsers } from '../../lib/userApi';
+import {
+  validateUserSignUpInput,
+  generateHashPassword,
+  createUser,
+  isUserEmailTaken,
+  deleteUsers,
+} from '../../lib/userLib';
 
 export default async function signUpHandler(
   req: NextApiRequest,
