@@ -1,0 +1,42 @@
+.changePasswordContainer {
+  display: flex;
+  padding: 2em;
+  flex-direction: column;
+  gap: 1em;
+  box-shadow: none;
+}
+.changePasswordButton {
+  padding: 1em 2em;
+  background-color: #e4e4e4;
+  font-size: 0.875rem;
+  font-weight: bold;
+  font-style: normal;
+  min-width: 4em;
+  line-height: 1.75;
+  box-shadow: none;
+}
+.changePasswordButtonLabel {
+  width: 100%;
+  display: inherit;
+  align-items: inherit;
+  justify-content: inherit;
+}
+.passwordFieldsContainer {
+  margin-bottom: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.header {
+  font-weight: bold;
+  font-size: 20px;
+}
+.headerContainer {
+  margin-bottom: 2em;
+}
+.oldPassword {
+}
+.newPassword {
+}
+.confirmNewPassword {
+}
