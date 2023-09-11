@@ -7,9 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:client": "jest --config jest.config.client.js",
+    "test:server": "jest --config jest.config.server.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -38,6 +37,7 @@
     "@types/uuid": "^9.0.2",
     "@testing-library/user-event": "^14.4.3",
     "jest": "^29.6.3",
-    "jest-environment-jsdom": "^29.6.3"
+    "jest-environment-jsdom": "^29.6.3",
+    "node-mocks-http": "^1.13.0"
   }
 }
