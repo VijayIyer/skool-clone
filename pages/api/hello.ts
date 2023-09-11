@@ -6,6 +6,8 @@ type Data = {
   name: string;
 };
 
+console.log("Test about the Pull Request");
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
@@ -13,3 +15,5 @@ export default async function handler(
   const result = await dbConnect();
   res.status(200).json({ name: "John Doe" });
 }
+
+
