@@ -1,10 +1,10 @@
 import { AppBar, Toolbar } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
-import Search from "../searchbar";
-import LoginSignUpBar from "../loginsection";
-import GroupSwitch from "../groupswitcher";
-import UserSection from "../usersection";
-import Tabs from "../tabbar";
+import Search from "../Searchbar";
+import LoginSignUpBar from "../Loginsection";
+import GroupSwitch from "../Groupswitcher";
+import UserSection from "../Usersection";
+import Tabs from "../Tabbar";
 import { useState } from "react";
 import style from "@/styles/Navbar.module.css";
 

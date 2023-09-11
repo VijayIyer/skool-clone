@@ -21,7 +21,7 @@ export default function ChatMenu(props: ChatMenuProps) {
   const { anchorEl, open, onClose } = props;
   type filterState = "All" | "Unread";
   const [chatFilter, setChatFilter] = useState<filterState>("All");
-  
+
   function handleFilterChange(event: SelectChangeEvent) {
     setChatFilter(event.target.value as filterState);
   }

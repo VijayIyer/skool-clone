@@ -1,5 +1,5 @@
 import React from "react";
-import NavBar from "./navbar";
+import NavBar from "./Navbar";
 import style from "@/styles/Navbar.module.css";
 
 interface LayoutProps {

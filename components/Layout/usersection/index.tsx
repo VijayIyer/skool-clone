@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import ChatIcon from "@mui/icons-material/ChatBubbleOutline";
 import NotificationIcon from "@mui/icons-material/NotificationsNone";
 import AccontCircle from "@mui/icons-material/AccountCircleOutlined";
-import UserMenu from "../usermenu";
-import ChatMenu from "../chats";
-import NotificationMenu from "../notifications";
+import UserMenu from "../Usermenu";
+import ChatMenu from "../Chats";
+import NotificationMenu from "../Notifications";
 import {
   Box,
   Badge,
