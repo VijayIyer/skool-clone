@@ -1,11 +1,11 @@
 import mongoose from 'mongoose'
 
 const UserSchema = new mongoose.Schema({
-  firstname: {
+  firstName: {
     type: String,
     required: [true, 'Please provide a first name for this user']
   },
-  lastname: {
+  lastName: {
     type: String,
     required: [true, 'Please provide a last name for this user']
   },
@@ -25,4 +25,4 @@ const UserSchema = new mongoose.Schema({
   timestamps: true, // this will add createdAt and updatedAt timestamps
 });
 
-export default mongoose.models.User || mongoose.model('User', UserSchema)
+export default mongoose.models.User || mongoose.model('user', UserSchema)
