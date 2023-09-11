@@ -53,7 +53,7 @@ export default async function signUpHandler(
           hashedPassword
         );
 
-        return res.status(201).json({ success: true, data: dbRes });
+        return res.status(201).json({ success: true, data: { id: dbRes._id } });
       } catch (error) {
         console.error('Error during sign-up:', error);
         return res.status(500).json({

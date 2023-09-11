@@ -8,6 +8,8 @@ export async function createUser(
   password: String
 ) {
   try {
+    firstName = firstName.toLowerCase();
+    lastName = lastName.toLowerCase();
     const newUser = new User({
       firstName,
       lastName,
