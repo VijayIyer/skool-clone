@@ -9,8 +9,8 @@ export async function createUser(
 ) {
   try {
     const newUser = new User({
-      firstname: firstName,
-      lastname: lastName,
+      firstName,
+      lastName,
       email,
       password,
     });

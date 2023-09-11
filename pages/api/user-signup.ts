@@ -20,7 +20,8 @@ export default async function signUpHandler(
   switch (req.method) {
     case 'POST':
       try {
-        const user = JSON.parse(req.body);
+        const user = req.body;
+        // console.log('typeof', typeof user);
         // console.log('user:', user);
 
         const validationResult = validateUserSignUpInput(user);
@@ -40,8 +41,8 @@ export default async function signUpHandler(
 
         const hashedPassword = await generateHashPassword(user.password);
         const dbRes = await createUser(
-          user.first_name,
-          user.last_name,
+          user.firstName,
+          user.lastName,
           user.email,
           hashedPassword
         );

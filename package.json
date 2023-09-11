@@ -10,7 +10,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:client": "jest --config jest.config.client.js",
-    "test:server": "jest --config jest.config.server.js"
+    "test:server": "jest --config jest.config.server.js --watch"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

@@ -1,17 +1,17 @@
 import validator from 'validator';
 
 export function validateUserSignUpInput({
-  first_name,
-  last_name,
+  firstName,
+  lastName,
   email,
   password,
 }: {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 }) {
-  if (!validateName(first_name)) {
+  if (!validateName(firstName)) {
     return {
       success: false,
       message:
@@ -19,7 +19,7 @@ export function validateUserSignUpInput({
     };
   }
 
-  if (!validateName(last_name)) {
+  if (!validateName(lastName)) {
     return {
       success: false,
       message:
@@ -49,7 +49,7 @@ export function validateEmail(email: string) {
 }
 
 export function validatePassword(password: string) {
-  return password.length >= 5;
+  return password.length >= 5 && password.length < 72;
 }
 
 export function validateName(name: string) {

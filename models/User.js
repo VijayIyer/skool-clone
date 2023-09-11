@@ -23,6 +23,13 @@ const UserSchema = new mongoose.Schema({
 
 }, {
   timestamps: true, // this will add createdAt and updatedAt timestamps
+  // virtuals: {
+  //   fullName: {
+  //     get() {
+  //       return this.firstName + ' ' + this.lastName;
+  //     }
+  //   }
+  // }
 });
 
-export default mongoose.models.User || mongoose.model('user', UserSchema)
+export default mongoose.models.User || mongoose.model('User', UserSchema)

@@ -16,8 +16,8 @@ describe('POST /api/signup', () => {
   it('should create a new user', async () => {
     // Mock user data for testing
     const userData = {
-      first_name: 'John',
-      last_name: 'Doe',
+      firstName: 'John',
+      lastName: 'Doe',
       email: 'test@example.com',
       password: 'password123',
     };
@@ -26,7 +26,7 @@ describe('POST /api/signup', () => {
     const req = httpMocks.createRequest({
       method: 'POST',
       url: '/api/signup',
-      body: JSON.stringify(userData),
+      body: userData,
     });
 
     const res = httpMocks.createResponse();
@@ -46,8 +46,8 @@ describe('POST /api/signup', () => {
   it('should return a 400 Bad Request for invalid user data', async () => {
     // Mock invalid user data for testing
     const invalidUserData = {
-      first_name: 'John',
-      last_name: null, // Missing last name
+      firstName: 'John',
+      lastName: null, // Missing last name
       email: 'invalid-email', // Invalid email format
       password: 'password123',
     };
@@ -55,7 +55,7 @@ describe('POST /api/signup', () => {
     const req = httpMocks.createRequest({
       method: 'POST',
       url: '/api/signup',
-      body: JSON.stringify(invalidUserData),
+      body: invalidUserData,
     });
 
     const res = httpMocks.createResponse();
@@ -72,8 +72,8 @@ describe('POST /api/signup', () => {
   it('should return a 400 Bad Request if user email is already taken', async () => {
     // Mock user data with an email that is already taken
     const existingUser = {
-      first_name: 'Alice',
-      last_name: 'Smith',
+      firstName: 'Alice',
+      lastName: 'Smith',
       email: 'test@example.com',
       password: 'password123',
     };
@@ -81,7 +81,7 @@ describe('POST /api/signup', () => {
     const req = httpMocks.createRequest({
       method: 'POST',
       url: '/api/signup',
-      body: JSON.stringify(existingUser),
+      body: existingUser,
     });
 
     const res = httpMocks.createResponse();
