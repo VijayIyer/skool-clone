@@ -38,6 +38,12 @@
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
+  /* -------------------------------- */
+  /* global variables for nav bar */
+  --nav-background-color: rgb(225, 225, 225);
+  --nav-border-color: rgb(228, 228, 228);
+  --nav-font-color: #202124;
+
 }
 
 @media (prefers-color-scheme: dark) {

@@ -13,7 +13,7 @@ import {
 import ArrowUp from "@mui/icons-material/KeyboardArrowUp";
 import ArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import AddIcon from "@mui/icons-material/Add";
-import style from "@/styles/Navbar.module.css";
+import style from "./group.module.css";
 
 interface GroupsInfo {
   groupIcon: String; // src of the icon image
@@ -80,7 +80,7 @@ export default function GroupSwitch() {
         // className={`${style.navbar_groupswitcher_menu}`}
       >
         <MenuItem>
-          <Typography >Switch Groups</Typography>
+          <Typography>Switch Groups</Typography>
         </MenuItem>
         <Divider />
         {/* { display a list of group button with infomationin groupList } */}

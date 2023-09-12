@@ -6,7 +6,8 @@ import GroupSwitch from "../Groupswitcher";
 import UserSection from "../Usersection";
 import Tabs from "../Tabbar";
 import { useState } from "react";
-import style from "@/styles/Navbar.module.css";
+// import style from "@/styles/Navbar.module.css";
+import style from "./navbar.module.css"
 
 interface NavBarProps {
   className?: string;
