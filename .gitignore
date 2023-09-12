@@ -33,11 +33,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# not this feature
-/styles
-/pages/use-cases.tsx
-/components/EntryPageCenterBar
-/components/EntryPageFooter
-/components/EntryPageHeader
-/__test__

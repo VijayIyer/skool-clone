@@ -1,0 +1,22 @@
+.gifPickerContainer {
+    height: 396px;
+    width: 281px;
+    overflow-y: scroll;
+}
+
+.gifSearchContainer {
+    padding: 10px;
+}
+
+.gifContainer {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-around;
+    margin: 10px 0;
+}
+
+.gifContainer img {
+    height: 77px;
+    width: 112px;
+    object-fit: cover;
+}

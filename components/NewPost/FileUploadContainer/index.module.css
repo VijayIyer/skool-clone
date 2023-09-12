@@ -1,0 +1,50 @@
+.fileUploadContainer {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.fileUploadContainer > div:not(:last-child) {
+    margin-right: 5px;
+}
+
+.fileUploadContainer > div {
+    display: inline-block;
+}
+
+.carouselPreviewContainer {
+    box-sizing: border-box;
+    height: 210px;
+    position: relative;
+    margin: 10px 0;
+}
+
+.leftIconContainer {
+    position: absolute;
+    z-index: 99999;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.rightIconContainer {
+    position: absolute;
+    z-index: 99999;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+}
+
+.iconButton {
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    background-color: white;
+}
+
+.iconButton:hover {
+    border: 1px solid black;
+    background-color: white;
+}
