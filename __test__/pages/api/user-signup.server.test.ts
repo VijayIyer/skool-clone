@@ -1,27 +1,27 @@
-import httpMocks from 'node-mocks-http';
-import signUpHandler from '../../../pages/api/user-signup';
-import dbConnect from '@/lib/dbConnect';
-import { deleteUsers } from '../../../lib/userLib';
+import httpMocks from "node-mocks-http";
+import signUpHandler from "../../../pages/api/user-signup";
+import { dbConnect } from "@/lib/mongoClient";
+import { deleteUsers } from "../../../lib/userLib";
 
 beforeAll(async () => {
   await dbConnect();
   await deleteUsers();
 });
 
-describe('POST /api/signup', () => {
-  it('should create a new user', async () => {
+describe("POST /api/signup", () => {
+  it("should create a new user", async () => {
     // Mock user data for testing
     const userData = {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'test@example.com',
-      password: 'password123',
+      firstName: "John",
+      lastName: "Doe",
+      email: "test@example.com",
+      password: "password123",
     };
 
     // Create a mock request and response
     const req = httpMocks.createRequest({
-      method: 'POST',
-      url: '/api/signup',
+      method: "POST",
+      url: "/api/signup",
       body: userData,
     });
 
@@ -39,18 +39,18 @@ describe('POST /api/signup', () => {
   });
 
   // Test case 2: Invalid user data
-  it('should return a 400 Bad Request for invalid user data', async () => {
+  it("should return a 400 Bad Request for invalid user data", async () => {
     // Mock invalid user data for testing
     const invalidUserData = {
-      firstName: 'John',
+      firstName: "John",
       lastName: null, // Missing last name
-      email: 'invalid-email', // Invalid email format
-      password: 'password123',
+      email: "invalid-email", // Invalid email format
+      password: "password123",
     };
 
     const req = httpMocks.createRequest({
-      method: 'POST',
-      url: '/api/signup',
+      method: "POST",
+      url: "/api/signup",
       body: invalidUserData,
     });
 
@@ -61,22 +61,22 @@ describe('POST /api/signup', () => {
     expect(res.statusCode).toBe(400);
     const responseBody = JSON.parse(res._getData());
     expect(responseBody.success).toBe(false);
-    expect(responseBody.errorMessage).toContain('Validation error');
+    expect(responseBody.errorMessage).toContain("Validation error");
   });
 
   // Test case 3: User email already taken
-  it('should return a 400 Bad Request if user email is already taken', async () => {
+  it("should return a 400 Bad Request if user email is already taken", async () => {
     // Mock user data with an email that is already taken
     const existingUser = {
-      firstName: 'Alice',
-      lastName: 'Smith',
-      email: 'test@example.com',
-      password: 'password123',
+      firstName: "Alice",
+      lastName: "Smith",
+      email: "test@example.com",
+      password: "password123",
     };
 
     const req = httpMocks.createRequest({
-      method: 'POST',
-      url: '/api/signup',
+      method: "POST",
+      url: "/api/signup",
       body: existingUser,
     });
 
@@ -87,6 +87,6 @@ describe('POST /api/signup', () => {
     expect(res.statusCode).toBe(400);
     const responseBody = JSON.parse(res._getData());
     expect(responseBody.success).toBe(false);
-    expect(responseBody.errorMessage).toContain('user already used this email');
+    expect(responseBody.errorMessage).toContain("user already used this email");
   });
 });

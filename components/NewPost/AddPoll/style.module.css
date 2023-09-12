@@ -1,0 +1,41 @@
+.pollContainer {
+    border: 1px solid rgb(228, 228, 228);
+    border-radius: 5px;
+    padding: 16px;
+}
+
+.pollTitleContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pollTitleContainer p {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.pollTitleContainer button {
+    color: #909090;
+    font-size: 12px;
+}
+
+.pollTitleContainer button:hover {
+    text-decoration: underline;
+}
+
+.pollOptionContainer {
+    display: flex;
+    margin: 10px 0;
+    align-items: center;
+    gap: 10px;
+}
+
+.pollAddOptionButton {
+    border-color: #909090;
+    color: #909090;
+}
+
+.pollOptionDeleteButton {
+    width: 40px;
+    height: 40px;
+}
