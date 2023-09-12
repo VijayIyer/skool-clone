@@ -10,7 +10,7 @@
   -webkit-box-pack: center;
   justify-content: center;
   background: var(--nav-background-color);
-  border-bottom: 1px, solid var(--nav-border-color);
+  /* border-bottom: 1px, solid var(--nav-border-color); */
   color: var(--nav-font-color);
   height: 112px;
 }

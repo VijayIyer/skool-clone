@@ -55,23 +55,26 @@ export default function Search() {
     //   onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
     // />
     // </FormControl>
+    <div className={`${style.navbar_search}`}>
 
-    <FormControl className={`${style.navbar_search}`}>
-      <InputBase
-        className={`${style.navbar_search_feild}`}
-        type="text"
-        placeholder="Search..."
-        value={searchValue}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
-        startAdornment={
-          <InputAdornment position="start">
-            <SearchIcon />
-          </InputAdornment>
-        }
-        endAdornment={
-          <InputAdornment position="end">{renderCloseIcon()}</InputAdornment>
-        }
-      />
-    </FormControl>
+      <FormControl className={`${style.navbar_search_form}`}>
+        <InputBase
+          className={`${style.navbar_search_feild}`}
+          type="text"
+          placeholder="Search..."
+          value={searchValue}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
+          startAdornment={
+            <InputAdornment position="start">
+              <SearchIcon className={`${style.navbar_searchIcon}`} />
+            </InputAdornment>
+          }
+          endAdornment={
+            <InputAdornment position="end">{renderCloseIcon()}</InputAdornment>
+          }
+        />
+      </FormControl>
+    </div>
   );
+
 }
