@@ -7,10 +7,7 @@ type Data = {
     data?: any;
 };
 
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse<Data>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     const { userId, postId } = req.query;
     console.log(userId, postId);
     await dbConnect();
@@ -32,6 +29,7 @@ export default async function handler(
 
     /**
      * if the user is the admin in the group, then he can delete the post.
+     * get author data from db
      */
     // if (author !== userId) {
     //     await res.status(401).json({message: "Unauthorized!"});

@@ -184,6 +184,13 @@ const NewPostInput: FC = () => {
                 }
             }
 
+            /**
+             * for test only, should be modified
+             */
+            data.user_id = '65007603cf299ac4c5fec701';
+            axios.post('http://localhost:3001/api/posts/new-post', data);
+
+
             console.log(data);
             setNewPostTitle('');
             setUploadArr([]);
@@ -192,6 +199,8 @@ const NewPostInput: FC = () => {
             setGifData({});
             setGifSearchData('');
             setOnEditing(false);
+
+
         } else {
             alert("Please enter title, content and category.")
         }
