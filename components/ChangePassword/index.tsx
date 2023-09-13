@@ -9,13 +9,25 @@ import {
   FormControl,
   InputLabel,
   OutlinedInput,
+  styled,
 } from "@mui/material";
+import ChangePasswordButton from "./changePasswordButton";
 
 interface ChangePasswordFormInput {
   oldPassword: string;
   newPassword: string;
   confirmNewPassword: string;
 }
+const CustomOutlinedInput = styled(OutlinedInput)({
+  "&.MuiOutlinedInput-root": {
+    "&:hover fieldset": {
+      borderColor: "none",
+    },
+  },
+  "&.MuiOutlinedInput-root.Mui-focused": {
+    borderColor: "1px black solid",
+  },
+});
 
 export default function ChangePasswordForm() {
   const { control, handleSubmit } = useForm<ChangePasswordFormInput>({
@@ -25,6 +37,7 @@ export default function ChangePasswordForm() {
       confirmNewPassword: "",
     },
   });
+
   const onSubmit: SubmitHandler<ChangePasswordFormInput> = (data, e) => {
     // e?.preventDefault();
     console.log(data);
@@ -102,7 +115,7 @@ export default function ChangePasswordForm() {
               >
                 New password
               </InputLabel>
-              <OutlinedInput
+              <CustomOutlinedInput
                 id='new_password'
                 data-testid='new-password-component'
                 onChange={newPassword.onChange}
@@ -131,6 +144,7 @@ export default function ChangePasswordForm() {
                 Confirm new password
               </InputLabel>
               <OutlinedInput
+                autoFocus
                 id='confirm_new_password'
                 data-testid='confirm-password-component'
                 onChange={confirmNewPassword.onChange}
@@ -148,30 +162,14 @@ export default function ChangePasswordForm() {
         </div>
 
         <div>
-          <Button
-            variant='contained'
-            type='submit'
-            className={styles.changePasswordButton}
+          <ChangePasswordButton
             disabled={
               newPassword.value === "" ||
               oldPassword.value === "" ||
               confirmNewPassword.value === "" ||
               newPassword.value !== confirmNewPassword.value
             }
-          >
-            <span className={styles.changePasswordButtonLabel}>
-              <Typography
-                variant='p'
-                component='p'
-                sx={{
-                  fontSize: "1em",
-                }}
-                fontSize={"large"}
-              >
-                Change Password
-              </Typography>
-            </span>
-          </Button>
+          />
         </div>
       </form>
     </Paper>
