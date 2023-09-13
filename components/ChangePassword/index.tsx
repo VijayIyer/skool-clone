@@ -118,10 +118,7 @@ export default function ChangePasswordForm() {
             </FormControl>
           </div>
           {newPasswordState.error && (
-            <FormHelperText
-              id='new-password-error-message'
-              error={newPasswordState.invalid}
-            >
+            <FormHelperText id='new-password-error-message' variant='filled'>
               {newPasswordState.error?.message}
             </FormHelperText>
           )}
@@ -155,7 +152,12 @@ export default function ChangePasswordForm() {
             variant='contained'
             type='submit'
             className={styles.changePasswordButton}
-            disabled={newPassword.value == confirmNewPassword.value}
+            disabled={
+              newPassword.value === "" ||
+              oldPassword.value === "" ||
+              confirmNewPassword.value === "" ||
+              newPassword.value !== confirmNewPassword.value
+            }
           >
             <span className={styles.changePasswordButtonLabel}>
               <Typography
@@ -164,6 +166,7 @@ export default function ChangePasswordForm() {
                 sx={{
                   fontSize: "1em",
                 }}
+                fontSize={"large"}
               >
                 Change Password
               </Typography>
