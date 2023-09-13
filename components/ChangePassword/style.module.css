@@ -1,13 +1,14 @@
 .changePasswordContainer {
-  display: flex;
-  padding: 2em;
-  flex-direction: column;
-  gap: 1em;
   box-shadow: none;
+  border-radius: 10px;
+  border: 1px solid rgb(228, 228, 228);
+  width: 100%;
+  padding: 2em;
+  overflow: hidden;
 }
+
 .changePasswordButton {
   padding: 1em 2em;
-  background-color: #e4e4e4;
   font-size: 0.875rem;
   font-weight: bold;
   font-style: normal;
