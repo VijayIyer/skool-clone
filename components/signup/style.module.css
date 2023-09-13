@@ -1,0 +1,56 @@
+.signup_paper {
+  width: 454px;
+  max-width: 100%;
+  padding: 32px;
+  background: rgb(255, 255, 255);
+  border-radius: 10px;
+  border: 1px solid rgb(228, 228, 228);
+}
+
+.signup_body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup_logo {
+  margin-bottom: 2rem;
+}
+
+.signup_title {
+  text-align: center;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  font-style: normal;
+  font-size: 23px;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+.signup_form {
+  width: 100%;
+}
+
+.signup_inputs {
+  width: 100%;
+  gap: 8px;
+  display: flex;
+  margin-bottom: 24px;
+  flex-direction: column;
+}
+
+.signup_agreement {
+  width: 100%;
+  margin: 0px 0px 24px;
+  color: rgb(144, 144, 144);
+  text-align: center;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.signup_legal {
+  text-decoration: underline;
+}

@@ -1,0 +1,33 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    min-width: 1075px;
+    margin: 20px auto 0px;
+}
+
+.logo {
+    width: 104px;
+}
+
+.logoSvg {
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    width: 100%; 
+    height: 100%;
+}
+
+@media screen and (max-width: 1075px) and (min-width: 800px) {
+    .header {
+        min-width: 800px;
+    }
+}
+
+@media screen and (max-width: 800px){
+    .header {
+        min-width: 0;
+        width: 100%
+    }
+}
