@@ -1,0 +1,31 @@
+.addLinkPopUpContainer {
+    box-sizing: border-box;
+    width: 460px;
+    border-radius: 10px;
+    padding: 32px;
+    background-color: white;
+    z-index: 999;
+}
+
+.addLinkPopUpContainer h2 {
+    margin-top: 0;
+}
+
+.addLinkInputContainer {
+    margin-bottom: 16px;
+}
+
+.addLinkButtonGroup {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.addLinkButtonGroup Button {
+    padding: 12px 24px;
+    font-size: 16px;
+}
+
+.addLinkErrorMessage {
+    margin: 0 0 0 14px;
+    color: red;
+}

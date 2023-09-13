@@ -1,0 +1,24 @@
+.container {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.editor {
+  width: 100%;
+  min-height: 200px;
+}
+
+.editor:focus {
+  outline: none;
+}
+
+.placeholder {
+  margin: 0;
+  user-select: none;
+  pointer-events: none;
+  position: absolute;
+  color: #909090;
+  top: 0;
+  left: 0;
+}
