@@ -1,9 +1,11 @@
-import { Button, TextField } from "@mui/material";
-import Link from "next/link";
-import styles from "./styles.module.css";
-import { FormEvent, useState } from "react";
+import { Button, TextField, Link } from "@mui/material";
+import NextLink from "next/link";
+import styles from "./style.module.css";
 import { FieldValues, useForm } from "react-hook-form";
-const Login = () => {
+import Image from "next/image";
+import skoolLogo from "@/public/skool.svg";
+
+export default function LogInForm() {
   const {
     register,
     reset,
@@ -25,12 +27,15 @@ const Login = () => {
   return (
     <div className={styles.formContainer}>
       <div style={{ textAlign: "center", fontSize: "1.5rem" }}>
-        <h2>
-          <span style={{ color: "#263397" }}>s</span>
-          <span style={{ color: "#d3513e" }}>k</span>
-          <span style={{ color: "#e0b467" }}>o</span>
-          <span style={{ color: "#6bb7ee " }}>o</span>
-          <span style={{ color: "#c45946" }}>l</span>
+        <h2 className={styles.h2}>
+          <NextLink href="/">
+            <Image
+              src={skoolLogo}
+              width={72}
+              alt="logo of skool"
+              className={styles.signup_logo}
+            />
+          </NextLink>
         </h2>
         <p style={{ marginTop: "1.5rem", fontWeight: "bold" }}>
           Log in to Skool
@@ -62,7 +67,11 @@ const Login = () => {
           <p className={styles.errMsg}>{`${errors.password?.message}`}</p>
         )}
         <p style={{ color: "blue" }}>
-          <Link href="/reset-password" style={{ color: "#3875f6" }}>
+          <Link
+            component={NextLink}
+            href="/reset-password"
+            style={{ color: "#3875f6" }}
+          >
             Forgot password?
           </Link>
         </p>
@@ -71,19 +80,22 @@ const Login = () => {
           className={styles.btn}
           type="submit"
           disabled={isSubmitting}
+          fullWidth
         >
-          LOG IN{" "}
+          LOG IN
         </Button>
       </form>
 
       <p style={{ textAlign: "center" }}>
-        Don't have an account?{" "}
-        <Link href={"/singup"} style={{ color: "#3875f6" }}>
+        Don&apos;t have an account?{" "}
+        <Link
+          component={NextLink}
+          href={"/signup"}
+          style={{ color: "#3875f6" }}
+        >
           Sign up
         </Link>
       </p>
     </div>
   );
-};
-
-export default Login;
+}

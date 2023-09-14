@@ -1,12 +1,7 @@
 /* styles.module.css */
-
 .formContainer {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  width: 500px;
-  transform: translate(-50%, -50%);
-
+  width: 454px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   padding: 2rem;
@@ -33,6 +28,7 @@
   opacity: 80%;
   background-color: #f8d481;
 }
+
 .btn:disabled {
   background-color: gray;
 }
