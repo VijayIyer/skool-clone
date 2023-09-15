@@ -1,41 +1,44 @@
-import { Schema, model, Document } from 'mongoose';
+import mongoose from 'mongoose';
 
-export interface User {
-    firstname: string;
-    lastname: string;
-    email: string;
-    password: string;
+function capitalize(name: string) {
+  if (typeof name !== 'string') name = '';
+  return name.charAt(0).toUpperCase() + name.substring(1);
 }
 
-export interface UserDocument extends User, Document {}
-
-const UserSchema = new Schema<User>(
-    {
-        firstname: {
-            type: String,
-            required: [true, 'Please provide a first name for this user']
-        },
-        lastname: {
-            type: String,
-            required: [true, 'Please provide a last name for this user']
-        },
-        email: {
-            type: String,
-            required: [true, 'Please provide a email for this user'],
-            unique: true,
-            trim: true,
-            lowercase: true
-        },
-        password: {
-            type: String,
-            required: [true, 'Please provide a password for this user']
-        }
+const UserSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: [true, 'Please provide a first name for this user'],
+      set: capitalize,
     },
-    {
-        timestamps: true
-    }
-)
+    lastName: {
+      type: String,
+      required: [true, 'Please provide a last name for this user'],
+      set: capitalize,
+    },
+    email: {
+      type: String,
+      required: [true, 'Please provide a email for this user'],
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    password: {
+      type: String,
+      required: [true, 'Please provide a password for this user'],
+    },
+  },
+  {
+    timestamps: true, // this will add createdAt and updatedAt timestamps
+    virtuals: {
+      fullName: {
+        get() {
+          return this.firstName + ' ' + this.lastName;
+        },
+      },
+    },
+  }
+);
 
-const User = model<UserDocument>('User', UserSchema);
-
-export default User;
+export default mongoose.models.User || mongoose.model('User', UserSchema);
