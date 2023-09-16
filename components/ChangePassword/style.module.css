@@ -29,8 +29,14 @@
   gap: 1em;
 }
 .header {
+  color: #202124;
+  margin: 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: bold;
+  font-style: normal;
   font-size: 20px;
+  line-height: 1.5;
+  margin-bottom: 32px;
 }
 .headerContainer {
   margin-bottom: 2em;
