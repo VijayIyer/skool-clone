@@ -1,4 +1,6 @@
 import styles from "./style.module.css";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useController, useForm, SubmitHandler } from "react-hook-form";
 import {
   Typography,
@@ -11,23 +13,14 @@ import {
   OutlinedInput,
   styled,
 } from "@mui/material";
-import ChangePasswordButton from "./changePasswordButton";
+import ChangePasswordButton from "./ChangePasswordButton";
+import PasswordTextField, { PasswordField } from "./PasswordTextField";
 
-interface ChangePasswordFormInput {
+export interface ChangePasswordFormInput {
   oldPassword: string;
   newPassword: string;
   confirmNewPassword: string;
 }
-const CustomOutlinedInput = styled(OutlinedInput)({
-  "&.MuiOutlinedInput-root": {
-    "&:hover fieldset": {
-      borderColor: "none",
-    },
-  },
-  "&.MuiOutlinedInput-root.Mui-focused": {
-    borderColor: "1px black solid",
-  },
-});
 
 export default function ChangePasswordForm() {
   const { control, handleSubmit } = useForm<ChangePasswordFormInput>({
@@ -38,12 +31,22 @@ export default function ChangePasswordForm() {
     },
   });
 
+  // Adds query parameter when user selects tab to get to Change Password form
+  const router = useRouter();
+  useEffect(() => {
+    router.query.t = "password";
+    router.push(router);
+  }, [router.isReady]);
+
   const onSubmit: SubmitHandler<ChangePasswordFormInput> = (data, e) => {
     // e?.preventDefault();
     console.log(data);
   };
 
-  const { field: newPassword, fieldState: newPasswordState } = useController({
+  const { field: newPassword, fieldState: newPasswordState } = useController<
+    ChangePasswordFormInput,
+    PasswordField
+  >({
     name: "newPassword",
     control,
     rules: {
@@ -58,7 +61,10 @@ export default function ChangePasswordForm() {
       },
     },
   });
-  const { field: oldPassword, fieldState: oldPasswordState } = useController({
+  const { field: oldPassword, fieldState: oldPasswordState } = useController<
+    ChangePasswordFormInput,
+    PasswordField
+  >({
     name: "oldPassword",
     control,
     rules: {
@@ -66,7 +72,7 @@ export default function ChangePasswordForm() {
     },
   });
   const { field: confirmNewPassword, fieldState: confirmNewPasswordState } =
-    useController({
+    useController<ChangePasswordFormInput, PasswordField>({
       name: "confirmNewPassword",
       control,
       rules: {
@@ -77,56 +83,26 @@ export default function ChangePasswordForm() {
   return (
     <Paper className={styles.changePasswordContainer}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.headerContainer}>
-          <Typography variant='type2' component={"p"} className={styles.header}>
-            Change password
-          </Typography>
-        </div>
+        <p className={styles.header}>Change password</p>
+
         <div className={styles.passwordFieldsContainer}>
           <div>
             <FormControl variant='outlined' fullWidth>
-              <InputLabel
-                htmlFor='old_password'
-                error={oldPasswordState.invalid}
-              >
-                Old password
-              </InputLabel>
-              <OutlinedInput
+              <PasswordTextField
                 id='old_password'
-                data-testid='old-password-component'
-                onChange={oldPassword.onChange}
-                name={oldPassword.name}
-                inputRef={oldPassword.ref}
-                error={oldPasswordState.invalid}
-                inputProps={{
-                  "aria-errormessage": "old-password-error-message",
-                }}
                 label='Old password'
-                fullWidth
-                autoFocus
+                controllerField={oldPassword}
+                controllerFieldState={oldPasswordState}
               />
             </FormControl>
           </div>
           <div>
             <FormControl variant='outlined' fullWidth>
-              <InputLabel
-                htmlFor='new_password'
-                error={newPasswordState.invalid}
-              >
-                New password
-              </InputLabel>
-              <CustomOutlinedInput
+              <PasswordTextField
                 id='new_password'
-                data-testid='new-password-component'
-                onChange={newPassword.onChange}
-                name={newPassword.name}
-                inputRef={newPassword.ref}
-                error={newPasswordState.invalid}
-                inputProps={{
-                  "aria-errormessage": "new-password-error-message",
-                }}
                 label='New password'
-                fullWidth
+                controllerField={newPassword}
+                controllerFieldState={newPasswordState}
               />
             </FormControl>
           </div>
@@ -137,25 +113,11 @@ export default function ChangePasswordForm() {
           )}
           <div>
             <FormControl variant='outlined' fullWidth>
-              <InputLabel
-                htmlFor='confirm_new_password'
-                error={confirmNewPasswordState.invalid}
-              >
-                Confirm new password
-              </InputLabel>
-              <OutlinedInput
-                autoFocus
+              <PasswordTextField
                 id='confirm_new_password'
-                data-testid='confirm-password-component'
-                onChange={confirmNewPassword.onChange}
-                name={confirmNewPassword.name}
-                inputRef={confirmNewPassword.ref}
-                error={confirmNewPasswordState.invalid}
-                inputProps={{
-                  "aria-errormessage": "confirm-new-password-error-message",
-                }}
                 label='Confirm new password'
-                fullWidth
+                controllerField={confirmNewPassword}
+                controllerFieldState={confirmNewPasswordState}
               />
             </FormControl>
           </div>
