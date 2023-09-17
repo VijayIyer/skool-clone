@@ -20,8 +20,6 @@ const PostSchema: Schema = new Schema({
     content: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     user_name: { type: String, required: true },
-    createdAt: { type: Date, required: true, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
     attachments: [
         {
             fileName: { type: String },
@@ -38,6 +36,6 @@ const PostSchema: Schema = new Schema({
     category: { type: String, required: true },
     likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-});
+}, {timestamps: true});
 
 export default mongoose.models.Post || mongoose.model<IPost>('Post', PostSchema, 'posts');

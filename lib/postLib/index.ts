@@ -1,13 +1,13 @@
-export {checkPostExist} from './checkPostExist';
-export {deletePost} from './deletePost';
-export {findUserById} from './findUserById';
 export {uploadToCloudinary} from './uploadToCloudinary';
 
 export {
+    checkPostExist,
+    deletePost,
+    findUserById,
     getAllPosts,
     getPostsByCategory,
     getPostById,
-} from './getPosts';
+} from './dbOperations';
 
 export {
     checkNewPostRequiredContent,
@@ -21,12 +21,11 @@ export {
 } from './utils';
 
 export {
-    handleUserValidation,
-    handlePostContentRequiredValidation,
-    handlePostEmptyContentValidation,
-    handlePostPollValidation,
-    handlePostGroupValidation,
-    handlePostAuthorValidation,
-    handlePostExistValidation,
-
-} from './handleValidations';
+    handleUserAuthorization,
+    handlePostContentRequiredAuthorization,
+    handlePostEmptyContentAuthorization,
+    handlePostPollAuthorization,
+    handlePostGroupAuthorization,
+    handlePostAuthorAuthorization,
+    handlePostExistAuthorization,
+} from './handleAuthorization';

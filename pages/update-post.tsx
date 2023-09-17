@@ -37,38 +37,21 @@ const UpdatePost = () => {
     }
 
     const changeCategory = () => {
-        const data = {
-            user_id: newPost.author,
-            user_name: newPost.user_name,
-            post_id: newPost._id,
-            category: 'Test Category'
-        }
-        axios.post(`http://localhost:3000/api/posts/update-post/update-category`, data)
+        axios.patch(`http://localhost:3000/api/posts?post_id=65065a006b2366e959369a68&category=1111`)
             .then(
                 res => {console.log(res)}
             )
     }
 
     const submitPost = () => {
-        const data = {
-            user_id: newPost.author,
-            user_name: newPost.user_name,
-            post_id: newPost._id,
-            new_post: newPost
-        }
-        axios.post(`http://localhost:3000/api/posts/update-post/update-post`, data)
+        axios.put(`http://localhost:3000/api/posts?post_id=65065a006b2366e959369a68`, {new_post: newPost})
             .then(res => {
                 console.log(res)
             })
     }
 
     useEffect(() => {
-        const data = {
-            user_id: '6500d391ba83ebc13d48cea9',
-            user_name: 'John Doe',
-            post_id: '6504f04a30ab9b2364ce67b7',
-        }
-        axios.post(`http://localhost:3000/api/posts/get-post/one-post/test`, data)
+        axios.get(`http://localhost:3000/api/posts?by=one&post_id=65065a006b2366e959369a68`)
             .then(res => {
                 setNewPost(res.data)
             })
