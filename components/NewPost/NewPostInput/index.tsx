@@ -187,11 +187,16 @@ const NewPostInput: FC = () => {
             /**
              * for test only, should be modified
              */
-            data.user_id = '65007603cf299ac4c5fec701';
-            axios.post('http://localhost:3001/api/posts/new-post', data);
+            console.log(data.attachments)
+            data.user_id = '6500d391ba83ebc13d48cea9';
+            data.user_name = 'John Doe';
+            axios.post('http://localhost:3000/api/posts/new-post', data)
+                .then(res => {
+                    console.log(res);
+                }).catch(err => {
+                console.log(err);
+            })
 
-
-            console.log(data);
             setNewPostTitle('');
             setUploadArr([]);
             setPollOptions(optionArr);

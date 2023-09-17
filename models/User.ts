@@ -28,6 +28,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please provide a password for this user'],
     },
+      group: [{type: String}]
   },
   {
     timestamps: true, // this will add createdAt and updatedAt timestamps
