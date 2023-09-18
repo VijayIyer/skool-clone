@@ -1,7 +1,8 @@
 import type { NextApiResponse } from 'next';
 
 export async function handlePostGroupAuthorization (userObj: string[], groupId: string, res: NextApiResponse) {
-    if (userObj.foundUser.toObject().groups.filter(id => id.toHexString() === groupId).length === 0) {
+    //@ts-ignore
+    if (userObj.foundUser.toObject().groups.filter((id: any) => id.toHexString() === groupId).length === 0) {
         await res.status(401).json({message: "Unauthorized!"});
         return;
     }

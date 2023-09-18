@@ -29,7 +29,7 @@ export async function checkPostExist (postId: string) {
     }
 }
 
-export async function addNewPost (newPost) {
+export async function addNewPost (newPost: any) {
     await dbConnect();
     try {
         const result = await newPost.save();
@@ -174,7 +174,7 @@ export async function getPostById (post_id: string) {
     }
 }
 
-export async function updatePostById (postId: string, newPost) {
+export async function updatePostById (postId: string, newPost: any) {
     await dbConnect();
     try {
         const result = await Post.findOneAndUpdate({_id: postId}, newPost, {new: true});

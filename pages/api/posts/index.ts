@@ -60,7 +60,7 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
          * group can be got from req.body after middleware
          * need to revise later
          */
-        await handlePostGroupAuthorization(userObj, groupId, res);
+        await handlePostGroupAuthorization(userObj as any, groupId, res);
 
         // check whether the attachments have image
         if (attachments.length > 0) {
@@ -120,23 +120,23 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
 
         // validate the newPost data
         if (!validateUpdatePost(newPost).success) {
-            await res.status(422).json({message: 'Invalid post data! ' + validateUpdatePost(newPost).error});
+            await res.status(422).json({message: 'Invalid post data!'});
             return;
         }
 
         // check if the user is the author of the post
         // if the user is the admin, then he can update the post too.
-        const foundObj = await getPostById(postId);
+        const foundObj = await getPostById(postId as string);
         await handlePostAuthorAuthorization(foundObj, userId, res);
 
         // check whether the attachments have image
         const {attachments=[]} = newPost;
         if (attachments.length > 0) {
-            const newAttachmentsArr = attachments.filter(attachment => attachment.id).filter(attachment => attachment.fileType === 'attachment');
+            const newAttachmentsArr = attachments.filter((attachment: any) => attachment.id).filter((attachment: any) => attachment.fileType === 'attachment');
             if (newAttachmentsArr.length > 0) {
                 const newImgArr = await uploadToCloudinary(newAttachmentsArr, res);
-                for (const imgObj of newImgArr) {
-                    newAttachmentsArr.filter(attachment => attachment.id === imgObj.id)[0].url = imgObj.url;
+                for (const imgObj of newImgArr as any) {
+                    newAttachmentsArr.filter((attachment: any) => attachment.id === imgObj.id)[0].url = imgObj.url;
                 }
                 for (const attachment of attachments) {
                     if (attachment.id) {
@@ -182,7 +182,7 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
             return;
         }
 
-        const foundObj = await getPostById(postId);
+        const foundObj = await getPostById(postId as string);
         const fountPost = foundObj.foundPost.toObject();
 
         switch (by) {
@@ -208,7 +208,7 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
                 }
 
                 const {likes} = fountPost;
-                const newLikes = likes.filter(like => like.toHexString() === userId).length > 0 ? likes.filter(like => like.toHexString() !== userId) : [...likes, userId]
+                const newLikes = likes.filter((like: any) => like.toHexString() === userId).length > 0 ? likes.filter((like: any) => like.toHexString() !== userId) : [...likes, userId]
 
                 result = await updatePostById(postId as string, {likes: newLikes});
                 if (!result.isUpdated) {
@@ -236,17 +236,17 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
                    return;
                }
 
-               const newPoll = poll.map((pollObj, index) => {
+               const newPoll = poll.map((pollObj: any, index: number) => {
                    if (index === Number(option)) {
                        const {votes} = pollObj;
-                       const newVotes = votes.filter(vote => vote.toHexString() === userId).length > 0 ? votes.filter(vote => vote.toHexString() !== userId) : [...votes, userId]
+                       const newVotes = votes.filter((vote: any) => vote.toHexString() === userId).length > 0 ? votes.filter((vote: any) => vote.toHexString() !== userId) : [...votes, userId]
                        return {
                            ...pollObj,
                            votes: newVotes,
                        }
                    } else {
                        const {votes} = pollObj;
-                       const newVotes = votes.filter(vote => vote.toHexString() === userId).length > 0 ? votes.filter(vote => vote.toHexString() !== userId) : [...votes]
+                       const newVotes = votes.filter((vote: any) => vote.toHexString() === userId).length > 0 ? votes.filter((vote: any) => vote.toHexString() !== userId) : [...votes]
                        return {
                            ...pollObj,
                            votes: newVotes,
@@ -346,7 +346,7 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
                  * need to revise later
                  */
                 // check if the user and group is valid
-                await handlePostGroupAuthorization(userObj, group as string, res);
+                await handlePostGroupAuthorization(userObj as any, group as string, res);
 
                 // get posts
                 result = await getAllPosts(page as string);
@@ -367,7 +367,7 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
                  * need to revise later
                  */
                 // check if the user and group is valid
-                await handlePostGroupAuthorization(userObj, group as string, res);
+                await handlePostGroupAuthorization(userObj as any, group as string, res);
 
                 // get posts
                 result = await getPostsByCategory(category as string, page as string);
@@ -377,7 +377,7 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
                 const {postId} = req.query;
                 const foundObj = await getPostById(postId as string);
                 await handlePostExistAuthorization(foundObj, res);
-                await handlePostGroupAuthorization(userObj, foundObj.foundPost.toObject().group.toHexString(), res);
+                await handlePostGroupAuthorization(userObj as any, foundObj.foundPost.toObject().group.toHexString(), res);
                 return res.status(200).json(foundObj.foundPost);
             default:
                 await res.status(404).json({message: 'Not found!'});
