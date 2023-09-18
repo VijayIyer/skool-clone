@@ -2,11 +2,16 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 
 const UpdatePost = () => {
-    const [newPost, setNewPost] = useState({});
+    const [newPost, setNewPost] = useState({
+        title: undefined,
+        attachments: undefined
+    });
 
     const changePost = () => {
         const temp = newPost;
+        // @ts-ignore
         temp.title = 'New Title';
+        // @ts-ignore
         temp.attachments = [
             {
                 fileName: "",
