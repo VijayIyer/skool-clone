@@ -131,18 +131,14 @@ const NewPostInput: FC = () => {
         if (newPostTitle && postCategory && editorRef.current.getData()) {
             const data: postDataType = {
                 category: "",
-                comments: [],
                 content: "",
-                likes: [],
                 title: "",
-                user_id: "",
-                user_name: ""
+                userId: "",
             }
             data.title = newPostTitle;
             data.content = JSON.stringify(editorRef.current.getData());
             data.category = postCategory;
-            data.user_name = localStorage.getItem('user_name');
-            data.user_id = localStorage.getItem('ObjectID');
+            data.userId = document.cookie.split(';')[0].split('=')[1];
 
             for (const pollOption of pollOptions) {
                 if (pollOption.content) {
@@ -187,10 +183,7 @@ const NewPostInput: FC = () => {
             /**
              * for test only, should be modified
              */
-            console.log(data.attachments)
-            data.user_id = '6500d391ba83ebc13d48cea9';
-            data.user_name = 'John Doe';
-            axios.post('http://localhost:3000/api/posts/new-post', data)
+            axios.post('http://localhost:3000/api/posts', data)
                 .then(res => {
                     console.log(res);
                 }).catch(err => {

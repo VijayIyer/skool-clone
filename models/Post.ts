@@ -5,7 +5,7 @@ export interface IPost extends mongoose.Document {
     title: string;
     content: string;
     author: string;
-    user_name: string;
+    userName: string;
     createdAt: Date;
     updatedAt: Date;
     attachments: { fileName: string; fileType: string; url: string }[];
@@ -19,7 +19,7 @@ const PostSchema: Schema = new Schema({
     title: { type: String, required: true },
     content: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    user_name: { type: String, required: true },
+    userName: { type: String, required: true },
     attachments: [
         {
             fileName: { type: String },

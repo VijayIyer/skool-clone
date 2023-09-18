@@ -37,21 +37,49 @@ const UpdatePost = () => {
     }
 
     const changeCategory = () => {
-        axios.patch(`http://localhost:3000/api/posts?post_id=65065a006b2366e959369a68&category=1111`)
+        axios.patch(`http://localhost:3000/api/posts?by=category&postId=6507d38d472333e5f0a5bb62&category='111'`)
             .then(
                 res => {console.log(res)}
             )
     }
 
+    const changeLikes = () => {
+        axios.patch(`http://localhost:3000/api/posts?by=likes&postId=6507d38d472333e5f0a5bb62`)
+            .then(
+                res => {console.log(res)}
+            )
+    }
+
+    const changeOptionOne = () => {
+        axios.patch(`http://localhost:3000/api/posts?by=option&postId=6507d38d472333e5f0a5bb62&option=0`)
+            .then(
+                res => {console.log(res)}
+            )
+    }
+
+    const changeOptionTwo = () => {
+        axios.patch(`http://localhost:3000/api/posts?by=option&postId=6507d38d472333e5f0a5bb62&option=1`)
+            .then(
+                res => {console.log(res)}
+            )
+    }
+
+    const deletePost = () => {
+        axios.delete(`http://localhost:3000/api/posts?postId=6507d38d472333e5f0a5bb62`)
+            .then(res => {
+                console.log(res)
+            })
+    }
+
     const submitPost = () => {
-        axios.put(`http://localhost:3000/api/posts?post_id=65065a006b2366e959369a68`, {new_post: newPost})
+        axios.put(`http://localhost:3000/api/posts?postId=6507d38d472333e5f0a5bb62`, {newPost: newPost})
             .then(res => {
                 console.log(res)
             })
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/api/posts?by=one&post_id=65065a006b2366e959369a68`)
+        axios.get(`http://localhost:3000/api/posts?by=one&postId=6507d38d472333e5f0a5bb62`)
             .then(res => {
                 setNewPost(res.data)
             })
@@ -62,7 +90,14 @@ const UpdatePost = () => {
         <h1>Update Data</h1>
         <button onClick={changePost}>Change</button>
         <button onClick={submitPost}>submit</button>
+        <br/>
         <button onClick={changeCategory}>Change Category</button>
+        <button onClick={changeLikes}>Change Likes</button>
+        <br/>
+        <button onClick={changeOptionOne}>click option 1</button>
+        <button onClick={changeOptionTwo}>click option 2</button>
+        <br/>
+        <button onClick={deletePost}>delete</button>
     </div>)
 }
 

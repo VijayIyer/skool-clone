@@ -1,5 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {
+    addNewPost,
     checkPostExist,
     deletePost,
     findUserById,
@@ -8,98 +9,118 @@ import {
     getPostById,
     getPostsByCategory,
     handlePostAuthorAuthorization,
-    handlePostContentRequiredAuthorization,
-    handlePostEmptyContentAuthorization,
     handlePostExistAuthorization,
     handlePostGroupAuthorization,
-    handlePostPollAuthorization,
-    handleUserAuthorization,
-    uploadToCloudinary
+    updatePostById,
+    uploadToCloudinary,
+    validateCategoryUpdate,
+    validateGetRequest,
+    validateLikesUpdate,
+    validateNewPost, validateOptionsUpdate,
+    validatePostId,
+    validateUpdatePost
 } from "@/lib/postLib";
 import Post, {IPost} from "@/models/Post";
 
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { user_id, user_name } = req.cookies;
-    if (!user_id || !user_name) {
-        await res.status(401).json({message: 'Unauthorized!'});
-        return;
-    }
+export default async function postsHandler(req: NextApiRequest, res: NextApiResponse) {
+    /**
+     * !!! important !!!
+     * user_id can be got from req.body after middleware
+     * delete tempUserId after testing
+     */
+    const tempUserId = '6500d391ba83ebc13d48cea9'
 
     if (req.method === 'POST') {
         const {
             title,
             content,
             category,
-            comments,
-            likes,
+            userId,
             poll = [],
             attachments = [],
-        } = req.query;
-        await handlePostContentRequiredAuthorization(title, content, category, user_id, user_name, res);
+        } = req.body;
 
-        // check if empty content is valid
-        await handlePostEmptyContentAuthorization(comments, likes, res);
+        // validate the post data
+        if (!validateNewPost(req.body).success) {
+            await res.status(422).json({message: 'Invalid post data!'});
+            return;
+        }
 
-        //check if poll content is valid
-        await handlePostPollAuthorization(poll, res);
+        // check if the user is existed
+        const userObj = await findUserById(userId);
+        if (!userObj.isFindUser) {
+            await res.status(userObj.status).json({message: userObj.message});
+            return;
+        }
 
-        // check if user is valid
-        const userObj = await findUserById(user_id);
-        await handleUserAuthorization(userObj, user_name, res)
-
+        // check whether the attachments have image
         if (attachments.length > 0) {
             const imageArr = getImageArray(attachments);
-            const newImgArr = await uploadToCloudinary(imageArr, res);
-            // @ts-ignore
-            for (const imgObj of newImgArr) {
+            if (imageArr.length > 0) {
+                const newImgArr = await uploadToCloudinary(imageArr, res);
                 // @ts-ignore
-                attachments.filter(attachment => attachment.id === imgObj.id)[0].url = imgObj.url;
+                for (const imgObj of newImgArr) {
+                    // @ts-ignore
+                    attachments.filter(attachment => attachment.id === imgObj.id)[0].url = imgObj.url;
+                }
             }
 
+            // delete the id field, conflict with id field in db
             for (const attachment of attachments) {
                 delete attachment.id;
             }
         }
 
+        // create new post
         const newPost: IPost = new Post({
             title,
             content,
             category,
-            comments,
-            likes,
+            comments: [],
+            likes: [],
             poll,
             attachments,
-            user_name,
-            author: user_id,
+            userName: `${userObj.foundUser.toObject().firstName} ${userObj.foundUser.toObject().lastName}` ,
+            author: userId,
         });
 
-        try {
-            await newPost.save();
-        } catch (error) {
-            console.log(error);
-            await res.status(500).json({message: 'Creating post failed, please try again.'});
+        // save the post to db
+        const result = await addNewPost(newPost);
+
+        // check if the post is added successfully
+        if (!result.isAdded) {
+            await res.status(500).json({message: result.message});
             return;
         }
 
-        await res.status(200).json({message: 'OK'});
+        // return the post data
+        await res.status(200).json({message: 'Post created successfully!', data: result.data});
         return;
-    } else if (req.method === 'PUT') {
-        const {post_id,} = req.query;
-        const {new_post} = req.body;
 
-        // check if the user is existed
-        const userObj = await findUserById(user_id);
-        await handleUserAuthorization(userObj, user_name, res);
+    } else if (req.method === 'PUT') {
+        const {postId} = req.query;
+        const {newPost} = req.body;
+
+        /**
+         * !!! important !!!
+         * user_id can be got from req.body after middleware
+         * delete tempUserId after testing
+         */
+        let userId = tempUserId;
+
+        // validate the newPost data
+        if (!validateUpdatePost(newPost).success) {
+            await res.status(422).json({message: 'Invalid post data! ' + validateUpdatePost(newPost).error});
+            return;
+        }
 
         // check if the user is the author of the post
-        const foundObj = await getPostById(post_id);
-        await handlePostAuthorAuthorization(foundObj, user_id, res);
+        const foundObj = await getPostById(postId);
+        await handlePostAuthorAuthorization(foundObj, userId, res);
 
-        const {title, content, category, poll=[], attachments=[]} = new_post;
-        await handlePostContentRequiredAuthorization(title, content, category, user_id, user_name, res);
-        await handlePostPollAuthorization(poll, res);
-
+        // check whether the attachments have image
+        const {attachments=[]} = newPost;
         if (attachments.length > 0) {
             const newAttachmentsArr = attachments.filter(attachment => attachment.id).filter(attachment => attachment.fileType === 'attachment');
             if (newAttachmentsArr.length > 0) {
@@ -115,45 +136,144 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-        delete new_post.createAt;
-        delete new_post.updateAt;
-
-        const newPost: IPost = new Post({
-            ...new_post,
+        // update the post
+        const Post = ({
+            ...newPost,
             attachments,
         });
-
-        try {
-            const returnedPost = await Post.findOneAndUpdate({_id: post_id}, newPost)
-            await res.status(200).json({message: 'Post updated successfully!', post: returnedPost});
+        const result = await updatePostById(postId as string, Post);
+        if (!result.isUpdated) {
+            await res.status(500).json({message: result.message});
             return;
-        } catch (error) {
-            await res.status(500).json({message: 'Internal server error!'});
+        } else {
+            await res.status(200).json({message: 'Post updated successfully!', data: result.newData});
             return;
         }
     } else if (req.method === 'PATCH') {
         const {
-            post_id,
-            category
-        } = req.query;
+            by,
+            postId,
+            category,
+            option,
+        } = req.query
 
-        const userObj = await findUserById(user_id);
-        await handleUserAuthorization(userObj, user_name, res);
+        let result;
 
-        const foundObj = await getPostById(post_id);
-        await handlePostExistAuthorization(foundObj, res);
+        /**
+         * !!! important !!!
+         * user_id can be got from req.body after middleware
+         * delete tempUserId after testing
+         */
+        let userId = tempUserId;
 
-        try {
-            const returnedPost = await Post.findOneAndUpdate({_id: post_id}, {category: category});
-            await res.status(200).json({message: 'Post updated successfully!', post: returnedPost});
-        } catch (error) {
-            await res.status(500).json({message: 'Internal server error!'});
+        // validate the post data
+        if (!validatePostId(postId).success) {
+            await res.status(422).json({message: 'Invalid post data!'});
             return;
         }
+
+        const foundObj = await getPostById(postId);
+        const fountPost = foundObj.foundPost.toObject();
+
+        switch (by) {
+            case 'category':
+                if (!validateCategoryUpdate(req.query).success) {
+                    await res.status(422).json({message: 'Invalid post data!'});
+                    return;
+                }
+
+                result = await updatePostById(postId as string, {category: category});
+                if (!result.isUpdated) {
+                    await res.status(500).json({message: result.message});
+                    return;
+                } else {
+                    await res.status(200).json({message: 'Post updated successfully!', data: result.newData});
+                    return;
+                }
+
+            case 'likes':
+                if (!validateLikesUpdate(req.query).success) {
+                    await res.status(422).json({message: 'Invalid post data!'});
+                    return;
+                }
+
+                const {likes} = fountPost;
+                const newLikes = likes.filter(like => like.toHexString() === userId).length > 0 ? likes.filter(like => like.toHexString() !== userId) : [...likes, userId]
+
+                result = await updatePostById(postId as string, {likes: newLikes});
+                if (!result.isUpdated) {
+                    await res.status(500).json({message: result.message});
+                    return;
+                } else {
+                    await res.status(200).json({message: 'Post updated successfully!', data: result.newData});
+                    return;
+                }
+
+            case 'option':
+               const {poll} = fountPost;
+               if (!validateOptionsUpdate(req.query).success) {
+                   await res.status(422).json({message: 'Invalid post data!'});
+                   return;
+               }
+
+               // check if the option is valid
+               if (poll.length === 0) {
+                     await res.status(422).json({message: 'Invalid poll data!'});
+                     return;
+               }
+               if (poll.length <= Number(option)) {
+                   await res.status(422).json({message: 'Invalid poll data!'});
+                   return;
+               }
+
+               const newPoll = poll.map((pollObj, index) => {
+                   if (index === Number(option)) {
+                       const {votes} = pollObj;
+                       const newVotes = votes.filter(vote => vote === userId).length > 0 ? votes.filter(vote => vote !== userId) : [...votes, userId]
+                       return {
+                           ...pollObj,
+                           votes: newVotes,
+                       }
+                   } else {
+                       const {votes} = pollObj;
+                       const newVotes = votes.filter(vote => vote === userId).length > 0 ? votes.filter(vote => vote !== userId) : [...votes]
+                       return {
+                           ...pollObj,
+                           votes: newVotes,
+                       }
+                   }
+               })
+
+                result = await updatePostById(postId as string, {poll: newPoll});
+                if (!result.isUpdated) {
+                    await res.status(500).json({message: result.message});
+                    return;
+                } else {
+                    await res.status(200).json({message: 'Post updated successfully!', data: result.newData});
+                    return;
+                }
+            default:
+                await res.status(404).json({message: 'Not found!'});
+                return;
+        }
+
+
     } else if (req.method === 'DELETE') {
         const {
             postId,
         } = req.query;
+
+        /**
+         * !!! important !!!
+         * user_id can be got from req.body after middleware
+         * delete tempUserId after testing
+         */
+        let userId = tempUserId;
+
+        if (!validatePostId(postId).success) {
+            await res.status(422).json({message: 'Invalid post data!'});
+            return;
+        }
 
         // check if post exist
         const foundDoc = await checkPostExist(postId as string);
@@ -165,24 +285,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const author = (foundDoc.data as IPost).author.toString();
 
         /**
-         * if the user is the admin in the group, then he can delete the post.
-         * get author data from db
+         * if the user is the admin in the group, then he can delete the post too.
          */
-        if (author !== user_id) {
+        if (author !== userId) {
             await res.status(401).json({message: "Unauthorized!"});
             return;
         } else {
             const deleteResult = await deletePost(postId as string);
-            if (!deleteResult || !deleteResult.isDeleted) {
-                if (!deleteResult) {
-                    await res.status(500).json({message: "Error deleting document!"});
-                    return;
-                }
+            if (!deleteResult.isDeleted) {
                 await res.status(500).json({message: deleteResult.message});
                 return;
+            } else {
+                await res.status(200).json({message: "Post deleted successfully!"});
+                return;
             }
-            await res.status(200).json({message: "Post deleted successfully!"});
-            return;
         }
     } else if (req.method === 'GET') {
         const {
@@ -190,9 +306,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             group,
             page,
         } = req.query;
+        let result;
 
-        const userObj = await findUserById(user_id);
-        await handleUserAuthorization(userObj, user_name, res);
+        /**
+         * !!! important !!!
+         * user_id can be got from req.body after middleware
+         * delete tempUserId after testing
+         */
+        let userId = tempUserId;
+
+        if (!validateGetRequest(req.query).success) {
+            await res.status(422).json({message: 'Invalid post data!'});
+            return;
+        }
+
+        const userObj = await findUserById(userId);
 
         switch (by) {
             case 'all':
@@ -203,17 +331,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
 
                 // check if the user and group is valid
-                await handlePostGroupAuthorization(userObj.foundUser.toObject().groups, group as string, res);
+                // console.log(userObj.foundUser.toObject().groups, group as string)
+                await handlePostGroupAuthorization(userObj, group as string, res);
 
                 // get posts
-                try {
-                    const posts = await getAllPosts(page as string);
-                    await res.status(200).json({posts});
-                    return;
-                } catch (e) {
-                    await res.status(500).json({message: 'Internal server error!'});
-                    return;
-                }
+                result = await getAllPosts(page as string);
+                await handlePostExistAuthorization(result, res);
+                return res.status(200).json(result.posts);
+
             case 'category':
                 const { category } = req.query;
                 // check if the page number is valid
@@ -223,27 +348,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
 
                 // check if the user and group is valid
-                await handlePostGroupAuthorization(userObj.foundUser.toObject().groups, group as string, res);
-
+                await handlePostGroupAuthorization(userObj, group as string, res);
 
                 // get posts
-                try {
-                    /**
-                     * !!! important !!!
-                     * post should be got by category and group
-                     */
-                    const posts = await getPostsByCategory(category as string, page as string);
-                    await res.status(200).json({posts});
-                    return;
-                } catch (e) {
-                    await res.status(500).json({message: 'Internal server error!'});
-                    return;
-                }
+                result = await getPostsByCategory(category as string, page as string);
+                await handlePostExistAuthorization(result, res);
+                return res.status(200).json(result.posts);
             case 'one':
-                const {post_id} = req.query;
-
-                console.log(post_id);
-                const foundObj = await getPostById(post_id);
+                const {postId} = req.query;
+                const foundObj = await getPostById(postId as string);
                 await handlePostExistAuthorization(foundObj, res);
 
                 return res.status(200).json(foundObj.foundPost);
