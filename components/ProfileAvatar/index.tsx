@@ -1,10 +1,11 @@
 import React from "react";
-import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+
 import AvatarWithBadge from "./AvatarWithBadge";
 import ProfileTimeStamp from "./ProfileTimeStamp";
 
@@ -23,25 +24,6 @@ const StackItem = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
-
-// //avatr
-// const StyledBadge = styled(Badge)(({ theme }) => ({
-//   "& .MuiBadge-badge": {
-//     backgroundColor: "#4357ad",
-//     color: "#ffffff",
-//     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-//     width: "48px",
-//     height: "48px",
-//     borderRadius: "50%",
-//   },
-// }));
-// //pichart
-// const pieParams = { height: 220, width: 220 };
-// const palette = ["purple", "gray"];
-
-// // const StyledLevelRing = styled(PieChart)(({ theme }) => ({
-// //   position: "absolute",
-// // }));
 
 export default function ProfileAvatar({ user }) {
   console.log(user);
