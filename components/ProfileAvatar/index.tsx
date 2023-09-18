@@ -1,16 +1,10 @@
 import React from "react";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-// import Badge from "@mui/material/Badge";
-// import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-// import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
-// import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-// import Link from "@mui/material/Link";
-// import SkoolPointsModal from "./SkoolPointsModal";
 import AvatarWithBadge from "./AvatarWithBadge";
 import ProfileTimeStamp from "./ProfileTimeStamp";
 
@@ -67,16 +61,6 @@ export default function ProfileAvatar({ user }) {
         </Typography>
       </section>
       <Divider variant="middle" />
-      {/* <section>
-        <div>
-          <QueryBuilderIcon />
-          <Typography>{user.activeTime}</Typography>
-        </div>
-        <div>
-          <CalendarTodayIcon />
-          <Typography>{user.createdTime}</Typography>
-        </div>
-      </section> */}
       <ProfileTimeStamp user={user} />
       <Divider variant="middle" />
       <section>

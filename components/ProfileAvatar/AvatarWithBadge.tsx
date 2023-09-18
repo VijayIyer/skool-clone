@@ -20,7 +20,11 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 //pichart
-const pieParams = { height: 220, width: 220 };
+const pieParams = {
+  height: 220,
+  width: 220,
+  margin: { right: 10 },
+};
 const palette = ["purple", "gray"];
 
 // const StyledLevelRing = styled(PieChart)(({ theme }) => ({
@@ -30,22 +34,28 @@ const palette = ["purple", "gray"];
 export default function AvatarWithBadge({ user }) {
   return (
     <section>
+      {/* <PieChart
+        series={[
+          {
+            data: [{ value: 1 }, { value: 99 }],
+            innerRadius: 90,
+            outerRadius: 100,
+          },
+        ]}
+        colors={palette}
+        {...pieParams}
+      ></PieChart> */}
       <StyledBadge
         overlap="circular"
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         badgeContent={<Typography>{user.level}</Typography>}
-        // variant="dot"
       >
         <Avatar
           alt={user.fullName}
-          // src={user.avatarUrl}
-          src="/2b_avatar.jpg"
+          src={user.avatarUrl}
+          // src="/2b_avatar.jpg"
           sx={{ width: 200, height: 200 }}
         />
-        {/* <div> */}
-        {/* <StyledLevelRing */}
-
-        {/* </div> */}
       </StyledBadge>
       <div>
         <Link href="#" underline="hover" color="primary">
