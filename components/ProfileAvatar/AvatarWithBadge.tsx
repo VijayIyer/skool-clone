@@ -8,6 +8,9 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import SkoolPointsModal from "./SkoolPointsModal";
 
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
+
 //avatr
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -19,7 +22,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     borderRadius: "50%",
   },
 }));
-//pichart
+// //pichart
 const pieParams = {
   height: 220,
   width: 220,
@@ -31,9 +34,39 @@ const palette = ["purple", "gray"];
 //   position: "absolute",
 // }));
 
+//react chart
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+const levelPoints = {
+  1: 0,
+  2: 5,
+  3: 20,
+  4: 65,
+  5: 155,
+  6: 515,
+  7: 2015,
+  8: 8015,
+  9: 33015,
+};
+
 export default function AvatarWithBadge({ user }) {
+  const curPoints = user.points;
+  const leftPointsToLevelUp = levelPoints[user.level + 1] - user.points;
+
+  const data = {
+    datasets: [
+      {
+        data: [curPoints, leftPointsToLevelUp],
+        backgroundColor: ["rgba(90, 34, 139, 1)", "rgba(189, 195, 199,1)"],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
     <section>
+      {/* Mui pie chart */}
       {/* <PieChart
         series={[
           {
@@ -45,6 +78,7 @@ export default function AvatarWithBadge({ user }) {
         colors={palette}
         {...pieParams}
       ></PieChart> */}
+      <Pie data={data} />
       <StyledBadge
         overlap="circular"
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
