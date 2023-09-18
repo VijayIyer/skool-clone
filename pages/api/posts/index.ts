@@ -37,6 +37,7 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
             content,
             category,
             userId,
+            groupId,
             poll = [],
             attachments = [],
         } = req.body;
@@ -53,6 +54,13 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
             await res.status(userObj.status).json({message: userObj.message});
             return;
         }
+
+        /**
+         * !!! important !!!
+         * group can be got from req.body after middleware
+         * need to revise later
+         */
+        await handlePostGroupAuthorization(userObj, groupId, res);
 
         // check whether the attachments have image
         if (attachments.length > 0) {
@@ -77,10 +85,11 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
             title,
             content,
             category,
-            comments: [],
-            likes: [],
             poll,
             attachments,
+            comments: [],
+            likes: [],
+            group: groupId,
             userName: `${userObj.foundUser.toObject().firstName} ${userObj.foundUser.toObject().lastName}` ,
             author: userId,
         });
@@ -116,6 +125,7 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
         }
 
         // check if the user is the author of the post
+        // if the user is the admin, then he can update the post too.
         const foundObj = await getPostById(postId);
         await handlePostAuthorAuthorization(foundObj, userId, res);
 
@@ -229,14 +239,14 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
                const newPoll = poll.map((pollObj, index) => {
                    if (index === Number(option)) {
                        const {votes} = pollObj;
-                       const newVotes = votes.filter(vote => vote === userId).length > 0 ? votes.filter(vote => vote !== userId) : [...votes, userId]
+                       const newVotes = votes.filter(vote => vote.toHexString() === userId).length > 0 ? votes.filter(vote => vote.toHexString() !== userId) : [...votes, userId]
                        return {
                            ...pollObj,
                            votes: newVotes,
                        }
                    } else {
                        const {votes} = pollObj;
-                       const newVotes = votes.filter(vote => vote === userId).length > 0 ? votes.filter(vote => vote !== userId) : [...votes]
+                       const newVotes = votes.filter(vote => vote.toHexString() === userId).length > 0 ? votes.filter(vote => vote.toHexString() !== userId) : [...votes]
                        return {
                            ...pollObj,
                            votes: newVotes,
@@ -330,8 +340,12 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
                     return;
                 }
 
+                /**
+                 * !!! important !!!
+                 * group should be got from req.body after middleware
+                 * need to revise later
+                 */
                 // check if the user and group is valid
-                // console.log(userObj.foundUser.toObject().groups, group as string)
                 await handlePostGroupAuthorization(userObj, group as string, res);
 
                 // get posts
@@ -347,6 +361,11 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
                     return;
                 }
 
+                /**
+                 * !!! important !!!
+                 * group should be got from req.body after middleware
+                 * need to revise later
+                 */
                 // check if the user and group is valid
                 await handlePostGroupAuthorization(userObj, group as string, res);
 
@@ -358,7 +377,7 @@ export default async function postsHandler(req: NextApiRequest, res: NextApiResp
                 const {postId} = req.query;
                 const foundObj = await getPostById(postId as string);
                 await handlePostExistAuthorization(foundObj, res);
-
+                await handlePostGroupAuthorization(userObj, foundObj.foundPost.toObject().group.toHexString(), res);
                 return res.status(200).json(foundObj.foundPost);
             default:
                 await res.status(404).json({message: 'Not found!'});

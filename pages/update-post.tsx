@@ -37,49 +37,49 @@ const UpdatePost = () => {
     }
 
     const changeCategory = () => {
-        axios.patch(`http://localhost:3000/api/posts?by=category&postId=6507d38d472333e5f0a5bb62&category='111'`)
+        axios.patch(`http://localhost:3000/api/posts?by=category&postId=6508897baffaed39dc3d6668&category='111'`)
             .then(
                 res => {console.log(res)}
             )
     }
 
     const changeLikes = () => {
-        axios.patch(`http://localhost:3000/api/posts?by=likes&postId=6507d38d472333e5f0a5bb62`)
+        axios.patch(`http://localhost:3000/api/posts?by=likes&postId=6508897baffaed39dc3d6668`)
             .then(
                 res => {console.log(res)}
             )
     }
 
     const changeOptionOne = () => {
-        axios.patch(`http://localhost:3000/api/posts?by=option&postId=6507d38d472333e5f0a5bb62&option=0`)
+        axios.patch(`http://localhost:3000/api/posts?by=option&postId=6508897baffaed39dc3d6668&option=0`)
             .then(
                 res => {console.log(res)}
             )
     }
 
     const changeOptionTwo = () => {
-        axios.patch(`http://localhost:3000/api/posts?by=option&postId=6507d38d472333e5f0a5bb62&option=1`)
+        axios.patch(`http://localhost:3000/api/posts?by=option&postId=6508897baffaed39dc3d6668&option=1`)
             .then(
                 res => {console.log(res)}
             )
     }
 
     const deletePost = () => {
-        axios.delete(`http://localhost:3000/api/posts?postId=6507d38d472333e5f0a5bb62`)
+        axios.delete(`http://localhost:3000/api/posts?postId=6508897baffaed39dc3d6668`)
             .then(res => {
                 console.log(res)
             })
     }
 
     const submitPost = () => {
-        axios.put(`http://localhost:3000/api/posts?postId=6507d38d472333e5f0a5bb62`, {newPost: newPost})
+        axios.put(`http://localhost:3000/api/posts?postId=6508897baffaed39dc3d6668`, {newPost: newPost})
             .then(res => {
                 console.log(res)
             })
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/api/posts?by=one&postId=6507d38d472333e5f0a5bb62`)
+        axios.get(`http://localhost:3000/api/posts?by=one&postId=6508897baffaed39dc3d6668`)
             .then(res => {
                 setNewPost(res.data)
             })

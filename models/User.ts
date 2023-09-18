@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, {Schema} from 'mongoose';
 
 function capitalize(name: string) {
   if (typeof name !== 'string') name = '';
@@ -24,6 +24,7 @@ const UserSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
     },
+      groups: [ {type: Schema.Types.ObjectId, ref: 'Group'}],
     password: {
       type: String,
       required: [true, 'Please provide a password for this user'],

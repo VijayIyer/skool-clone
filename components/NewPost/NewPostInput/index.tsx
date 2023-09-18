@@ -183,6 +183,7 @@ const NewPostInput: FC = () => {
             /**
              * for test only, should be modified
              */
+            data.groupId = '650876d2affaed39dc3d6556';
             axios.post('http://localhost:3000/api/posts', data)
                 .then(res => {
                     console.log(res);
@@ -197,7 +198,6 @@ const NewPostInput: FC = () => {
             setGifData({});
             setGifSearchData('');
             setOnEditing(false);
-
 
         } else {
             alert("Please enter title, content and category.")

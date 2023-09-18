@@ -20,6 +20,7 @@ const PostSchema: Schema = new Schema({
     content: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     userName: { type: String, required: true },
+    group: { type: Schema.Types.ObjectId, ref: 'Group', required: true },
     attachments: [
         {
             fileName: { type: String },
@@ -30,7 +31,7 @@ const PostSchema: Schema = new Schema({
     poll: [
         {
             option: { type: String },
-            votes: [{type: String}],
+            votes: [{type: Schema.Types.ObjectId, ref: 'User'}],
         }
     ],
     category: { type: String, required: true },

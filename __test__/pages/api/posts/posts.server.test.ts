@@ -54,6 +54,7 @@ beforeAll(async () => {
 //                 content: '"[{\\"type\\":\\"text\\",\\"content\\":\\"delete\\"},{\\"type\\":\\"paragraph\\",\\"children\\":[{\\"type\\":\\"link\\",\\"content\\":\\"google.com\\",\\"href\\":\\"https://google.com/\\"}]},{\\"type\\":\\"paragraph\\",\\"children\\":[{\\"type\\":\\"text\\",\\"content\\":\\"🥶\\"},{\\"type\\":\\"breakline\\"}]}]"',
 //                 title: 'delete',
 //                 userId: '6500d391ba83ebc13d48cea9',
+//                 groupId = '650876d2affaed39dc3d6556';
 //                 poll: [
 //                     { option: 'option 1', votes: [] },
 //                     { option: 'option 2', votes: [] }

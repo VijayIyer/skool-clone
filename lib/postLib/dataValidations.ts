@@ -41,6 +41,7 @@ const newPostSchema = z.object({
     content: z.string().min(1).max(65535),
     category: z.string().min(1).max(255),
     userId: z.string().min(1).max(255),
+    groupId: z.string().min(1).max(255),
     poll: z.union([pollSchema, z.undefined()]),
     attachments: z.union([attachmentSchema, z.undefined()]),
 });

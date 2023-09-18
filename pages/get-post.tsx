@@ -8,13 +8,13 @@ export default function GetPost() {
         // document.cookie = `user_name=John Doe`;
 
 
-        axios.get(`http://localhost:3000/api/posts?by=all&group=test&page=1`)
+        axios.get(`http://localhost:3000/api/posts?by=all&group=650876d2affaed39dc3d6556&page=1`)
             .then(r => console.log(r.data))
 
-        // axios.get(`http://localhost:3000/api/posts?by=category&group=test&category=Test Category&page=1`)
+        // axios.get(`http://localhost:3000/api/posts?by=category&group=650876d2affaed39dc3d6556&category=Test Category&page=1`)
         //     .then(r => console.log(r.data))
         //
-        // axios.get(`http://localhost:3000/api/posts?by=one&postId=6507d319472333e5f0a5bb58`)
+        // axios.get(`http://localhost:3000/api/posts?by=one&postId=6508897baffaed39dc3d6668`)
         //     .then(r => console.log(r.data))
 
     })
