@@ -65,7 +65,7 @@ export default function ProfileAvatar({ user }) {
         </Stack>
       </section>
       <Divider variant="middle" />
-      <Button variant="contained">FOLLOW</Button>
+      <Button variant="contained">EDIT PROFILE</Button>
     </PaperContainer>
   );
 }

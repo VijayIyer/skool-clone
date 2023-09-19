@@ -10,6 +10,7 @@ import SkoolPointsModal from "./SkoolPointsModal";
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
+import { Box } from "@mui/material";
 
 //avatr
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -22,17 +23,6 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     borderRadius: "50%",
   },
 }));
-// //pichart
-const pieParams = {
-  height: 220,
-  width: 220,
-  margin: { right: 10 },
-};
-const palette = ["purple", "gray"];
-
-// const StyledLevelRing = styled(PieChart)(({ theme }) => ({
-//   position: "absolute",
-// }));
 
 //react chart
 
@@ -66,40 +56,39 @@ export default function AvatarWithBadge({ user }) {
 
   return (
     <section>
-      {/* Mui pie chart */}
-      {/* <PieChart
-        series={[
-          {
-            data: [{ value: 1 }, { value: 99 }],
-            innerRadius: 90,
-            outerRadius: 100,
-          },
-        ]}
-        colors={palette}
-        {...pieParams}
-      ></PieChart> */}
-      <Pie data={data} />
-      <StyledBadge
-        overlap="circular"
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        badgeContent={<Typography>{user.level}</Typography>}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
-        <Avatar
-          alt={user.fullName}
-          src={user.avatarUrl}
-          // src="/2b_avatar.jpg"
-          sx={{ width: 200, height: 200 }}
-        />
-      </StyledBadge>
-      <div>
-        <Link href="#" underline="hover" color="primary">
-          {`Level ${user.level}`}
-        </Link>
-      </div>
-      <div>
-        <span>5</span> {"points to level up"}
-        <SkoolPointsModal />
-      </div>
+        <Pie data={data} />
+        <div>
+          <StyledBadge
+            overlap="circular"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            badgeContent={<Typography>{user.level}</Typography>}
+          >
+            <Avatar
+              alt={user.fullName}
+              // src={user.avatarUrl}
+              src="/2b_avatar.jpg"
+              sx={{ width: 200, height: 200 }}
+            />
+          </StyledBadge>
+        </div>
+        <div>
+          <Link href="#" underline="hover" color="primary">
+            {`Level ${user.level}`}
+          </Link>
+        </div>
+        <div>
+          <span>{leftPointsToLevelUp}</span> {"points to level up"}
+          <SkoolPointsModal />
+        </div>
+      </Box>
     </section>
   );
 }
