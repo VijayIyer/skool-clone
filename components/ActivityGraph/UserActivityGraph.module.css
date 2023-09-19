@@ -1,0 +1,101 @@
+.graphContainer {
+  display: grid;
+  grid-template-columns: repeat(52,20px); /* Adjust the width of the tiles */
+  grid-template-rows: repeat(7, 20px); /* Adjust the height of the tiles */
+  gap: 1.3px;
+  background-color: #f5f5f5;
+  padding: 11px;
+  border-radius: 10px;
+  border:1px solid #E4E4E4;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.tile {
+  background-color: #ffffff;
+  transition: background-color 0.3s;
+  width: 100%;
+  height: 100%;
+}
+
+.activityTile {
+  transition: background-color 0.3s;
+  width: 100%;
+  height: 100%;
+}
+
+.tooltip {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: normal;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.dayLabel {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.monthLabel {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center; /* Center align the month labels */
+}
+
+.legendContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  flex-direction: row-reverse;
+}
+
+.legendTile {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.legendText {
+  font-size: 12px;
+  font-weight: normal;
+  padding: 5px;
+  text-align: right; /* Align the legend text to the right */
+}
+.buttonContainer {
+  flex-grow: 1; /* Allows the button to take up the remaining space */
+  text-align: left; /* Align the button to the left */
+  margin-right: 10px; /* Add some spacing to the right of the button */
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+  outline: none;
+  width: 400px;
+  max-width: 90%;  
+}
+
+.modal h2 {
+  margin-top: 0;
+  text-align: left;
+}
+
+.modal p {
+  margin-bottom: 20px;
+}
