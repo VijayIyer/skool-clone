@@ -50,9 +50,9 @@ export default function SignUpForm() {
   const onSubmit: SubmitHandler<SignupFormInput> = async (data, e) => {
     e?.preventDefault();
     setStatusText("");
-    let response;
+    let response, responseData;
     try {
-      response = await fetch("/api/signup", {
+      response = await fetch("/api/user-signup", {
         method: "POST",
         mode: "same-origin",
         headers: {
@@ -60,13 +60,16 @@ export default function SignUpForm() {
         },
         body: JSON.stringify(data),
       });
+      responseData = await response.json()
+      console.log(response)
+      console.log(responseData)
     } catch (err) {
       setStatusText(`Error: ${err} Please try again.`);
     } finally {
-      if (response?.ok === true) {
+      if (response?.ok === true && responseData.success === true) {
         router.push("/login");
-      } else if (response?.status === 400) {
-        setStatusText(`${response.statusText} Please try again.`);
+      } else {
+        setStatusText(`${responseData.errorMessage}. Please try again.`);
       }
     }
   };
