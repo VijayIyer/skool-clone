@@ -7,6 +7,7 @@ import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import SkoolPointsModal from "./SkoolPointsModal";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
@@ -49,7 +50,7 @@ export default function AvatarWithBadge({ user }) {
       {
         data: [curPoints, leftPointsToLevelUp],
         backgroundColor: ["rgba(90, 34, 139, 1)", "rgba(189, 195, 199,1)"],
-        borderWidth: 1,
+        // borderWidth: 1,
       },
     ],
   };
@@ -64,21 +65,49 @@ export default function AvatarWithBadge({ user }) {
           alignItems: "center",
         }}
       >
-        <Pie data={data} />
-        <div>
-          <StyledBadge
-            overlap="circular"
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            badgeContent={<Typography>{user.level}</Typography>}
+        <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              position: "relative",
+            }}
           >
-            <Avatar
-              alt={user.fullName}
-              // src={user.avatarUrl}
-              src="/2b_avatar.jpg"
-              sx={{ width: 200, height: 200 }}
-            />
-          </StyledBadge>
-        </div>
+            <Box>
+              <StyledBadge
+                overlap="circular"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                badgeContent={<Typography>{user.level}</Typography>}
+              >
+                <Avatar
+                  alt={user.fullName}
+                  // src={user.avatarUrl}
+                  src="/2b_avatar.jpg"
+                  sx={{
+                    width: 200,
+                    height: 200,
+                    border: "10px solid lightgray",
+                  }}
+                />
+              </StyledBadge>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "0px",
+                }}
+              >
+                <CircularProgress
+                  variant="determinate"
+                  value={90}
+                  color="secondary"
+                  size={220}
+                  thickness={2}
+                />
+              </Box>
+            </Box>
+          </Box>
+        </Box>
         <div>
           <Link href="#" underline="hover" color="primary">
             {`Level ${user.level}`}
