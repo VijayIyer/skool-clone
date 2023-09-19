@@ -1,7 +1,16 @@
+import { ReactElement } from "react";
+import { render, waitFor, cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { useRouter } from "next/router";
-import { render, screen, waitFor } from "@testing-library/react";
-import ChangePasswordForm from ".";
+import userEvent from "@testing-library/user-event";
+import ChangePasswordForm from "./index";
+
+// setup userEvent
+function setup(jsx: ReactElement) {
+  return {
+    user: userEvent.setup(),
+    wrapper: render(jsx),
+  };
+}
 jest.mock("next/router", () => ({
   useRouter() {
     return {
@@ -19,56 +28,135 @@ jest.mock("next/router", () => ({
     };
   },
 }));
-describe("ChangePassword form should render correctly in different states", () => {
+describe("ChangePasswordForm", () => {
   beforeEach(() => {
     jest.restoreAllMocks();
-
     const useRouter = jest.spyOn(require("next/router"), "useRouter");
-
     useRouter.mockImplementation(() => ({
       route: "/",
-      isReady: true,
-      pathname: "",
       query: {},
-      asPath: "",
+      pathname: "settings",
       push: jest.fn(),
-      events: {
-        on: jest.fn(),
-        off: jest.fn(),
-      },
-      beforePopState: jest.fn(() => null),
-      prefetch: jest.fn(() => null),
     }));
   });
-  test("it should have text `Change password` above the password fields", () => {
-    const { container } = render(<ChangePasswordForm />);
-    expect(screen.getByText("Change password")).toBeInTheDocument();
-    expect(screen.getByText("Change password")).toBeVisible();
+
+  it("should render change password form with password fields for old password, new password and confirm new password and header `Change password` and button `CHANGE PASSWORD`", () => {
+    const wrapper = render(<ChangePasswordForm />);
+    const formHeader = wrapper.getByText("Change password");
+    const oldPasswordInput = wrapper.getByLabelText("Old password");
+    const newPasswordInput = wrapper.getByLabelText("New password");
+    const confirmNewPasswordInput = wrapper.getByLabelText(
+      "Confirm new password"
+    );
+
+    expect(oldPasswordInput.tagName).toBe("INPUT");
+    expect(oldPasswordInput).toHaveAttribute("type", "password");
+    expect(newPasswordInput.tagName).toBe("INPUT");
+    expect(newPasswordInput).toHaveAttribute("type", "password");
+    expect(confirmNewPasswordInput.tagName).toBe("INPUT");
+    expect(confirmNewPasswordInput).toHaveAttribute("type", "password");
+    expect(formHeader.tagName).toBe("P");
   });
-  it("Should be rendered inside the Settings page", () => {
-    const component = render(<ChangePasswordForm />);
-    expect(false).toEqual(true);
+
+  it("change password button should be disabled when any input is empty", async () => {
+    const { user, wrapper } = setup(<ChangePasswordForm />);
+    const formHeader = wrapper.getByText("Change password");
+    const oldPasswordInput = wrapper.getByLabelText("Old password");
+    const newPasswordInput = wrapper.getByLabelText("New password");
+    const confirmNewPasswordInput = wrapper.getByLabelText(
+      "Confirm new password"
+    );
+    const changePasswordButton = wrapper.getByRole("button");
+    expect(changePasswordButton).toHaveAttribute("disabled");
+    await user.type(newPasswordInput, "Jane");
+    await user.type(confirmNewPasswordInput, "Jane");
+    expect(changePasswordButton).toHaveAttribute("disabled");
+    await user.type(oldPasswordInput, "old password");
+    expect(changePasswordButton).toHaveAttribute("disabled");
   });
-  it("Should have query parameters added after rendering", async () => {
-    const component = render(<ChangePasswordForm />);
-    await waitFor(() => {
-      expect(useRouter().push).toHaveBeenCalled();
-      expect(useRouter().push).toHaveBeenCalledTimes(1);
-    });
+
+  it("password length should be longer than 5", async () => {
+    const { user, wrapper } = setup(<ChangePasswordForm />);
+    const oldPasswordInput = wrapper.getByLabelText("Old password");
+    const newPasswordInput = wrapper.getByLabelText("New password");
+    const confirmNewPasswordInput = wrapper.getByLabelText(
+      "Confirm new password"
+    );
+    const changePasswordButton = wrapper.getByRole("button");
+
+    await user.type(oldPasswordInput, "ABCD");
+    await user.type(newPasswordInput, "Doe");
+    await user.type(confirmNewPasswordInput, "Doe");
+
+    expect(changePasswordButton).not.toHaveAttribute("disabled");
+    await user.click(changePasswordButton);
+
+    await waitFor(() =>
+      expect(newPasswordInput).toHaveAccessibleErrorMessage(
+        "Password must be at least 5 characters"
+      )
+    );
   });
-  it("Should render 3 input fields for entering passwords with correct names", () => {
-    const component = render(<ChangePasswordForm />);
-    expect(false).toEqual(true);
+
+  it("password inputs should be within length limits", async () => {
+    const { user, wrapper } = setup(<ChangePasswordForm />);
+    const oldPasswordInput = wrapper.getByLabelText("Old password");
+    const newPasswordInput = wrapper.getByLabelText("New password");
+    const confirmNewPasswordInput = wrapper.getByLabelText("New password");
+    const changePasswordButton = wrapper.getByRole("button");
+
+    await user.type(oldPasswordInput, "hello");
+    // making password inputs equal
+    await user.type(newPasswordInput, "hello".repeat(15));
+    await user.type(confirmNewPasswordInput, "hello".repeat(15));
+    expect(changePasswordButton).not.toHaveAttribute("disabled");
+    await user.click(changePasswordButton);
+    expect(newPasswordInput).toHaveAccessibleErrorMessage(
+      "Password can be up to 72 characters"
+    );
   });
-  it("Should render a button with text `CHANGE PASSWORD`", () => {
-    const component = render(<ChangePasswordForm />);
-    expect(false).toEqual(true);
+
+  it("inputs should be not contain invalid characters", async () => {
+    const { user, wrapper } = setup(<ChangePasswordForm />);
+    const firstNameInput = wrapper.getByLabelText("First name");
+    const lastNameInput = wrapper.getByLabelText("Last name");
+    const emailInput = wrapper.getByLabelText("Email");
+    const passwordInput = wrapper.getByLabelText("Password");
+    const submitButton = wrapper.getByTestId("sign-up-btn");
+
+    await user.type(firstNameInput, "*&*(&*(");
+    await user.type(lastNameInput, "*<>SLDKKS>");
+    await user.type(emailInput, "test@test.com");
+    await user.type(passwordInput, "test");
+    await user.click(submitButton);
+    expect(firstNameInput).toHaveAccessibleErrorMessage(
+      "Please use a valid name"
+    );
+    expect(lastNameInput).toHaveAccessibleErrorMessage(
+      "Please use a valid name"
+    );
   });
-  it("Should be possible to enter text in the password fields", () => {});
-  it("Should enable `CHANGE PASSWORD` button when all password fields are filled and `new password` and `confirm new password` fields have the same value", () => {});
-  it("Should disable `CHANGE PASSWORD` button again if `new password` and `confirm new password` fields do not have same values", () => {});
-  it("Should display error messages below `New Password` field on clicking `CHANGE PASSWORD` button, if the value does not conform to minimum and maximum length rules", () => {});
-  it("Should error message below `Old Password` field on clicking `CHANGE PASSWORD` button, if the value is not same as the old password", () => {});
-  it("Should send a request to change password on clicking `CHANGE PASSWORD` button once it is enabled", () => {});
-  it("Should clear all password fields if `CHANGE PASSWORD` action was successful", () => {});
+
+  it("should handle submit correctly", async () => {
+    global.fetch = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        ok: true,
+        status: 200,
+      } as Response)
+    );
+    let fetchMock = jest.spyOn(global, "fetch");
+
+    const { user, wrapper } = setup(<ChangePasswordForm />);
+    const firstNameInput = wrapper.getByLabelText("First name");
+    const lastNameInput = wrapper.getByLabelText("Last name");
+    const emailInput = wrapper.getByLabelText("Email");
+    const passwordInput = wrapper.getByLabelText("Password");
+    const submitButton = wrapper.getByTestId("sign-up-btn");
+    await user.type(firstNameInput, "Jane");
+    await user.type(lastNameInput, "Doe");
+    await user.type(emailInput, "test@test.com");
+    await user.type(passwordInput, "testing");
+    await user.click(submitButton);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
 });
