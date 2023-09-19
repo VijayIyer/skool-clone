@@ -23,7 +23,7 @@ export interface ChangePasswordFormInput {
 }
 
 export default function ChangePasswordForm() {
-  const { control, handleSubmit } = useForm<ChangePasswordFormInput>({
+  const { control, handleSubmit, setFocus } = useForm<ChangePasswordFormInput>({
     defaultValues: {
       oldPassword: "",
       newPassword: "",
@@ -37,10 +37,31 @@ export default function ChangePasswordForm() {
     router.query.t = "password";
     router.push(router);
   }, [router.isReady]);
+  useEffect(() => {
+    setFocus("oldPassword");
+  }, [setFocus]);
 
-  const onSubmit: SubmitHandler<ChangePasswordFormInput> = (data, e) => {
-    // e?.preventDefault();
-    console.log(data);
+  const onSubmit: SubmitHandler<ChangePasswordFormInput> = async (data, e) => {
+    e?.preventDefault();
+    let response;
+    try {
+      response = await fetch("/api/user/change-password", {
+        method: "PUT",
+        mode: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+    } catch (err) {
+      // setStatusText(`Error: ${err} Please try again.`);
+    } finally {
+      if (response?.ok === true) {
+        // clear password fields and show popup message
+      } else if (response?.status === 400) {
+        // setStatusText(`${response.statusText} Please try again.`);
+      }
+    }
   };
 
   const { field: newPassword, fieldState: newPasswordState } = useController<

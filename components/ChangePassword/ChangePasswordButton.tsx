@@ -12,15 +12,10 @@ export default function ChangePasswordButton({
       type='submit'
       className={styles.changePasswordButton}
       disabled={disabled}
+      disableElevation
     >
-      <span className={styles.changePasswordButtonLabel}>
-        <Typography
-          component='p'
-          sx={{
-            fontSize: "1em",
-          }}
-          fontSize={"large"}
-        >
+      <span className='MuiButton-label'>
+        <Typography className={styles.changePasswordButtonLabel} component='p'>
           Change Password
         </Typography>
       </span>
