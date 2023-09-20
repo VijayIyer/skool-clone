@@ -17,15 +17,17 @@ const CustomTypography = styled(Typography)({
   fontWeight: "500",
 });
 
+interface ContributionAndFollowProps {
+  contributions: number;
+  followers: number;
+  following: number;
+}
+
 export default function ContributionAndFollow({
   contributions,
   followers,
   following,
-}: {
-  contributions: number;
-  followers: number;
-  following: number;
-}) {
+}: ContributionAndFollowProps) {
   console.log(contributions);
 
   return (
