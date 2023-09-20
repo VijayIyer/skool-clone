@@ -1,4 +1,11 @@
-import User from '../../models/User';
+import User from "../../models/User";
+type User = {
+  id: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+};
 
 //User CRUD function below can only be invoke when server connects with database, such as code like  "await dbConnect();" from lib/dbConnect.ts is invoked
 export async function createUser(
@@ -36,7 +43,38 @@ export async function deleteUsers() {
     const result = await User.deleteMany({});
     return result;
   } catch (error) {
-    console.error('Error deleting users:', error);
+    console.error("Error deleting users:", error);
+    throw error;
+  }
+}
+export async function getUser(userId: string | null): Promise<User> {
+  try {
+    const user = await User.findById(userId);
+    if (!user) throw Error("Error finding user");
+    return {
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      password: user.password,
+    };
+  } catch (error) {
+    throw error;
+  }
+}
+export async function editUser(
+  id: string,
+  { firstName, lastName, email, password }: User
+) {
+  try {
+    const result = await User.findByIdAndUpdate(id, {
+      firstName,
+      lastName,
+      email,
+      password,
+    });
+    return result;
+  } catch (error) {
     throw error;
   }
 }
