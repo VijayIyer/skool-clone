@@ -6,66 +6,44 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 
-import AvatarWithBadge from "./AvatarWithBadge";
+import { AvatarWithBadge } from "./Avatar";
 import ProfileTimeStamp from "./ProfileTimeStamp";
+import ContributionAndFollow from "./ContributionAndFollow";
+import { EditOrFollowButton } from "./EditOrFollowButton";
+import NameAndBio from "./NameAndBio";
 
 const PaperContainer = styled(Paper)(({ theme }) => ({
   width: 273,
   height: 628.5,
   padding: theme.spacing(2),
   ...theme.typography.body2,
-  // textAlign: "center",
 }));
 
-const StackItem = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
-
-export default function ProfileAvatar({ user }) {
+export default function ProfileAvatar({
+  user,
+  isAccounOwner,
+  handleClickEditProfile,
+  handleClickFollow,
+}) {
   console.log(user);
 
   return (
     <PaperContainer>
       <AvatarWithBadge user={user} />
-      <section>
-        <Typography variant="h5" component="h1">
-          {user.fullName}
-        </Typography>
-        <Typography variant="caption" display="block" gutterBottom>
-          {user.url}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          {user.bio}
-        </Typography>
-      </section>
-      <Divider variant="middle" />
+      <NameAndBio user={user} />
+
+      <Divider variant="middle" sx={{ margin: "20px 0 20px 0" }} />
       <ProfileTimeStamp user={user} />
-      <Divider variant="middle" />
-      <section>
-        <Stack
-          direction="row"
-          divider={<Divider orientation="vertical" flexItem />}
-        >
-          <StackItem elevation={0}>
-            <Typography>{user.contributions}</Typography>
-            <Typography>Contributions</Typography>
-          </StackItem>
-          <StackItem elevation={0}>
-            <Typography>{user.followers}</Typography>
-            <Typography> Followers</Typography>
-          </StackItem>
-          <StackItem elevation={0}>
-            <Typography>{user.following}</Typography>
-            <Typography> Following</Typography>
-          </StackItem>
-        </Stack>
-      </section>
-      <Divider variant="middle" />
-      <Button variant="contained">EDIT PROFILE</Button>
+      <Divider variant="middle" sx={{ margin: "20px 0 5px 0" }} />
+      <ContributionAndFollow user={user} />
+
+      <Divider variant="middle" sx={{ margin: "5px 0 20px 0" }} />
+
+      <EditOrFollowButton
+        isAccountOwner={true}
+        handleClickEditProfile={handleClickEditProfile}
+        handleClickFollow={handleClickFollow}
+      />
     </PaperContainer>
   );
 }
