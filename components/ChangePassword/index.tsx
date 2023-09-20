@@ -23,29 +23,26 @@ export interface ChangePasswordFormInput {
 }
 
 export default function ChangePasswordForm() {
-  const { control, handleSubmit, setFocus } = useForm<ChangePasswordFormInput>({
+  const {
+    control,
+    handleSubmit,
+    setFocus,
+    setError,
+    reset,
+    formState,
+    formState: { isSubmitSuccessful },
+  } = useForm<ChangePasswordFormInput>({
     defaultValues: {
       oldPassword: "",
       newPassword: "",
       confirmNewPassword: "",
     },
   });
-
-  // Adds query parameter when user selects tab to get to Change Password form
-  const router = useRouter();
-  useEffect(() => {
-    router.query.t = "password";
-    router.push(router);
-  }, [router.isReady]);
-  useEffect(() => {
-    setFocus("oldPassword");
-  }, [setFocus]);
-
   const onSubmit: SubmitHandler<ChangePasswordFormInput> = async (data, e) => {
     e?.preventDefault();
     let response;
     try {
-      response = await fetch("/api/user/change-password", {
+      response = await fetch("/api/auth/change-password", {
         method: "PUT",
         mode: "same-origin",
         credentials: "same-origin",
@@ -55,16 +52,35 @@ export default function ChangePasswordForm() {
         },
         body: JSON.stringify(data),
       });
-    } catch (err) {
-      // setStatusText(`Error: ${err} Please try again.`);
+    } catch (err: any) {
+      console.log(JSON.stringify(err));
+      setError("oldPassword", { type: "manual", message: err?.message });
     } finally {
       if (response?.ok === true) {
-        // clear password fields and show popup message
-      } else if (response?.status === 400) {
-        // setStatusText(`${response.statusText} Please try again.`);
+        console.log(`resetting all password fields`);
+        reset({
+          oldPassword: "",
+          newPassword: "",
+          confirmNewPassword: "",
+        });
+      } else if (response?.status === 401) {
+        console.log(JSON.stringify(response));
+        setError("oldPassword", {
+          type: "manual",
+          message: "Password does not match",
+        });
       }
     }
   };
+  // Adds query parameter when user selects tab to get to Change Password form
+  const router = useRouter();
+  useEffect(() => {
+    router.query.t = "password";
+    router.push(router);
+  }, [router.isReady]);
+  useEffect(() => {
+    setFocus("oldPassword");
+  }, [setFocus]);
 
   const { field: newPassword, fieldState: newPasswordState } = useController<
     ChangePasswordFormInput,
@@ -118,6 +134,11 @@ export default function ChangePasswordForm() {
                 controllerFieldState={oldPasswordState}
               />
             </FormControl>
+            {oldPasswordState.error && (
+              <FormHelperText id='old-password-error-message' variant='filled'>
+                {oldPasswordState.error?.message}
+              </FormHelperText>
+            )}
           </div>
           <div>
             <FormControl variant='outlined' fullWidth>
