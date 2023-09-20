@@ -35,7 +35,7 @@ export default function ProfileAvatar({
       <Divider variant="middle" sx={{ margin: "20px 0 20px 0" }} />
       <ProfileTimeStamp user={user} />
       <Divider variant="middle" sx={{ margin: "20px 0 5px 0" }} />
-      <ContributionAndFollow user={user} />
+      <ContributionAndFollow {...user} />
 
       <Divider variant="middle" sx={{ margin: "5px 0 20px 0" }} />
 

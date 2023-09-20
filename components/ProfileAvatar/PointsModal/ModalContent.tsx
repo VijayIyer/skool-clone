@@ -1,4 +1,3 @@
-// SkoolModalContent.tsx
 import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -19,21 +18,21 @@ const modalStyle = {
   lineHeight: 1.5,
 };
 
-const ModalHeader = styled(Typography)(() => ({
+const ModalHeader = styled(Typography)({
   fontWeight: "bold",
   fontSize: "23px",
-  margin: "0 0  16px",
-}));
+  margin: "0 0 16px 0",
+});
 
-const ModalSubHeader = styled(Typography)(() => ({
+const ModalSubHeader = styled(Typography)({
   fontWeight: "bold",
   fontSize: "16px",
-  margin: "0 0  4px",
-}));
+  margin: "0 0 4px 0",
+});
 
-const ModalParagraph = styled(Typography)(() => ({
-  margin: "0 0  16px",
-}));
+const ModalParagraph = styled(Typography)({
+  margin: "0 0 16px 0",
+});
 
 const ModalContent: React.FC = () => {
   return (

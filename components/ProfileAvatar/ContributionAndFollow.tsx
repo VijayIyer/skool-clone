@@ -6,26 +6,28 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 
 const StackItem = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.bodyTypography2,
   padding: theme.spacing(1),
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
 
-const HeaderTypography = styled(Typography)(() => ({
+const CustomTypography = styled(Typography)({
   color: "#202124",
   fontSize: "18px",
   fontWeight: "500",
-}));
+});
 
-const BodyTypography = styled(Typography)(() => ({
-  color: "#909090",
-  fontSize: "13px",
-  fontWeight: "normal",
-}));
+export default function ContributionAndFollow({
+  contributions,
+  followers,
+  following,
+}: {
+  contributions: number;
+  followers: number;
+  following: number;
+}) {
+  console.log(contributions);
 
-export default function ContributionAndFollow({ user }) {
   return (
     <section>
       <Stack
@@ -34,16 +36,16 @@ export default function ContributionAndFollow({ user }) {
         divider={<Divider orientation="vertical" flexItem />}
       >
         <StackItem elevation={0}>
-          <HeaderTypography>{user.contributions}</HeaderTypography>
-          <BodyTypography>Contributions</BodyTypography>
+          <CustomTypography>{contributions}</CustomTypography>
+          <Typography variant="body2">Contributions</Typography>
         </StackItem>
         <StackItem elevation={0}>
-          <HeaderTypography>{user.followers}</HeaderTypography>
-          <BodyTypography> Followers</BodyTypography>
+          <CustomTypography>{followers}</CustomTypography>
+          <Typography variant="body2">Followers</Typography>
         </StackItem>
         <StackItem elevation={0}>
-          <HeaderTypography>{user.following}</HeaderTypography>
-          <BodyTypography> Following</BodyTypography>
+          <CustomTypography>{following}</CustomTypography>
+          <Typography variant="body2">Following</Typography>
         </StackItem>
       </Stack>
     </section>

@@ -6,6 +6,12 @@ import ModalContent from "./ModalContent";
 import ModalWrapper from "./ModalWrapper";
 import { styled } from "@mui/material/styles";
 
+const CancelButtonIcon = styled(CancelIcon)({
+  color: "white",
+  fontSize: "50px",
+  "&:hover": { color: "black" },
+});
+
 const IconAndModal: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -17,20 +23,20 @@ const IconAndModal: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const CancelButtonIcon = styled(CancelIcon)({
-    color: "white",
-    fontSize: 50,
-    "&:hover": { color: "black" },
-  });
-
   return (
     <>
-      <IconButton aria-label="open the modal" onClick={handleModalOpen}>
+      <IconButton
+        aria-label="Open Skool Points modal"
+        onClick={handleModalOpen}
+      >
         <HelpOutlineIcon color="disabled" fontSize="small" />
       </IconButton>
       <ModalWrapper open={isModalOpen} onClose={handleModalClose}>
         <>
-          <IconButton onClick={handleModalClose} aria-label="close the modal">
+          <IconButton
+            onClick={handleModalClose}
+            aria-label="Close Skool Points modal"
+          >
             <CancelButtonIcon />
           </IconButton>
           <ModalContent />
