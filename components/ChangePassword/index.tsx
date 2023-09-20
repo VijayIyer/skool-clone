@@ -48,8 +48,10 @@ export default function ChangePasswordForm() {
       response = await fetch("/api/user/change-password", {
         method: "PUT",
         mode: "same-origin",
+        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer token`,
         },
         body: JSON.stringify(data),
       });
