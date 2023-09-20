@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import { ThemeProvider } from "@mui/material/styles";
 import { createTheme } from "@mui/material/styles";
+import { IconAndModal } from "../PointsModal";
 
 //avatr
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -137,7 +138,8 @@ export default function AvatarWithBadge({ user, levelPageLink = "#" }) {
                 {"\xa0points to level up"}
               </GrayTextTyppgraphy>
             </Box>
-            <SkoolPointsModal />
+            {/* <SkoolPointsModal /> */}
+            <IconAndModal />
           </Stack>
         </Box>
       </Box>
