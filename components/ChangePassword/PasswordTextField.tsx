@@ -1,8 +1,14 @@
-import { styled, OutlinedInput, InputLabel } from "@mui/material";
+import {
+  styled,
+  OutlinedInput,
+  InputLabel,
+  TextField,
+  TextFieldProps,
+} from "@mui/material";
 import { ControllerFieldState, ControllerRenderProps } from "react-hook-form";
 import { ChangePasswordFormInput } from ".";
-const StyledPasswordField = styled(OutlinedInput)({
-  "&.MuiOutlinedInput-root": {
+const StyledPasswordField = styled(TextField)({
+  "& .MuiOutlinedInput-root": {
     "&.Mui-focused > .MuiOutlinedInput-notchedOutline": {
       borderColor: "black",
       borderWidth: "2px",
@@ -12,33 +18,30 @@ const StyledPasswordField = styled(OutlinedInput)({
       borderWidth: "1px",
     },
   },
-  "&.MuiFormLabel-root.Mui-focused": {
+  "& .MuiFormLabel-root.Mui-focused": {
     color: "rgba(0, 0, 0, 0.6)!important",
-    fontStyle: "italic",
   },
 });
-export type PasswordField =
+export type PasswordFieldName =
   | "oldPassword"
   | "newPassword"
   | "confirmNewPassword";
 
-interface PasswordTextFieldProps<T extends PasswordField> {
+type PasswordTextFieldProps<T extends PasswordFieldName> = TextFieldProps & {
   id: string;
   label: string;
+  focus: boolean;
   controllerField: ControllerRenderProps<ChangePasswordFormInput, T>;
   controllerFieldState: ControllerFieldState;
-}
+};
 export default function PasswordTextField({
   id,
   label,
   controllerField,
   controllerFieldState,
-}: PasswordTextFieldProps<PasswordField>) {
+}: PasswordTextFieldProps<PasswordFieldName>) {
   return (
     <>
-      <InputLabel htmlFor={id} error={controllerFieldState.invalid}>
-        {label}
-      </InputLabel>
       <StyledPasswordField
         type='password'
         label={label}
@@ -46,9 +49,13 @@ export default function PasswordTextField({
         onChange={controllerField.onChange}
         error={controllerFieldState.invalid}
         name={controllerField.name}
-        ref={controllerField.ref}
+        inputRef={controllerField.ref}
         fullWidth
+        autoFocus
       />
     </>
   );
 }
+PasswordTextField.defaultProps = {
+  focus: false,
+};
