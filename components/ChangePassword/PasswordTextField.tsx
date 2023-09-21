@@ -56,6 +56,3 @@ export default function PasswordTextField({
     </>
   );
 }
-PasswordTextField.defaultProps = {
-  focus: false,
-};
