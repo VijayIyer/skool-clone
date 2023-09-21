@@ -29,8 +29,9 @@ export default function ChangePasswordForm() {
     setFocus,
     setError,
     reset,
+    clearErrors,
     formState,
-    formState: { isSubmitSuccessful },
+    formState: { isSubmitSuccessful, isDirty },
   } = useForm<ChangePasswordFormInput>({
     defaultValues: {
       oldPassword: "",
@@ -78,9 +79,6 @@ export default function ChangePasswordForm() {
     router.query.t = "password";
     router.push(router);
   }, [router.isReady]);
-  useEffect(() => {
-    setFocus("oldPassword");
-  }, [setFocus]);
 
   const { field: newPassword, fieldState: newPasswordState } = useController<
     ChangePasswordFormInput,
@@ -129,9 +127,12 @@ export default function ChangePasswordForm() {
             <FormControl variant='outlined' fullWidth>
               <PasswordTextField
                 id='old_password'
+                fullWidth
+                variant='outlined'
                 label='Old password'
                 controllerField={oldPassword}
                 controllerFieldState={oldPasswordState}
+                focus={true}
               />
             </FormControl>
             {oldPasswordState.error && (
