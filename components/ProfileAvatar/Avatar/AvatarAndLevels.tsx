@@ -6,8 +6,13 @@ import Levels from "./Levels";
 import Experience from "./Experience";
 import AvatarWithBadge from "./AvatarWithBadge";
 import { flexCenterStyle } from "../StyledComponents";
+import { UserProps } from "../";
 
-const levelPoints = {
+interface LevelPointsProp {
+  [level: number]: number;
+}
+
+const levelPoints: LevelPointsProp = {
   1: 0,
   2: 5,
   3: 20,
@@ -19,10 +24,18 @@ const levelPoints = {
   9: 33015,
 };
 
-export default function AvatarAndLevels({ user, levelPageLink = "#" }) {
-  const curPoints = user.points;
-  const curPointsPercentage = parseInt(
-    (curPoints / levelPoints[user.level + 1]) * 100
+interface AvatarAndLevelsProps {
+  user: UserProps;
+  levelPageLink?: string;
+}
+
+export default function AvatarAndLevels({
+  user,
+  levelPageLink = "#",
+}: AvatarAndLevelsProps) {
+  const currentUserPoints = user.points;
+  const curPointsPercentage = Math.floor(
+    (currentUserPoints / levelPoints[user.level + 1]) * 100
   );
 
   return (
@@ -33,7 +46,7 @@ export default function AvatarAndLevels({ user, levelPageLink = "#" }) {
       }}
     >
       <AvatarWithBadge curPointsPercentage={curPointsPercentage} {...user} />
-      <Levels levelPageLink={levelPageLink} user={user} />
+      <Levels levelPageLink={levelPageLink} {...user} />
       <Experience curPointsPercentage={curPointsPercentage} />
     </Box>
   );
