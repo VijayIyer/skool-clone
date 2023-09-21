@@ -6,18 +6,13 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 
-import { AvatarWithBadge } from "./Avatar";
-import ProfileTimeStamp from "./ProfileTimeStamp";
+import { AvatarAndLevels, AvatarWithBadge } from "./Avatar";
+import NameAndBio from "./NameAndBio";
+import { ProfileTimeStamp } from "./TimeStamp";
 import ContributionAndFollow from "./ContributionAndFollow";
 import { EditOrFollowButton } from "./EditOrFollowButton";
-import NameAndBio from "./NameAndBio";
 
-const PaperContainer = styled(Paper)(({ theme }) => ({
-  width: 273,
-  height: 628.5,
-  padding: theme.spacing(2),
-  ...theme.typography.body2,
-}));
+import { PaperContainer } from "./StyledComponents";
 
 export default function ProfileAvatar({
   user,
@@ -29,11 +24,11 @@ export default function ProfileAvatar({
 
   return (
     <PaperContainer>
-      <AvatarWithBadge user={user} />
-      <NameAndBio user={user} />
+      <AvatarAndLevels user={user} />
+      <NameAndBio {...user} />
 
       <Divider variant="middle" sx={{ margin: "20px 0 20px 0" }} />
-      <ProfileTimeStamp user={user} />
+      <ProfileTimeStamp {...user} isAccountOwner={isAccounOwner} />
       <Divider variant="middle" sx={{ margin: "20px 0 5px 0" }} />
       <ContributionAndFollow {...user} />
 

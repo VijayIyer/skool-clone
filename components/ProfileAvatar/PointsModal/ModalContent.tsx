@@ -2,37 +2,13 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import { styled } from "@mui/material/styles";
 
-const modalStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "454px",
-  bgcolor: "background.paper",
-  border: "1px solid rgb(228, 228, 228)",
-  borderRadius: "10px",
-  color: "rgb(32,33,36)",
-  p: 4,
-  lineHeight: 1.5,
-};
-
-const ModalHeader = styled(Typography)({
-  fontWeight: "bold",
-  fontSize: "23px",
-  margin: "0 0 16px 0",
-});
-
-const ModalSubHeader = styled(Typography)({
-  fontWeight: "bold",
-  fontSize: "16px",
-  margin: "0 0 4px 0",
-});
-
-const ModalParagraph = styled(Typography)({
-  margin: "0 0 16px 0",
-});
+import {
+  modalStyle,
+  ModalHeader,
+  ModalSubHeader,
+  ModalParagraph,
+} from "../StyledComponents";
 
 const ModalContent: React.FC = () => {
   return (

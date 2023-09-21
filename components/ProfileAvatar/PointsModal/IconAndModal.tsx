@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import CancelIcon from "@mui/icons-material/Cancel";
 import ModalContent from "./ModalContent";
 import ModalWrapper from "./ModalWrapper";
-import { styled } from "@mui/material/styles";
 
-const CancelButtonIcon = styled(CancelIcon)({
-  color: "white",
-  fontSize: "50px",
-  "&:hover": { color: "black" },
-});
+import { CancelButtonIcon } from "../StyledComponents";
 
 const IconAndModal: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

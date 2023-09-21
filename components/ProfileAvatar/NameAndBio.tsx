@@ -2,33 +2,31 @@ import React from "react";
 
 import Typography from "@mui/material/Typography";
 
-export default function NameAndBio({ user }) {
+interface NameAndBioProps {
+  fullName: string;
+  url: string;
+  bio: string;
+}
+
+export default function NameAndBio({ fullName, url, bio }: NameAndBioProps) {
   return (
     <section>
-      <Typography
-        sx={{
-          fontWeight: "bold",
-          fontSize: "23px",
-        }}
-      >
-        {user.fullName}
+      <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+        {fullName}
       </Typography>
       <Typography
         variant="caption"
-        display="block"
-        gutterBottom
         sx={{
-          color: "rgb(144, 144, 144)",
+          color: "text.secondary",
           fontWeight: "bold",
-          fontStyle: "normal",
           fontSize: "14px",
           lineHeight: 1.5,
         }}
       >
-        {user.url}
+        {url}
       </Typography>
       <Typography variant="body1" gutterBottom>
-        {user.bio}
+        {bio}
       </Typography>
     </section>
   );

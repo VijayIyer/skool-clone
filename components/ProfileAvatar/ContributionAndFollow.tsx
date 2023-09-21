@@ -1,21 +1,9 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 
-const StackItem = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
-
-const CustomTypography = styled(Typography)({
-  color: "#202124",
-  fontSize: "18px",
-  fontWeight: "500",
-});
+import { StackItem, CustomTypography } from "./StyledComponents";
 
 interface ContributionAndFollowProps {
   contributions: number;
