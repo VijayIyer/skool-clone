@@ -1,9 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import jwt from "jsonwebtoken";
 import { dbConnect } from "@/lib/mongoClient";
 import { responseFormatter } from "@/lib/responseLib";
 import { editUser, getUserById } from "@/lib/userLib/userApi";
 import { generateHashPassword, validatePassword } from "@/lib/userLib";
-import comparePasswords from "@/lib/userLib/comparePassword";
+import { compareHashPasswordWith } from "@/lib/userLib/hashPassword";
 
 export default async function changePasswordHandler(
   req: NextApiRequest,
@@ -21,26 +22,22 @@ export default async function changePasswordHandler(
     );
   }
 
-  // if (!req.headers.userId) {
-  //   return res
-  //     .status(401)
-  //     .json(responseFormatter(false, null, "User not authenticated!"));
-  // }
+  if (!req.headers.userId) {
+    return res
+      .status(401)
+      .json(responseFormatter(false, null, "User not authenticated!"));
+  }
   switch (req.method) {
     case "PUT":
       // replace with extracting userId from the request header or body
-      if (!req.headers?.userId) throw Error("Internal server error");
       const userId: string = req.headers?.userId;
 
       // get user using the userId obtained through token
-      const { email, id } = await getUserById(userId);
-      if (!id) throw Error("Internal server error");
+      const { firstName, lastName, email, id } = await getUserById(userId);
+      if (!id || !email) throw Error("Internal server error");
       const { oldPassword, newPassword } = req.body;
       // validate old password
-      const isValidPassword = await comparePasswords(
-        oldHashedPassword,
-        oldPassword
-      );
+      const isValidPassword = await compareHashPasswordWith(email, oldPassword);
 
       if (!isValidPassword) {
         return res
@@ -60,10 +57,25 @@ export default async function changePasswordHandler(
         email,
         password: newHashedPassword,
       });
+      const JWT_SECRET = process.env.JWT_SECRET;
 
-      return res
-        .status(200)
-        .json(responseFormatter(true, editUserResult, "Password updated!"));
+      if (!JWT_SECRET) {
+        throw new Error("JWT_SECRET is not defined in .env.local");
+      }
+
+      const token = jwt.sign({ id: id.toString(), email: email }, JWT_SECRET, {
+        expiresIn: "2m",
+      });
+      res.status(200).json(responseFormatter(true, token, "Password updated!"));
+      res.setHeader(
+        "Set-Cookie",
+        serialize("jwt", token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "strict",
+        })
+      );
+      return res;
     default:
       return res
         .status(405)
