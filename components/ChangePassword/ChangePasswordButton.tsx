@@ -1,13 +1,15 @@
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, ButtonProps } from "@mui/material";
 import styles from "./style.module.css";
-interface ChangePasswordButtonProps {
+type ChangePasswordButtonProps = ButtonProps & {
   disabled: boolean;
-}
+};
 export default function ChangePasswordButton({
   disabled,
+  ...rest
 }: ChangePasswordButtonProps) {
   return (
     <Button
+      {...rest}
       variant='contained'
       type='submit'
       className={styles.changePasswordButton}
