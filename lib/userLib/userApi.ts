@@ -57,7 +57,7 @@ export async function deleteUsers() {
     throw error;
   }
 }
-export async function getUser(userId: string | null): Promise<User> {
+export async function getUserById(userId: string | null): Promise<User> {
   try {
     const user = await User.findById(userId);
     if (!user) throw Error("Error finding user");
