@@ -43,7 +43,6 @@ export default function ChangePasswordForm({
         credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer token`,
         },
         body: JSON.stringify(data),
       });
