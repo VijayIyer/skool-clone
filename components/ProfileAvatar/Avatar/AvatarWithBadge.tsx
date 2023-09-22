@@ -1,7 +1,5 @@
 import React from "react";
 
-// import { styled } from "@mui/material/styles";
-// import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
@@ -12,21 +10,6 @@ import {
   StyledBadge,
   GrayCircularProgress,
 } from "../StyledComponents";
-
-// const StyledBadge = styled(Badge)(({ theme }) => ({
-//   "& .MuiBadge-badge": {
-//     backgroundColor: "#4357ad",
-//     color: "#ffffff",
-//     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-//     width: "48px",
-//     height: "48px",
-//     borderRadius: "50%",
-//   },
-// }));
-
-// const GrayCircularProgress = styled(CircularProgress)(({ theme }) => ({
-//   color: theme.palette.text.secondary,
-// }));
 
 interface AvatarWithBadge {
   curPointsPercentage: number;

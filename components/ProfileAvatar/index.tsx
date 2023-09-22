@@ -1,3 +1,4 @@
+//go to localhost/3000/componentRender page to see the visual component
 import React from "react";
 
 import Divider from "@mui/material/Divider";
