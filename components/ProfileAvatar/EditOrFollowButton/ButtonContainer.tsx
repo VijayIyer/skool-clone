@@ -16,14 +16,14 @@ export default function ButtonContainer({
   if (isAccountOwner) {
     return (
       <div>
-        <EditButton onClick={handleClickEditProfile} />
+        <EditButton handleClickEditProfile={handleClickEditProfile} />
       </div>
     );
   }
 
   return (
     <div>
-      <FollowButton onClick={handleClickFollow} />
+      <FollowButton handleClickFollow={handleClickFollow} />
     </div>
   );
 }

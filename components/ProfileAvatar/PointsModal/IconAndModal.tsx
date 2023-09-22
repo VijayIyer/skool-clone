@@ -23,7 +23,11 @@ const IconAndModal: React.FC = () => {
         aria-label="Open Skool Points modal"
         onClick={handleModalOpen}
       >
-        <HelpOutlineIcon color="disabled" fontSize="small" />
+        <HelpOutlineIcon
+          color="disabled"
+          fontSize="small"
+          data-testid="modal-icon"
+        />
       </IconButton>
       <ModalWrapper open={isModalOpen} onClose={handleModalClose}>
         <>
