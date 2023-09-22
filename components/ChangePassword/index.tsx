@@ -1,37 +1,31 @@
 import styles from "./style.module.css";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useController, useForm, SubmitHandler } from "react-hook-form";
-import {
-  Typography,
-  FormHelperText,
-  Paper,
-  Button,
-  TextField,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  styled,
-} from "@mui/material";
+import { FormHelperText, Paper } from "@mui/material";
+import TimedAlert from "../common/TimedAlert/TimedAlert";
 import ChangePasswordButton from "./ChangePasswordButton";
-import PasswordTextField, { PasswordField } from "./PasswordTextField";
+import PasswordTextField, { PasswordFieldName } from "./PasswordTextField";
 
-export interface ChangePasswordFormInput {
+export type ChangePasswordFormInput = {
   oldPassword: string;
   newPassword: string;
   confirmNewPassword: string;
-}
-
-export default function ChangePasswordForm() {
+};
+type ChangePasswordFormProps = {
+  onSubmissionSucessAlert: () => void;
+};
+export default function ChangePasswordForm({
+  onSubmissionSucessAlert,
+}: ChangePasswordFormProps) {
+  const [showAlert, setShowAlert] = useState(false);
   const {
     control,
     handleSubmit,
-    setFocus,
     setError,
     reset,
-    clearErrors,
-    formState,
-    formState: { isSubmitSuccessful, isDirty },
+
+    formState: { isSubmitSuccessful, isDirty, isSubmitted },
   } = useForm<ChangePasswordFormInput>({
     defaultValues: {
       oldPassword: "",
@@ -54,21 +48,18 @@ export default function ChangePasswordForm() {
         body: JSON.stringify(data),
       });
     } catch (err: any) {
-      console.log(JSON.stringify(err));
       setError("oldPassword", { type: "manual", message: err?.message });
     } finally {
+      const data: {
+        success?: boolean;
+        errorMessage?: string;
+        data?: string;
+      } = await response?.json();
       if (response?.ok === true) {
-        console.log(`resetting all password fields`);
-        reset({
-          oldPassword: "",
-          newPassword: "",
-          confirmNewPassword: "",
-        });
       } else if (response?.status === 401) {
-        console.log(JSON.stringify(response));
         setError("oldPassword", {
           type: "manual",
-          message: "Password does not match",
+          message: data.errorMessage,
         });
       }
     }
@@ -78,11 +69,19 @@ export default function ChangePasswordForm() {
   useEffect(() => {
     router.query.t = "password";
     router.push(router);
-  }, [router.isReady]);
+  }, [router.isReady]); // adding router as dependency creates infinite calling of useEffect
+  useEffect(() => {
+    // let timer: ReturnType<typeof setTimeout>;
+    if (isSubmitSuccessful) {
+      onSubmissionSucessAlert();
+      reset({});
+    }
+    // return () => clearTimeout(timer);
+  }, [isSubmitSuccessful]);
 
   const { field: newPassword, fieldState: newPasswordState } = useController<
     ChangePasswordFormInput,
-    PasswordField
+    PasswordFieldName
   >({
     name: "newPassword",
     control,
@@ -100,7 +99,7 @@ export default function ChangePasswordForm() {
   });
   const { field: oldPassword, fieldState: oldPasswordState } = useController<
     ChangePasswordFormInput,
-    PasswordField
+    PasswordFieldName
   >({
     name: "oldPassword",
     control,
@@ -109,7 +108,7 @@ export default function ChangePasswordForm() {
     },
   });
   const { field: confirmNewPassword, fieldState: confirmNewPasswordState } =
-    useController<ChangePasswordFormInput, PasswordField>({
+    useController<ChangePasswordFormInput, PasswordFieldName>({
       name: "confirmNewPassword",
       control,
       rules: {
@@ -124,17 +123,16 @@ export default function ChangePasswordForm() {
 
         <div className={styles.passwordFieldsContainer}>
           <div>
-            <FormControl variant='outlined' fullWidth>
-              <PasswordTextField
-                id='old_password'
-                fullWidth
-                variant='outlined'
-                label='Old password'
-                controllerField={oldPassword}
-                controllerFieldState={oldPasswordState}
-                focus={true}
-              />
-            </FormControl>
+            <PasswordTextField
+              id='old_password'
+              label='Old password'
+              fullWidth
+              autoFocus
+              variant='outlined'
+              controllerField={oldPassword}
+              controllerFieldState={oldPasswordState}
+            />
+
             {oldPasswordState.error && (
               <FormHelperText id='old-password-error-message' variant='filled'>
                 {oldPasswordState.error?.message}
@@ -142,34 +140,36 @@ export default function ChangePasswordForm() {
             )}
           </div>
           <div>
-            <FormControl variant='outlined' fullWidth>
-              <PasswordTextField
-                id='new_password'
-                label='New password'
-                controllerField={newPassword}
-                controllerFieldState={newPasswordState}
-              />
-            </FormControl>
+            <PasswordTextField
+              id='new_password'
+              label='New password'
+              helperText={
+                newPasswordState.error ? newPasswordState.error?.message : ""
+              }
+              fullWidth
+              variant='outlined'
+              controllerField={newPassword}
+              controllerFieldState={newPasswordState}
+            />
           </div>
-          {newPasswordState.error && (
-            <FormHelperText id='new-password-error-message' variant='filled'>
-              {newPasswordState.error?.message}
-            </FormHelperText>
-          )}
+
           <div>
-            <FormControl variant='outlined' fullWidth>
-              <PasswordTextField
-                id='confirm_new_password'
-                label='Confirm new password'
-                controllerField={confirmNewPassword}
-                controllerFieldState={confirmNewPasswordState}
-              />
-            </FormControl>
+            <PasswordTextField
+              id='confirm_new_password'
+              label='Confirm new password'
+              variant='outlined'
+              controllerField={confirmNewPassword}
+              controllerFieldState={confirmNewPasswordState}
+              fullWidth
+            />
           </div>
         </div>
 
         <div>
           <ChangePasswordButton
+            type='submit'
+            data-testid='change-password-btn'
+            name='change-password-btn'
             disabled={
               newPassword.value === "" ||
               oldPassword.value === "" ||
@@ -182,3 +182,6 @@ export default function ChangePasswordForm() {
     </Paper>
   );
 }
+ChangePasswordForm.defaultProps = {
+  onSubmissionSucessAlert: () => {},
+};
