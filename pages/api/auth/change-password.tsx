@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { dbConnect } from "@/lib/mongoClient";
 import { responseFormatter } from "@/lib/responseLib";
-import { editUser, getUser } from "@/lib/userLib/userApi";
+import { editUser, getUserById } from "@/lib/userLib/userApi";
 import { generateHashPassword, validatePassword } from "@/lib/userLib";
 import comparePasswords from "@/lib/userLib/comparePassword";
 
@@ -29,19 +29,12 @@ export default async function changePasswordHandler(
   switch (req.method) {
     case "PUT":
       // replace with extracting userId from the request header or body
-      const userId: string = "650b3203d8f631888523aee1";
+      if (!req.headers?.userId) throw Error("Internal server error");
+      const userId: string = req.headers?.userId;
 
       // get user using the userId obtained through token
-      const {
-        firstName,
-        lastName,
-        email,
-        password: oldHashedPassword,
-        id,
-      } = await getUser(userId);
-
-      if (!oldHashedPassword) throw Error("Internal server error");
-
+      const { email, id } = await getUserById(userId);
+      if (!id) throw Error("Internal server error");
       const { oldPassword, newPassword } = req.body;
       // validate old password
       const isValidPassword = await comparePasswords(
