@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test:client": "jest --config jest.config.client.js",
+    "test:client": "jest --config jest.config.client.js --watch",
     "test:server": "jest --config jest.config.server.js --watch"
   },
   "dependencies": {
