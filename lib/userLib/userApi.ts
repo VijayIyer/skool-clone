@@ -41,7 +41,7 @@ export async function findUserByEmail(email: String) {
     const user = await User.findOne({ email }).exec();
     return user;
   } catch (error) {
-    console.log('database error:unable to find this user \n', error);
+    console.log("database error:unable to find this user \n", error);
     throw error;
   }
 }
@@ -72,17 +72,9 @@ export async function getUserById(userId: string | null): Promise<User> {
     throw error;
   }
 }
-export async function editUser(
-  id: string,
-  { firstName, lastName, email, password }: User
-) {
+export async function editUser(id: string, updatedUser: User) {
   try {
-    const result = await User.findByIdAndUpdate(id, {
-      firstName,
-      lastName,
-      email,
-      password,
-    });
+    const result = await User.findOneAndUpdate({ _id: id }, updatedUser);
     return result;
   } catch (error) {
     throw error;
