@@ -5,7 +5,8 @@ import { responseFormatter } from "@/lib/responseLib";
 import { editUser, getUserById } from "@/lib/userLib/userApi";
 import { generateHashPassword, validatePassword } from "@/lib/userLib";
 import { compareHashPasswordWith } from "@/lib/userLib/hashPassword";
-
+import { serialize } from "cookie";
+import generateJwtToken from "@/lib/jwtLib/generateToken";
 export default async function changePasswordHandler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -21,8 +22,7 @@ export default async function changePasswordHandler(
         .json(responseFormatter(false, null, "Internal Server Error"))
     );
   }
-
-  if (!req.headers.userId) {
+  if (!req.headers.userid) {
     return res
       .status(401)
       .json(responseFormatter(false, null, "User not authenticated!"));
@@ -30,7 +30,7 @@ export default async function changePasswordHandler(
   switch (req.method) {
     case "PUT":
       // replace with extracting userId from the request header or body
-      const userId: string = req.headers?.userId;
+      const userId: string = req.headers.userid;
 
       // get user using the userId obtained through token
       const { firstName, lastName, email, id } = await getUserById(userId);
@@ -50,23 +50,26 @@ export default async function changePasswordHandler(
           .json(responseFormatter(false, null, `Password is not valid!`));
       }
       const newHashedPassword: string = await generateHashPassword(newPassword);
-      const editUserResult = await editUser(id, {
-        id,
-        firstName,
-        lastName,
-        email,
-        password: newHashedPassword,
-      });
-      const JWT_SECRET = process.env.JWT_SECRET;
-
-      if (!JWT_SECRET) {
-        throw new Error("JWT_SECRET is not defined in .env.local");
+      try {
+        const editUserResult = await editUser(id, {
+          id,
+          firstName,
+          lastName,
+          email,
+          password: newHashedPassword,
+        });
+      } catch (err) {
+        console.error(err);
+        return res
+          .status(500)
+          .json(responseFormatter(false, null, "Internal server error"));
       }
 
-      const token = jwt.sign({ id: id.toString(), email: email }, JWT_SECRET, {
-        expiresIn: "2m",
-      });
-      res.status(200).json(responseFormatter(true, token, "Password updated!"));
+      const token = generateJwtToken({ id, email });
+      if (!token)
+        return res
+          .status(500)
+          .json(responseFormatter(false, null, "Internal server error"));
       res.setHeader(
         "Set-Cookie",
         serialize("jwt", token, {
@@ -75,7 +78,8 @@ export default async function changePasswordHandler(
           sameSite: "strict",
         })
       );
-      return res;
+      res.status(200).json(responseFormatter(true, token, "Password updated!"));
+
     default:
       return res
         .status(405)
