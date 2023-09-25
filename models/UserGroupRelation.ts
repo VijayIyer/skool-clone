@@ -1,31 +1,29 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 
 const UserGroupRelationSchema = new Schema({
     groupID: {
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: 'Group'
     },
-    userID: {
-        type: Schema.Types.ObjectId,
+    email: {
+        type: String,
         ref: 'User'
     },
     role: {
         type: String,
-        required: true,
         enum: ["creator", "admin", "member"],
         default: "member"
-    },
-    joinedAt: {
-        type: Date, 
-        required: true, 
-        default: Date.now 
     }
+}, {
+    timestamps: true
 });
 
-export const UserUserGroupRelationRelationModel = model<UserGroupRelation>('UserGroupRelation', UserGroupRelationSchema);
+const UserGroupRelation = models.UserGroupRelation || model<UserGroupRelation>('UserGroupRelation', UserGroupRelationSchema);
 
-export interface UserGroupRelation extends Document {
-    groupID: Schema.Types.ObjectId,
-    userID: Schema.Types.ObjectId,
+interface UserGroupRelation extends Document {
+    groupID: string,
+    userID: string,
     role: string
 }
+
+export default UserGroupRelation;

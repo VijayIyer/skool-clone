@@ -1,8 +1,8 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 
-const groupSchema = new Schema({
+const GroupSchema = new Schema({
     groupID: {
-        type: Schema.Types.ObjectId,
+        type: String,
         required: true,
         unique: true,
     },
@@ -16,11 +16,6 @@ const groupSchema = new Schema({
         enum: ["private", "public"],
         default: "public"
     },
-    createdAt: {
-        type: Date, 
-        required: true, 
-        default: Date.now
-    },
     groupIcon: {
         type: String,
     },
@@ -32,16 +27,21 @@ const groupSchema = new Schema({
             type: String,
         }]
     },
+},{
+    timestamps: true, 
 });
 
-export const GroupModel = model<Group>('Group', groupSchema);
+const Group = models.Group || model<Group>("Group", GroupSchema);
 
-export interface Group extends Document {
-    groupID: Schema.Types.ObjectId,
-    groupName: String,
-    groupType: String,
+
+interface Group extends Document {
+    groupID: string,
+    groupName: string,
+    groupType: string,
     createdAt: Date, 
     activeAt?: Date,
-    groupIcon?: String,
-    groupDescription?: String,
+    groupIcon?: string,
+    groupDescription?: string,
 }
+
+export default Group;
