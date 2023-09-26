@@ -7,6 +7,7 @@ import { generateHashPassword, validatePassword } from "@/lib/userLib";
 import { compareHashPasswordWith } from "@/lib/userLib/hashPassword";
 import { serialize } from "cookie";
 import generateJwtToken from "@/lib/jwtLib/generateToken";
+import { isTokenIssuedBeforePasswordChange } from "@/lib/jwtLib/tokenValidation";
 export default async function changePasswordHandler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -31,9 +32,10 @@ export default async function changePasswordHandler(
     case "PUT":
       // replace with extracting userId from the request header or body
       const userId: string = req.headers.userid;
-
+      const iat: string = req.headers.iat;
       // get user using the userId obtained through token
-      const { firstName, lastName, email, id } = await getUserById(userId);
+      const { firstName, lastName, email, id, passwordChangedAt } =
+        await getUserById(userId);
       if (!id || !email) throw Error("Internal server error");
       const { oldPassword, newPassword } = req.body;
       // validate old password
@@ -49,6 +51,17 @@ export default async function changePasswordHandler(
           .status(500)
           .json(responseFormatter(false, null, `Password is not valid!`));
       }
+      if (isTokenIssuedBeforePasswordChange(passwordChangedAt, iat)) {
+        return res
+          .status(401)
+          .json(
+            responseFormatter(
+              false,
+              null,
+              "Invalid token! Token expired or invalidated"
+            )
+          );
+      }
       const newHashedPassword: string = await generateHashPassword(newPassword);
       try {
         const editUserResult = await editUser(id, {
@@ -57,6 +70,7 @@ export default async function changePasswordHandler(
           lastName,
           email,
           password: newHashedPassword,
+          passwordChangedAt,
         });
       } catch (err) {
         console.error(err);
@@ -79,7 +93,7 @@ export default async function changePasswordHandler(
         })
       );
       res.status(200).json(responseFormatter(true, token, "Password updated!"));
-
+      break;
     default:
       return res
         .status(405)

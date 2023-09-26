@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { responseFormatter } from "./lib/responseLib";
 import jwt from "jsonwebtoken";
+
 interface JwtPayload {
   id: string;
+  iat: string;
 }
-export default function middleware(request: NextRequest): NextResponse {
+export default async function middleware(
+  request: NextRequest
+): Promise<NextResponse> {
   const token = request.cookies.get("jwt")?.value;
 
   if (!token) {
@@ -14,7 +17,7 @@ export default function middleware(request: NextRequest): NextResponse {
     );
   }
 
-  const decodedToken = jwt.decode(token) as JwtPayload; // could switch to verify
+  const decodedToken = jwt.decode(token) as unknown as JwtPayload; // could switch to verify
   if (!decodedToken?.id)
     return new NextResponse(
       JSON.stringify({
@@ -23,8 +26,10 @@ export default function middleware(request: NextRequest): NextResponse {
       }),
       { status: 401, headers: { "content-type": "application/json" } }
     );
+
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("userId", decodedToken.id);
+  requestHeaders.set("iat", decodedToken.iat);
   return NextResponse.next({
     request: {
       headers: requestHeaders,

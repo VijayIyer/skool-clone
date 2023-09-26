@@ -1,10 +1,11 @@
 import User from "../../models/User";
 type User = {
   id: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  password?: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  passwordChangedAt: string;
 };
 
 //User CRUD function below can only be invoke when server connects with database, such as code like  "await dbConnect();" from lib/dbConnect.ts is invoked
@@ -67,14 +68,16 @@ export async function getUserById(userId: string | null): Promise<User> {
       lastName: user.lastName,
       email: user.email,
       password: user.password,
+      passwordChangedAt: user.passwordChangedAt,
     };
   } catch (error) {
     throw error;
   }
 }
 export async function editUser(id: string, updatedUser: User) {
+  const { passwordChangedAt, ...updatedUserDetails } = updatedUser;
   try {
-    const result = await User.findOneAndUpdate({ _id: id }, updatedUser);
+    const result = await User.findOneAndUpdate({ _id: id }, updatedUserDetails);
     return result;
   } catch (error) {
     throw error;
