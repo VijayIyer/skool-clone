@@ -1,25 +1,25 @@
 import { Schema, model, models } from 'mongoose';
 
 const GroupSchema = new Schema({
-    groupID: {
+    gid: {
         type: String,
         required: true,
         unique: true,
     },
-    groupName: {
+    name: {
         type: String,
         required: true,
     },
-    groupType: {
+    type: {
         type: String,
         required: true,
         enum: ["private", "public"],
         default: "public"
     },
-    groupIcon: {
+    icon: {
         type: String,
     },
-    groupDescription: {
+    description: {
         text: {
             type: String,
         },

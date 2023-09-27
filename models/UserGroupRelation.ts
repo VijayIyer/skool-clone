@@ -1,13 +1,15 @@
 import { Schema, model, models } from 'mongoose';
 
 const UserGroupRelationSchema = new Schema({
-    groupID: {
-        type: String,
-        ref: 'Group'
+    group: {
+        type: Schema.Types.ObjectId,
+        ref: 'Group',
+        required: true
     },
-    email: {
-        type: String,
-        ref: 'User'
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
     role: {
         type: String,
@@ -21,8 +23,8 @@ const UserGroupRelationSchema = new Schema({
 const UserGroupRelation = models.UserGroupRelation || model<UserGroupRelation>('UserGroupRelation', UserGroupRelationSchema);
 
 interface UserGroupRelation extends Document {
-    groupID: string,
-    userID: string,
+    group: Schema.Types.ObjectId,
+    user: Schema.Types.ObjectId,
     role: string
 }
 

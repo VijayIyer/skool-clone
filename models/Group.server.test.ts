@@ -2,9 +2,9 @@ import Group from "./Group";
 import {setUp, dropCollections, dropDatabase} from "@/__test__/setup/db";
 
 const GroupData = {
-    groupID: "nextjs-2734",
-    groupName: "NextJS",
-    groupType: "private",
+    gid: "nextjs-2734",
+    name: "NextJS",
+    type: "private",
 };
 
 beforeAll(async () => {
@@ -29,8 +29,8 @@ describe("Group model", () => {
     const savedGroup = await validGroup.save();
     // Object Id should be defined when successfully saved to MongoDB.
     expect(savedGroup._id).toBeDefined();
-    expect(savedGroup.groupID).toBe(GroupData.groupID);
-    expect(savedGroup.groupName).toBe(GroupData.groupName);
-    expect(savedGroup.groupType).toBe(GroupData.groupType);
+    expect(savedGroup.gid).toBe(GroupData.gid);
+    expect(savedGroup.name).toBe(GroupData.name);
+    expect(savedGroup.type).toBe(GroupData.type);
   });
 });
