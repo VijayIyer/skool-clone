@@ -58,7 +58,7 @@ const Heatmap: React.FC<HeatmapProps> = (props: HeatmapProps) => {
 
 
 	const renderLegendTiles = () => {
-		const legendColors = ['#196127', '#239a3b', '#7bc96f', '#c6e48b', '#ebedf0'];
+		const legendColors = ['rgba(0,143,83,1)', 'rgba(0,143,83,0.7)', 'rgba(0,143,83,0.5)', 'rgba(0,143,83,0.3)', '#E4E4E4'];
 
 		return legendColors.map((color) => {
 			const activityCount = getActivityCountForColor(color);
@@ -85,132 +85,81 @@ const Heatmap: React.FC<HeatmapProps> = (props: HeatmapProps) => {
 	const getActivityCountForColor = (color: string): number => {
 		// Map legend colors to activity count using your getTileColor function
 		switch (color) {
-			case '#ebedf0':
+			case '#E4E4E4':
 				return 0;
-			case '#c6e48b':
+			case 'rgba(0,143,83,0.3)':
 				return 1; // Adjust the counts as per your getTileColor logic
-			case '#7bc96f':
+			case 'rgba(0,143,83,0.5)':
 				return 3;
-			case '#239a3b':
+			case 'rgba(0,143,83,0.7)':
 				return 6;
-			case '#196127':
+			case 'rgba(0,143,83,1)':
 				return 10;
 			default:
 				return 0; // Default to 0 for unknown colors
 		}
 	};
 
-	// const renderTiles = () => {
-	// 	const tiles = [];
-
-	// 	for (let i = 0; i < 52; i++) {
-	// 		for (let j = 0; j < 7; j++) {
-	// 			const date = getDateForTile(i, j);
-	// 			const registrationDate = new Date(2023, 0, 1);
-
-	// 			if (date < registrationDate) {
-	// 				tiles.push(<div className={styles.placeholderTile} />);
-	// 				continue;
-	// 			}
-
-	// 			const activityData = props.data.find(
-	// 				(item) =>
-	// 					item.date.getFullYear() === date.getFullYear() &&
-	// 					item.date.getMonth() === date.getMonth() &&
-	// 					item.date.getDate() === date.getDate()
-	// 			);
-
-	// 			const isFirstDay = date.getTime() === registrationDate.getTime();
-	// 			const activityCount = activityData ? activityData.activityCount : 0;
-	// 			const tileColor = getTileColor(activityCount);
-
-	// 			tiles.push(
-	// 				<Tooltip title={getTileTooltip(date, activityCount, isFirstDay)}>
-	// 					<div
-	// 						className={styles.activityTile}
-	// 						style={{ backgroundColor: tileColor }}
-	// 					>
-	// 						{/* Added day and month labels */}
-	// 						{!isFirstDay && (
-	// 							<>
-	// 								<div className={styles.dayLabel}>
-	// 									{WEEK_DAYS[j]}
-	// 								</div>
-	// 								<div className={styles.monthLabel}>
-	// 									{MONTHS[date.getMonth()]}
-	// 								</div>
-	// 							</>
-	// 						)}
-	// 					</div>
-	// 				</Tooltip>
-	// 			);
-	// 		}
-	// 	}
-	// 	return tiles;
-	// };
-
 	return (
-		<div className={styles.Wrapper}>
-			<div className={styles.header}>
-				<p>Activity</p>
-			</div>
-			<div className={styles.Graph}>
-				<ul className={styles.Months}>
-					{MONTHS.map((month, i) => (
-						<li key={i}>{month}</li>
-					))}
-				</ul>
-				<ul className={styles.Days}>
-					{WEEK_DAYS.map((day, i) => (
-						<li key={i}>{day}</li>
-					))}
-				</ul>
-				<ul className={styles.SquaresList}>
-					{[...Array(squareNumber)].map((key: React.Key, i) => (
-						<li
-							className={`${styles.SquareListItem} ${styles.squares}`}
-							data-level={level[i]}
-							key={key}
-							data-tooltip={
-								props.tooltipContent || `${count[i]} activities`
-							}
-						></li>
-					))}
-				</ul>
-			</div>
-
-			<div className={styles.legendContainer}>
-				<span className={styles.legendText}>More</span>
-				{renderLegendTiles()}
-				<span className={styles.legendText}>Less</span>
-
-				<div className={styles.buttonContainer}>
-					<Button onClick={handleModalOpen}>What is this?</Button>
-				</div>
-				<Modal
-					open={modalOpen}
-					onClose={handleModalClose}
-					aria-labelledby="modal-title"
-					aria-describedby="modal-description"
-				>
-					<div>
-						<div className={styles.modal}>
-							<h2 id="modal-title">Daily Activity</h2>
-							<p id="modal-description">
-								Daily Activity refers to the number of activities performed by a
-								user on a given day. It is represented by the color of the tiles
-								in the graph. The darker the color, the higher the activity count.
-								The graph displays the activity count for each day of the week over
-								a period of 52 weeks. The legend on the right side of the graph
-								provides a color scale to interpret the activity levels. You can
-								hover over each tile to view the specific date and activity count.
-								Enjoy tracking your daily activities!
-							</p>
-
-							<Button onClick={handleModalClose}>Close</Button>
-						</div>
+		<div>
+			<p className={styles.header}>Activity</p>
+			<div className={styles.main}>
+				<div className={styles.GraphWrapper}>
+					<div className={styles.Graph}>
+						<ul className={styles.Months}>
+							{MONTHS.map((month, i) => (
+								<li key={i}>{month}</li>
+							))}
+						</ul>
+						<ul className={styles.Days}>
+							{WEEK_DAYS.map((day, i) => (
+								<li key={i}>{day}</li>
+							))}
+						</ul>
+						<ul className={styles.SquaresList}>
+							{[...Array(squareNumber)].map((key: React.Key, i) => (
+								<li
+									className={`${styles.SquareListItem} ${styles.squares}`}
+									data-level={level[i]}
+									key={key}
+									data-tooltip={
+										props.tooltipContent || `${count[i]} activities`
+									}
+								></li>
+							))}
+						</ul>
 					</div>
-				</Modal>
+
+				</div>
+				<div className={styles.legendContainer}>
+					<span className={styles.legendText}>More</span>
+					{renderLegendTiles()}
+					<span className={styles.legendText}>Less</span>
+				</div>
+				<div className={styles.modalContainer}>
+					<div className={styles.buttonContainer}>
+						<Button className={styles.btn} onClick={handleModalOpen}>What is this?</Button>
+					</div>
+					<Modal
+						open={modalOpen}
+						onClose={handleModalClose}
+						aria-labelledby="modal-title"
+						aria-describedby="modal-description"
+					>
+						<div>
+							<div className={styles.modal}>
+								<h2 id="modal-title">Daily activity</h2>
+								<p id="modal-description">
+									<br />
+									The daily activity chart is a visual display of your activity on Skool over the past year. Activities that contribute towards this chart include liking posts, writing posts, commenting on posts and voting on polls.
+									<br /><br />
+									Activities are timestamped according to Coordinated Universal Time (UTC) rather than your local time zone.
+								</p>
+
+							</div>
+						</div>
+					</Modal>
+				</div>
 			</div>
 		</div>
 	);

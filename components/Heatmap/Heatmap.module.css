@@ -1,24 +1,35 @@
+.main{
+  position: relative;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #E4E4E4;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+  margin: auto 80px;
+  display: inline-grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 10px;
+}
+
 /* Wrapper styles */
-.Wrapper {
-  color: #202124;
+.GraphWrapper {
+  position: relative;
+  fill: #909090 !important;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-weight: 400;
   line-height: 1.43;
   letter-spacing: 0;
   box-sizing: inherit;
   font-size: 13px;
-  fill: #909090;
-  margin-bottom: 8px;
   user-select: none;
 }
 
 /* Graph styles */
 .Graph {
+  position: relative;
   padding: 20px;
   border-radius: 10px;
-  border: 1px solid #E4E4E4;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
-  margin: auto 80px;
+  border: 0px solid #E4E4E4;
+  box-shadow: 0px 2px 5px rgba(255, 255, 255, 0.15);
+  margin: 5px;
   display: inline-grid;
   grid-template-areas:
     'empty months'
@@ -28,16 +39,11 @@
 }
 
 .header {
-  -webkit-font-smoothing: antialiased;
-  letter-spacing: 0;
-  box-sizing: inherit;
   color: #202124;
   margin: 20px 80px;
-  padding-top: 5px;
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-size: 16px;
   font-weight: bold;
-  line-height: 1.5;
+  line-height: 1.2;
 }
 
 /* Months styles */
@@ -89,29 +95,28 @@
 .SquareListItem {
   border-radius: 3px;
   border: 1px rgba(27, 31, 35, 0.06) solid;
-  background-color: #ebedf0; /* Default color */
+  background-color: #E4E4E4; /* Default color */
 }
 
 .SquareListItem[data-level='1'] {
-  background-color: #c6e48b;
+  background-color: rgba(0,143,83,0.3);
 }
 
 .SquareListItem[data-level='2'] {
-  background-color: #40c463;
+  background-color: rgba(0,143,83,0.5);
 }
 
 .SquareListItem[data-level='3'] {
-  background-color: #30a14e;
+  background-color: rgba(0,143,83,0.7);
 }
 
 .SquareListItem[data-level='4'] {
-  background-color: #216e39;
+  background-color: rgba(0,143,83,1);
 }
 
 /* Tooltip styles */
 .SquareListItem[data-tooltip] {
   position: relative;
-  cursor: pointer;
 }
 
 .SquareListItem[data-tooltip]:before,
@@ -162,16 +167,19 @@
 }
 
 .legendContainer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  /* letter-spacing: 0; */
+  box-sizing: inherit;
   display: flex;
   align-items: center;
-  margin-top: 10px;
-  margin-right: 260px;
   flex-direction: row-reverse;
 }
 
 .legendTile {
-  width: 20px;
-  height: 20px;
+  width: 11px;
+  height: 11px;
   margin-right: 5px;
 }
 
@@ -181,14 +189,37 @@
   padding: 5px;
 }
 
-.buttonContainer {
-  flex-grow: 1; /* Allows the button to take up the remaining space */
-  text-align: left; /* Align the button to the left */
-  margin-left: 70px; /* Add some spacing to the right of the button */
+.modalContainer{
+  box-sizing: inherit;
 }
 
-.modalBtn {
-  margin: 20px 80px;
+.buttonContainer {
+  margin-right: 50px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.btn {
+  -webkit-font-smoothing: antialiased;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  letter-spacing: 0.02857em;
+  text-transform: inherit;
+  box-sizing: inherit;
+  opacity: 1;
+  color: #909090;
+  margin: 0;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.btn:hover {
+  text-decoration: underline;
 }
 
 .modal {
@@ -208,6 +239,8 @@
 .modal h2 {
   margin-top: 0;
   text-align: left;
+  font-weight: bolder;
+
 }
 
 .modal p {

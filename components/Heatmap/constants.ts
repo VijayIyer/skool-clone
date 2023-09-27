@@ -24,4 +24,4 @@ export const DAYS_IN_YEAR: number = 365
 
 export const DEFAULT_SQUARE_GAP: string = '4px'
 
-export const DEFAULT_SQUARE_SIZE: string = '15px'
+export const DEFAULT_SQUARE_SIZE: string = '11'
