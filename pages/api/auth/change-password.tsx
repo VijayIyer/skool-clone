@@ -92,7 +92,7 @@ export default async function changePasswordHandler(
           sameSite: "strict",
         })
       );
-      res.status(200).json(responseFormatter(true, token, "Password updated!"));
+      res.status(200).json(responseFormatter(true, null, "Password updated!"));
       break;
     default:
       return res
