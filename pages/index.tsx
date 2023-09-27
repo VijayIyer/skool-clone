@@ -28,8 +28,7 @@ const imgData = [
 ];
 
 export default function Entry() {
-  const matchDown = useMediaQuery('(max-width:1320px)');
-  
+  const matchDown = useMediaQuery("(max-width:1320px)");
   return (
     <>
       <Head>
@@ -39,7 +38,7 @@ export default function Entry() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-      <EntryPageHeader />
+        <EntryPageHeader />
         <div className={styles.content} data-testid="content">
           <div className={styles.title}>Community platform for creators</div>
           <div className={styles.description}>
