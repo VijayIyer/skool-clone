@@ -170,9 +170,10 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  /* letter-spacing: 0; */
   box-sizing: inherit;
   display: flex;
+  padding: 15px;
+  gap: 0.8px;
   align-items: center;
   flex-direction: row-reverse;
 }
@@ -180,37 +181,37 @@
 .legendTile {
   width: 11px;
   height: 11px;
-  margin-right: 5px;
+  margin-right: 2px;
 }
 
 .legendText {
-  font-size: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgb(144, 144, 144);
   font-weight: normal;
-  padding: 5px;
+  padding: 10px;
 }
 
 .modalContainer{
   box-sizing: inherit;
+  
 }
 
 .buttonContainer {
   margin-right: 50px;
   position: absolute;
+  padding: 15px;
   bottom: 0;
   left: 0;
 }
 
 .btn {
-  -webkit-font-smoothing: antialiased;
   cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  letter-spacing: 0.02857em;
+  padding: 10px;
   text-transform: inherit;
   box-sizing: inherit;
   opacity: 1;
   color: #909090;
-  margin: 0;
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-weight: normal;
   font-style: normal;
