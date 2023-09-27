@@ -14,7 +14,12 @@ export default function StatusDisplay({
   activeTime,
 }: StatusDisplayProps) {
   return (
-    <Stack direction="row" spacing={1} alignItems="center">
+    <Stack
+      direction="row"
+      spacing={1}
+      alignItems="center"
+      data-testid="status-display"
+    >
       {isAccountOwner ? (
         <>
           <CircleIcon sx={{ color: "rgb(0, 158, 93)" }} />

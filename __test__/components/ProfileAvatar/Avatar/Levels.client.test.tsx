@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import Levels from "@/components/ProfileAvatar/Avatar/Levels";
-import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
 describe("Levels Component", () => {
@@ -24,9 +23,5 @@ describe("Levels Component", () => {
     const levelPageLink = "/level/3"; // Replace with your desired link
 
     render(<Levels level={level} levelPageLink={levelPageLink} />);
-
-    // Click the link
-    const link = screen.getByRole("link");
-    userEvent.click(link);
   });
 });

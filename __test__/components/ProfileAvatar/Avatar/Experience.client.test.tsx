@@ -5,7 +5,7 @@ import "@testing-library/jest-dom";
 
 describe("Experience Component", () => {
   it("renders with the given curPointsPercentage", () => {
-    const curPointsPercentage = 50; // Replace with your desired percentage
+    const curPointsPercentage = 50;
 
     render(<Experience curPointsPercentage={curPointsPercentage} />);
 

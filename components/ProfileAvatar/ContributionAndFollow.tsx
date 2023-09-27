@@ -16,8 +16,6 @@ export default function ContributionAndFollow({
   followers,
   following,
 }: ContributionAndFollowProps) {
-  console.log(contributions);
-
   return (
     <section>
       <Stack

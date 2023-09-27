@@ -15,6 +15,7 @@ const ModalWrapper: React.FC<ModalProps> = ({ open, onClose, children }) => {
       onClose={onClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      data-testid="modal-wrapper"
     >
       {children}
     </Modal>

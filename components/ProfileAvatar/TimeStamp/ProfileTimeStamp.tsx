@@ -30,19 +30,6 @@ export default function ProfileTimeStamp({
       justifyContent="space-between"
       sx={{ height: "56px" }}
     >
-      {/* <Stack direction="row" spacing={1}>
-        {isAccounOwner ? (
-          <>
-            <CircleIcon sx={{ color: "rgb(0, 158, 93)" }} />
-            <Typography>Online now</Typography>
-          </>
-        ) : (
-          <>
-            <QueryBuilder />
-            <Typography> {activeTime}</Typography>
-          </>
-        )}
-      </Stack> */}
       <StatusDisplay
         isAccountOwner={isAccountOwner}
         activeTime={activeTimeFromNow}
