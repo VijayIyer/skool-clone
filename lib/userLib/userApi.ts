@@ -1,5 +1,5 @@
 import User from "../../models/User";
-type User = {
+type UserType = {
   id: string;
   firstName: string;
   lastName: string;
@@ -58,7 +58,7 @@ export async function deleteUsers() {
     throw error;
   }
 }
-export async function getUserById(userId: string | null): Promise<User> {
+export async function getUserById(userId: string | null): Promise<UserType> {
   try {
     const user = await User.findById(userId);
     if (!user) throw Error("Error finding user");
@@ -74,7 +74,7 @@ export async function getUserById(userId: string | null): Promise<User> {
     throw error;
   }
 }
-export async function editUser(id: string, updatedUser: User) {
+export async function editUser(id: string, updatedUser: UserType) {
   const { passwordChangedAt, ...updatedUserDetails } = updatedUser;
   try {
     const result = await User.findOneAndUpdate({ _id: id }, updatedUserDetails);
