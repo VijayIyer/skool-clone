@@ -49,7 +49,6 @@ const UserSchema = new mongoose.Schema(
 UserSchema.pre("findOneAndUpdate", function (next) {
   try {
     const schema = this.getUpdate();
-    console.log(`updating passwordChangedAt field - ${JSON.stringify(schema)}`);
     if (!schema) return next();
 
     if (Object.hasOwn(schema, "password")) {
