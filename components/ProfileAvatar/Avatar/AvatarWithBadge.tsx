@@ -46,8 +46,8 @@ export default function AvatarWithBadge({
             alt={fullName}
             src={avatarUrl}
             sx={{
-              width: 200,
-              height: 200,
+              width: 220,
+              height: 220,
               border: "10px solid transparent",
             }}
           />

@@ -38,8 +38,6 @@ export default function ProfileAvatar({
   handleClickEditProfile,
   handleClickFollow,
 }: ProfileAvatarProps) {
-  console.log(user);
-
   return (
     <PaperContainer>
       <AvatarAndLevels user={user} />
