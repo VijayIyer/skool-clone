@@ -10,37 +10,29 @@ import {
 	DEFAULT_SQUARE_SIZE,
 } from './constants';
 import {
-	getRandomCount,
 	transformCount,
 	transformPixelsToNumber,
 } from './utils';
-import styles from './Heatmap.module.css'; // Import the CSS module
+import styles from './Heatmap.module.css';
 
 interface HeatmapProps {
 	colour?: string[];
-	squareNumber?: number;
-	count: number[];
-	squareGap?: string;
-	squareSize?: string;
 	fontSize?: string;
-	tooltipContent?: string;
 	data: { date: Date; activityCount: number }[];
 	registrationDate: Date;
+	isFirstDay: boolean;
 }
 
 const Heatmap: React.FC<HeatmapProps> = (props: HeatmapProps) => {
-	const squareNumber: number = props.squareNumber || DAYS_IN_YEAR;
-	const count: number[] = props.count || getRandomCount(squareNumber);
-	const level: number[] = count.map((i: number) => transformCount(i));
-	const squareGap: string = props.squareGap || DEFAULT_SQUARE_GAP;
-	const squareSize: string = props.squareSize || DEFAULT_SQUARE_SIZE;
-	const fontSize: string = props.fontSize || '12px';
+	const squareGap: string = DEFAULT_SQUARE_GAP;
+	const squareSize: string = DEFAULT_SQUARE_SIZE;
 	const weekWidth: string =
 		String(
 			transformPixelsToNumber(squareGap) +
 			transformPixelsToNumber(squareSize)
 		) + 'px';
 
+	const registrationDate: Date = props.registrationDate;
 	const [modalOpen, setModalOpen] = useState(false);
 	const [hoveredLegend, setHoveredLegend] = useState<string | null>(null);
 
@@ -55,7 +47,6 @@ const Heatmap: React.FC<HeatmapProps> = (props: HeatmapProps) => {
 	const handleLegendTileHover = (color: string) => {
 		setHoveredLegend(color);
 	};
-
 
 	const renderLegendTiles = () => {
 		const legendColors = ['rgba(0,143,83,1)', 'rgba(0,143,83,0.7)', 'rgba(0,143,83,0.5)', 'rgba(0,143,83,0.3)', '#E4E4E4'];
@@ -100,36 +91,90 @@ const Heatmap: React.FC<HeatmapProps> = (props: HeatmapProps) => {
 		}
 	};
 
+	const renderCalendarLabels = () => {
+		return (
+			<>
+				<ul className={styles.Months}>
+					{MONTHS.map((month, i) => (
+						<li key={i}>{month}</li>
+					))}
+				</ul>
+				<ul className={styles.Days}>
+					{WEEK_DAYS.map((day, i) => (
+						<li key={i}>{day}</li>
+					))}
+				</ul>
+			</>
+		)
+	}
+
+	// Helper to get date for a tile 
+	const getDateForTile = (weekIndex: number, dayIndex: number) => {
+		const currentDate = new Date();
+		const registrationDay = registrationDate.getDay();
+
+		return new Date(
+			currentDate.getFullYear(),
+			currentDate.getMonth(),
+			currentDate.getDate() -
+			(52 - weekIndex) * 7 +
+			dayIndex -
+			registrationDay
+		);
+	}
+
+	const renderSquaresList = () => {
+		const sortedTiles = [...Array(DAYS_IN_YEAR)].map((_, i) => {
+			const dateForSquare: Date = getDateForTile(i, i % 7);
+			const dayIndex = Math.floor(
+				(dateForSquare.getTime() - registrationDate.getTime()) / (24 * 60 * 60 * 1000)
+			);
+			const weekIndex = Math.floor(dayIndex / 7);
+			const monthIndex = dateForSquare.getMonth();
+			const sortIndex = monthIndex * WEEK_DAYS.length * 7 + weekIndex * 7 + dateForSquare.getDay();
+
+			return {
+				squareIndex: i,
+				sortIndex,
+			};
+		});
+
+		sortedTiles.sort((a, b) => a.sortIndex - b.sortIndex);
+
+		return (
+			<ul className={styles.SquaresList}>
+				{sortedTiles.map(({ squareIndex }) => {
+					const activityCount = props.data[squareIndex]?.activityCount || 0;
+					const dateForSquare: Date = getDateForTile(squareIndex, squareIndex % 7);
+					const isFirstDay =
+						dateForSquare.getDay() === registrationDate.getDay();
+					const formattedDate = format(dateForSquare, 'EEEE, MMMM d, yyyy');
+					const tileTooltip = isFirstDay
+						? `First Day, ${formattedDate}`
+						: `${formattedDate}\n${activityCount} activities`;
+
+					return (
+						<Tooltip key={squareIndex} title={tileTooltip} arrow>
+							<li
+								className={`${styles.SquareListItem} ${styles.squares}`}
+								data-level={transformCount(activityCount)}
+							></li>
+						</Tooltip>
+					);
+				})}
+			</ul>
+		);
+	};
+
 	return (
 		<div>
 			<p className={styles.header}>Activity</p>
 			<div className={styles.main}>
 				<div className={styles.GraphWrapper}>
 					<div className={styles.Graph}>
-						<ul className={styles.Months}>
-							{MONTHS.map((month, i) => (
-								<li key={i}>{month}</li>
-							))}
-						</ul>
-						<ul className={styles.Days}>
-							{WEEK_DAYS.map((day, i) => (
-								<li key={i}>{day}</li>
-							))}
-						</ul>
-						<ul className={styles.SquaresList}>
-							{[...Array(squareNumber)].map((key: React.Key, i) => (
-								<li
-									className={`${styles.SquareListItem} ${styles.squares}`}
-									data-level={level[i]}
-									key={key}
-									data-tooltip={
-										props.tooltipContent || `${count[i]} activities`
-									}
-								></li>
-							))}
-						</ul>
+						{renderCalendarLabels()}
+						{renderSquaresList()}
 					</div>
-
 				</div>
 				<div className={styles.legendContainer}>
 					<span className={styles.legendText}>More</span>
@@ -155,7 +200,6 @@ const Heatmap: React.FC<HeatmapProps> = (props: HeatmapProps) => {
 									<br /><br />
 									Activities are timestamped according to Coordinated Universal Time (UTC) rather than your local time zone.
 								</p>
-
 							</div>
 						</div>
 					</Modal>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { getRandomCount } from './utils'
-import { DAYS_IN_YEAR } from '../constants'
+import { DAYS_IN_YEAR } from './constants'
 
 import Heatmap from './Heatmap'
 

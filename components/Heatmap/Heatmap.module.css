@@ -99,7 +99,8 @@
 }
 
 .SquareListItem[data-level='1'] {
-  background-color: rgba(0,143,83,0.3);
+  fill: rgba(0,143,83,1);
+  /* background-color: rgba(0,143,83,0.3); */
 }
 
 .SquareListItem[data-level='2'] {
