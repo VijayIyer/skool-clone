@@ -5,7 +5,10 @@ type UserAuthDetails = {
 };
 export default function generateJwtToken({ id, email }: UserAuthDetails) {
   const JWT_SECRET = process.env.JWT_SECRET;
-  if (!JWT_SECRET) return null;
+  if (!JWT_SECRET)
+    throw new Error(
+      "Error in token generation: unable to read JWT_SECRET environment variable"
+    );
   return jwt.sign({ id: id.toString(), email: email }, JWT_SECRET, {
     expiresIn: "2m",
   });
