@@ -1,5 +1,6 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { styled } from "@mui/material";
 import { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -7,11 +8,21 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Grid, Link, Typography } from "@mui/material";
+import { SubmitHandler } from "react-hook-form";
+import { SignupFormInput } from ".";
 type SignUpVerificationFormProps = {
   email: string;
+  verify: SubmitHandler<SignupFormInput>;
 };
-
-const SignUpVerificationForm = ({ email }: SignUpVerificationFormProps) => {
+const StyledLink = styled(Link)({
+  "& .MuiLink-root:hover": {
+    textDecoration: "decoration",
+  },
+});
+const SignUpVerificationForm = ({
+  email,
+  verify,
+}: SignUpVerificationFormProps) => {
   const [open, setOpen] = useState<boolean>(true);
 
   const handleClickOpen = () => {
@@ -19,16 +30,10 @@ const SignUpVerificationForm = ({ email }: SignUpVerificationFormProps) => {
   };
 
   const handleClose = () => {
-    setOpen(false);
+    console.log(`modal is ${open}`);
   };
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      sx={{
-        borderRadius: "2em",
-      }}
-    >
+    <Dialog open={open} onClose={handleClose}>
       <form>
         <Grid
           container
@@ -36,6 +41,7 @@ const SignUpVerificationForm = ({ email }: SignUpVerificationFormProps) => {
           sx={{
             padding: "2em",
             boxShadow: "none",
+            borderRadius: "10px",
           }}
         >
           <Grid item textAlign={"center"}>
@@ -99,14 +105,24 @@ const SignUpVerificationForm = ({ email }: SignUpVerificationFormProps) => {
             >
               Didn&#39;t get the email?{" "}
               <span>
-                <Link underline='none' color={"secondary"}>
-                  Resend
+                <Link
+                  underline='hover'
+                  color={"secondary"}
+                  href='#'
+                  onClick={(e) => e.preventDefault()}
+                >
+                  Resend it
                 </Link>
               </span>
               <span> </span>
-              it or{" "}
+              <span>or </span>
               <span>
-                <Link underline='none' color={"secondary"}>
+                <Link
+                  underline='hover'
+                  color={"secondary"}
+                  href='#'
+                  onClick={(e) => e.preventDefault()}
+                >
                   Use a different email
                 </Link>
               </span>
