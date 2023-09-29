@@ -33,8 +33,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# not complete
-/components/CommentContent
-/components/CommentList
-/components/CommentSection
