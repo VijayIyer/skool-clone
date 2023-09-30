@@ -93,8 +93,6 @@ export const CustomTypography = styled(Typography)({
 });
 
 export const PaperContainer = styled(Paper)(({ theme }) => ({
-  width: 273,
-  height: 680,
   padding: theme.spacing(2),
   ...theme.typography.body2,
 }));
