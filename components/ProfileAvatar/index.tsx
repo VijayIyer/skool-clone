@@ -34,7 +34,7 @@ interface ProfileAvatarProps {
   handleClickFollowButton: () => void;
   handleClickContributions: () => void;
   handleClickFollowers: () => void;
-  handleClickFolling: () => void;
+  handleClickFollowing: () => void;
 }
 
 export default function ProfileAvatar({
@@ -46,7 +46,7 @@ export default function ProfileAvatar({
   handleClickFollowButton,
   handleClickContributions,
   handleClickFollowers,
-  handleClickFolling,
+  handleClickFollowing,
 }: ProfileAvatarProps) {
   return (
     <PaperContainer
@@ -64,7 +64,7 @@ export default function ProfileAvatar({
         {...user}
         handleClickContributions={handleClickContributions}
         handleClickFollowers={handleClickFollowers}
-        handleClickFolling={handleClickFolling}
+        handleClickFollowing={handleClickFollowing}
       />
       <Divider variant="middle" sx={{ margin: "5px 0 20px 0" }} />
       <EditOrFollowButton

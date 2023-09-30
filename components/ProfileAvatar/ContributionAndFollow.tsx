@@ -11,7 +11,7 @@ interface ContributionAndFollowProps {
   following: number;
   handleClickContributions: () => void;
   handleClickFollowers: () => void;
-  handleClickFolling: () => void;
+  handleClickFollowing: () => void;
 }
 
 export default function ContributionAndFollow({
@@ -20,7 +20,7 @@ export default function ContributionAndFollow({
   following,
   handleClickContributions,
   handleClickFollowers,
-  handleClickFolling,
+  handleClickFollowing,
 }: ContributionAndFollowProps) {
   return (
     <section>
@@ -31,15 +31,33 @@ export default function ContributionAndFollow({
           <Divider orientation="vertical" flexItem sx={{ width: "9px" }} />
         }
       >
-        <StackItem onClick={handleClickContributions} elevation={0}>
+        <StackItem
+          onClick={handleClickContributions}
+          elevation={0}
+          role="button"
+          tabIndex={4} // Make it focusable
+          aria-label="Click to view contributions"
+        >
           <CustomTypography>{contributions}</CustomTypography>
           <Typography variant="body2">Contributions</Typography>
         </StackItem>
-        <StackItem onClick={handleClickFollowers} elevation={0}>
+        <StackItem
+          onClick={handleClickFollowers}
+          elevation={0}
+          role="button"
+          tabIndex={5} // Make it focusable
+          aria-label="Click to view followers"
+        >
           <CustomTypography>{followers}</CustomTypography>
           <Typography variant="body2">Followers</Typography>
         </StackItem>
-        <StackItem onClick={handleClickFolling} elevation={0}>
+        <StackItem
+          onClick={handleClickFollowing}
+          elevation={0}
+          role="button"
+          tabIndex={6} // Make it focusable
+          aria-label="Click to view following"
+        >
           <CustomTypography>{following}</CustomTypography>
           <Typography variant="body2">Following</Typography>
         </StackItem>

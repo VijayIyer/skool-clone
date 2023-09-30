@@ -85,7 +85,6 @@ export const StackItem = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
   cursor: "pointer",
-  // flex: "0 0 0",
 }));
 
 export const CustomTypography = styled(Typography)({
