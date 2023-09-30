@@ -73,10 +73,11 @@ export default function SignUpForm() {
       }
     }
   };
-  const verifyEmail: SubmitHandler<SignupFormInput> = async (data, e) => {
+  const signUp: SubmitHandler<SignupFormInput> = async (data, e) => {
     e?.preventDefault();
+    console.log(JSON.stringify(data));
     try {
-      const response = fetch("/api/signup/verify", {
+      const response = await fetch("/api/signup", {
         method: "POST",
         mode: "same-origin",
         headers: {
@@ -84,8 +85,9 @@ export default function SignUpForm() {
         },
         body: JSON.stringify(data),
       });
+      if (response?.ok === true) setAwaitingVerification(true);
     } catch (err) {
-    } finally {
+      setStatusText(`Error: ${err} Please try again.`);
     }
   };
 
@@ -146,9 +148,16 @@ export default function SignUpForm() {
     },
   });
 
-  if (awaitingVerification)
-    return <SignUpVerificationForm verify={onSubmit} email={email.value} />;
-
+  if (awaitingVerification) {
+    return (
+      <SignUpVerificationForm
+        setAwaitingVerification={setAwaitingVerification}
+        verify={onSubmit}
+        resend={handleSubmit(signUp)}
+        email={email.value}
+      />
+    );
+  }
   return (
     <div className={styles.signup_paper}>
       <div className={styles.signup_body}>
@@ -164,7 +173,7 @@ export default function SignUpForm() {
         <form
           data-testid='sign-up-dialog-sign-up-content'
           className={styles.signup_form}
-          onSubmit={handleSubmit(verifyEmail)}
+          onSubmit={handleSubmit(signUp)}
         >
           <div className={styles.signup_inputs}>
             <FormControl variant='outlined' fullWidth>

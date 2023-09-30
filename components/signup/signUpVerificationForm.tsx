@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { styled } from "@mui/material";
-import { useState } from "react";
+import { Dispatch, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -13,6 +13,8 @@ import { SignupFormInput } from ".";
 type SignUpVerificationFormProps = {
   email: string;
   verify: SubmitHandler<SignupFormInput>;
+  setAwaitingVerification: any;
+  resend: any;
 };
 const StyledLink = styled(Link)({
   "& .MuiLink-root:hover": {
@@ -22,6 +24,8 @@ const StyledLink = styled(Link)({
 const SignUpVerificationForm = ({
   email,
   verify,
+  resend,
+  setAwaitingVerification,
 }: SignUpVerificationFormProps) => {
   const [open, setOpen] = useState<boolean>(true);
 
@@ -93,6 +97,10 @@ const SignUpVerificationForm = ({
                 marginBottom: "1em 1em",
                 borderRadius: "4px",
               }}
+              onClick={(e) => {
+                e.preventDefault();
+                setAwaitingVerification(false);
+              }}
             >
               Submit
             </Button>
@@ -109,7 +117,10 @@ const SignUpVerificationForm = ({
                   underline='hover'
                   color={"secondary"}
                   href='#'
-                  onClick={(e) => e.preventDefault()}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    resend();
+                  }}
                 >
                   Resend it
                 </Link>
@@ -121,7 +132,10 @@ const SignUpVerificationForm = ({
                   underline='hover'
                   color={"secondary"}
                   href='#'
-                  onClick={(e) => e.preventDefault()}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setAwaitingVerification(false);
+                  }}
                 >
                   Use a different email
                 </Link>
