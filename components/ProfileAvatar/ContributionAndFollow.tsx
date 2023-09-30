@@ -26,8 +26,10 @@ export default function ContributionAndFollow({
     <section>
       <Stack
         direction="row"
-        justifyContent="space-between"
-        divider={<Divider orientation="vertical" flexItem />}
+        justifyContent="space-around"
+        divider={
+          <Divider orientation="vertical" flexItem sx={{ width: "9px" }} />
+        }
       >
         <StackItem onClick={handleClickContributions} elevation={0}>
           <CustomTypography>{contributions}</CustomTypography>

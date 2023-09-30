@@ -30,8 +30,8 @@ interface ProfileAvatarProps {
   isAccounOwner: boolean;
   profileHeight?: number;
   profileWidth?: number;
-  handleClickEditProfile: () => void;
-  handleClickFollow: () => void;
+  handleClickEditProfileButton: () => void;
+  handleClickFollowButton: () => void;
   handleClickContributions: () => void;
   handleClickFollowers: () => void;
   handleClickFolling: () => void;
@@ -42,8 +42,8 @@ export default function ProfileAvatar({
   isAccounOwner,
   profileHeight = 680,
   profileWidth = 273,
-  handleClickEditProfile,
-  handleClickFollow,
+  handleClickEditProfileButton,
+  handleClickFollowButton,
   handleClickContributions,
   handleClickFollowers,
   handleClickFolling,
@@ -69,8 +69,8 @@ export default function ProfileAvatar({
       <Divider variant="middle" sx={{ margin: "5px 0 20px 0" }} />
       <EditOrFollowButton
         isAccountOwner={true}
-        handleClickEditProfile={handleClickEditProfile}
-        handleClickFollow={handleClickFollow}
+        handleClickEditProfile={handleClickEditProfileButton}
+        handleClickFollow={handleClickFollowButton}
       />
     </PaperContainer>
   );
