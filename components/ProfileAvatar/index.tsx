@@ -28,8 +28,8 @@ export interface UserProps {
 interface ProfileAvatarProps {
   user: UserProps;
   isAccounOwner: boolean;
-  profileHeight?: number;
-  profileWidth?: number;
+  profileHeight?: string;
+  profileWidth?: string;
   handleClickEditProfileButton: () => void;
   handleClickFollowButton: () => void;
   handleClickContributions: () => void;
@@ -40,8 +40,8 @@ interface ProfileAvatarProps {
 export default function ProfileAvatar({
   user,
   isAccounOwner,
-  profileHeight = 680,
-  profileWidth = 273,
+  profileHeight = "680px",
+  profileWidth = "273px",
   handleClickEditProfileButton,
   handleClickFollowButton,
   handleClickContributions,
