@@ -9,12 +9,18 @@ interface ContributionAndFollowProps {
   contributions: number;
   followers: number;
   following: number;
+  handleClickContributions: () => void;
+  handleClickFollowers: () => void;
+  handleClickFolling: () => void;
 }
 
 export default function ContributionAndFollow({
   contributions,
   followers,
   following,
+  handleClickContributions,
+  handleClickFollowers,
+  handleClickFolling,
 }: ContributionAndFollowProps) {
   return (
     <section>
@@ -23,15 +29,15 @@ export default function ContributionAndFollow({
         justifyContent="space-between"
         divider={<Divider orientation="vertical" flexItem />}
       >
-        <StackItem elevation={0}>
+        <StackItem onClick={handleClickContributions} elevation={0}>
           <CustomTypography>{contributions}</CustomTypography>
           <Typography variant="body2">Contributions</Typography>
         </StackItem>
-        <StackItem elevation={0}>
+        <StackItem onClick={handleClickFollowers} elevation={0}>
           <CustomTypography>{followers}</CustomTypography>
           <Typography variant="body2">Followers</Typography>
         </StackItem>
-        <StackItem elevation={0}>
+        <StackItem onClick={handleClickFolling} elevation={0}>
           <CustomTypography>{following}</CustomTypography>
           <Typography variant="body2">Following</Typography>
         </StackItem>

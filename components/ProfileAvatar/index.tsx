@@ -28,19 +28,25 @@ export interface UserProps {
 interface ProfileAvatarProps {
   user: UserProps;
   isAccounOwner: boolean;
-  handleClickEditProfile: () => void;
-  handleClickFollow: () => void;
   profileHeight?: number;
   profileWidth?: number;
+  handleClickEditProfile: () => void;
+  handleClickFollow: () => void;
+  handleClickContributions: () => void;
+  handleClickFollowers: () => void;
+  handleClickFolling: () => void;
 }
 
 export default function ProfileAvatar({
   user,
   isAccounOwner,
-  handleClickEditProfile,
-  handleClickFollow,
   profileHeight = 680,
   profileWidth = 273,
+  handleClickEditProfile,
+  handleClickFollow,
+  handleClickContributions,
+  handleClickFollowers,
+  handleClickFolling,
 }: ProfileAvatarProps) {
   return (
     <PaperContainer
@@ -54,7 +60,12 @@ export default function ProfileAvatar({
       <Divider variant="middle" sx={{ margin: "20px 0 20px 0" }} />
       <ProfileTimeStamp {...user} isAccountOwner={isAccounOwner} />
       <Divider variant="middle" sx={{ margin: "20px 0 5px 0" }} />
-      <ContributionAndFollow {...user} />
+      <ContributionAndFollow
+        {...user}
+        handleClickContributions={handleClickContributions}
+        handleClickFollowers={handleClickFollowers}
+        handleClickFolling={handleClickFolling}
+      />
       <Divider variant="middle" sx={{ margin: "5px 0 20px 0" }} />
       <EditOrFollowButton
         isAccountOwner={true}
