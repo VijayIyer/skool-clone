@@ -6,7 +6,6 @@ import GroupSwitch from "../Groupswitcher";
 import UserSection from "../Usersection";
 import Tabs from "../Tabbar";
 import { useState } from "react";
-// import style from "@/styles/Navbar.module.css";
 import style from "./navbar.module.css"
 
 interface NavBarProps {
@@ -30,7 +29,7 @@ export default function NavBar(props: NavBarProps) {
 
   return (
     <StyledEngineProvider injectFirst>
-      <AppBar className={`${style.navbar_root}`}>
+      <AppBar elevation={0} className={`${style.navbar_root}`}>
         <Toolbar className={`${style.navbar_toolbar}`}>
           <GroupSwitch />
           {isDisplaySearch ? <Search /> : <></>}

@@ -17,9 +17,9 @@ export default function UserSection() {
   const [isUserOpen, setUserOpen] = useState(false);
   const [newChatNumber, setNewChatNumber] = useState(5);
   const [newNotificationNumber, setNotificationNumber] = useState(6);
-  const [userMenuAnchor, setUserMenuAnchor] = useState< null | HTMLElement>(null);
-  const [chatMenuAnchor, setChatMenuAnchor] = useState< null | HTMLElement>(null);
-  const [notificationMenuAnchor, setNotificationMenuAnchor] = useState< null | HTMLElement>(null);
+  const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null);
+  const [chatMenuAnchor, setChatMenuAnchor] = useState<null | HTMLElement>(null);
+  const [notificationMenuAnchor, setNotificationMenuAnchor] = useState<null | HTMLElement>(null);
 
 
 
@@ -56,36 +56,36 @@ export default function UserSection() {
 
   function renderChatMenu() {
     return (
-      <ChatMenu anchorEl={chatMenuAnchor} open={isChatOpen} onClose={closeChatMenu}/>
+      <ChatMenu anchorEl={chatMenuAnchor} open={isChatOpen} onClose={closeChatMenu} />
     );
   }
 
   function renderNotificationMenu() {
     return (
-      <NotificationMenu anchorEl={notificationMenuAnchor} open={isNotificationOpen} onClose={closeNotificationMenu}/>
+      <NotificationMenu anchorEl={notificationMenuAnchor} open={isNotificationOpen} onClose={closeNotificationMenu} />
     );
   }
 
   function renderUserMenu() {
     return (
-      <UserMenu open = {isUserOpen} anchorEl={userMenuAnchor} onClose={closeUserMenu}/>
+      <UserMenu open={isUserOpen} anchorEl={userMenuAnchor} onClose={closeUserMenu} />
     );
   }
 
   return (
     <>
       <Box>
-        <IconButton onClick={(e)=>openChatMenu(e)}>
+        <IconButton onClick={(e) => openChatMenu(e)}>
           <Badge badgeContent={newChatNumber} color="error">
             <ChatIcon />
           </Badge>
         </IconButton>
-        <IconButton onClick={(e)=>openNotificationMenu(e)}>
+        <IconButton onClick={(e) => openNotificationMenu(e)}>
           <Badge badgeContent={newNotificationNumber} color="error">
             <NotificationIcon />
           </Badge>
         </IconButton>
-        <IconButton onClick={(e)=>openUserMenu(e)}>
+        <IconButton onClick={(e) => openUserMenu(e)}>
           <Badge>
             <AccontCircle />
           </Badge>

@@ -17,6 +17,13 @@
     transition: background 150ms ease-in-out;
     margin-right: 8px;
     border-radius: 10px;
+    text-decoration: none;
+    color: var(--nav-font-color);
+  }
+
+  .navbar_groupswitcher_community :visited{
+    color:var(--nav-font-color);
+    text-decoration: none;
   }
   
   .navbar_groupswitcher_childwrapper {
