@@ -1,28 +1,54 @@
 import React, { useState } from "react";
-import { List, ListItem, ListItemButton } from "@mui/material";
+import { Box, Tabs, Tab } from "@mui/material";
+import style from "./tabbar.module.css";
 
-interface tabsProps {
-  tabList: Array<{ name: string; number: number }>;
+interface itemsProps {
+  itemsList: { name: string; number: number }[];
 }
 
-export default function Tabs(props: tabsProps) {
-  const { tabList } = props;
-  const [tabs, setTabs] = useState<{ name: string; number: number }[]>(tabList);
-  // need modify rendertab later
-  function renderTab(name: string) {
-    return <ListItemButton key={name}>{name}</ListItemButton>;
-  }
+export default function TabBar(props: itemsProps) {
+  const { itemsList } = props;
+  const [items, setItems] =
+    useState<{ name: string; number: number }[]>(itemsList);
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
   return (
-    <List
-      sx={{
-        display: "flex",
-        // flexDirection: "row",
-        // justifyContent: "flex-start",
-      }}
-    >
-      {tabs.map((tab) => {
-        return <ListItem key={tab.name}>{renderTab(tab.name)}</ListItem>;
-      })}
-    </List>
+    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        sx={{
+          "& button: focus": {
+            color: "black",
+          },
+          "& button: hover": {
+            color: "black",
+          },
+          "& button: active": {
+            color: "black",
+          },
+
+        }}
+        TabIndicatorProps={{
+          sx: {
+            backgroundColor: "black",
+            height: 4,
+            weigh: "bold",
+          }
+        }}
+      >
+        {items.map((item) => (
+          <Tab
+            label={item.name}
+            key={item.name}
+            className={`${style.tabBar_tab}`}
+          />
+        ))}
+      </Tabs>
+    </Box>
   );
 }

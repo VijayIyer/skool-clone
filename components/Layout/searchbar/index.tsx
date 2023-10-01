@@ -34,34 +34,12 @@ export default function Search() {
   }
 
   return (
-    // <FormControl className={`${style.navbar_search}`}>
-    // <TextField
-    //   className={`${style.navbar_search} ${style.navbar_search_feild}`}
-    //   variant="outlined"
-    //   fullWidth={true}
-    //   margin="dense"
-
-    //   type="text"
-    //   placeholder="Search..."
-    //   InputProps={{
-    //     startAdornment: (
-    //       <InputAdornment position="start">
-    //         <SearchIcon />
-    //       </InputAdornment>
-    //     ),
-    //     endAdornment: <>{renderCloseIcon()}</>,
-    //   }}
-    //   value={searchValue}
-    //   onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
-    // />
-    // </FormControl>
     <div className={`${style.navbar_search}`}>
-
       <FormControl className={`${style.navbar_search_form}`}>
         <InputBase
           className={`${style.navbar_search_feild}`}
           type="text"
-          placeholder="Search..."
+          placeholder="Search"
           value={searchValue}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
           startAdornment={
@@ -70,11 +48,10 @@ export default function Search() {
             </InputAdornment>
           }
           endAdornment={
-            <InputAdornment position="end">{renderCloseIcon()}</InputAdornment>
+            <InputAdornment position="end" className={`${style.navbar_crossIcon}`}>{renderCloseIcon()}</InputAdornment>
           }
         />
       </FormControl>
     </div>
   );
-
 }

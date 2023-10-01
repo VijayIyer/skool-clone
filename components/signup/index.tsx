@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from "react";
-=======
 import { MouseEvent, useState } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
@@ -325,4 +322,3 @@ export default function SignUpForm() {
     </div>
   );
 }
->>>>>>> dff87950e777b3202b8a9b7d8b0302816bdd8d03

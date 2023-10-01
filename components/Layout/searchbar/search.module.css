@@ -2,12 +2,15 @@
   flex: 1 1 0%;
   flex-grow: 1;
   padding: 0px, 8px;
+  margin: 8px;
+  height: 75%;
 }
 
 .navbar_search_form {
   margin-left: 16px;
   margin-right: 16px;
-  background-color: rgb(228, 228, 228);
+  /* background-color: rgb(228, 228, 228); */
+  background-color: none;
   height: 100%;
   width: 100%
 }
@@ -20,9 +23,15 @@
   background-color: lightgray;
   border-style: none;
   height: 100%;
-  border-radius: 16px;
+  border-radius: 8px;
 }
 
 .navbar_searchIcon {
   color: gray;
+  margin-left: 16px;
+}
+
+.navbar_crossIcon {
+  color: gray;
+  margin-right: 16px;
 }

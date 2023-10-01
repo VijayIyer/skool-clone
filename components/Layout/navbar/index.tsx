@@ -4,7 +4,7 @@ import Search from "../Searchbar";
 import LoginSignUpBar from "../Loginsection";
 import GroupSwitch from "../Groupswitcher";
 import UserSection from "../Usersection";
-import Tabs from "../Tabbar";
+import TabBar from "../Tabbar";
 import { useState } from "react";
 import style from "./navbar.module.css"
 
@@ -13,6 +13,7 @@ interface NavBarProps {
   isDisplayTabs?: boolean;
   isDisplaySearch?: boolean;
 }
+
 
 export default function NavBar(props: NavBarProps) {
   const { className, isDisplayTabs, isDisplaySearch } = props;
@@ -27,6 +28,14 @@ export default function NavBar(props: NavBarProps) {
     { name: "About", number: 1 },
   ];
 
+  const renderTabs = (items: { name: string; number: number }[]) => {
+    if(isDisplayTabs) {
+      return (
+        <TabBar itemsList={items}/>
+      );
+    }
+  }
+
   return (
     <StyledEngineProvider injectFirst>
       <AppBar elevation={0} className={`${style.navbar_root}`}>
@@ -35,7 +44,7 @@ export default function NavBar(props: NavBarProps) {
           {isDisplaySearch ? <Search /> : <></>}
           {isLogedIn ? <UserSection /> : <LoginSignUpBar />}
         </Toolbar>
-        {isDisplayTabs ? <Tabs tabList={tabs} /> : <></>}
+        {renderTabs(tabs)}
       </AppBar>
     </StyledEngineProvider>
   );

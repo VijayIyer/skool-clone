@@ -5,11 +5,8 @@ import AccontCircle from "@mui/icons-material/AccountCircleOutlined";
 import UserMenu from "../Usermenu";
 import ChatMenu from "../Chats";
 import NotificationMenu from "../Notifications";
-import {
-  Box,
-  Badge,
-  IconButton,
-} from "@mui/material";
+import { Box, Badge, IconButton } from "@mui/material";
+import style from "./usersection.module.css";
 
 export default function UserSection() {
   const [isChatOpen, setChatOpen] = useState(false);
@@ -17,13 +14,18 @@ export default function UserSection() {
   const [isUserOpen, setUserOpen] = useState(false);
   const [newChatNumber, setNewChatNumber] = useState(5);
   const [newNotificationNumber, setNotificationNumber] = useState(6);
-  const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null);
-  const [chatMenuAnchor, setChatMenuAnchor] = useState<null | HTMLElement>(null);
-  const [notificationMenuAnchor, setNotificationMenuAnchor] = useState<null | HTMLElement>(null);
+  const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(
+    null
+  );
+  const [chatMenuAnchor, setChatMenuAnchor] = useState<null | HTMLElement>(
+    null
+  );
+  const [notificationMenuAnchor, setNotificationMenuAnchor] =
+    useState<null | HTMLElement>(null);
 
-
-
-  function openChatMenu(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function openChatMenu(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
     setNewChatNumber(0);
     setChatMenuAnchor(event.currentTarget);
     setChatOpen(true);
@@ -33,7 +35,9 @@ export default function UserSection() {
     setChatMenuAnchor(null);
   }
 
-  function openNotificationMenu(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function openNotificationMenu(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
     setNotificationNumber(0);
     setNotificationMenuAnchor(event.currentTarget);
     setNotificationOpen(true);
@@ -44,8 +48,10 @@ export default function UserSection() {
     setNotificationMenuAnchor(null);
   }
 
-  function openUserMenu(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    setUserMenuAnchor(event.currentTarget)
+  function openUserMenu(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
+    setUserMenuAnchor(event.currentTarget);
     setUserOpen(true);
   }
 
@@ -56,38 +62,62 @@ export default function UserSection() {
 
   function renderChatMenu() {
     return (
-      <ChatMenu anchorEl={chatMenuAnchor} open={isChatOpen} onClose={closeChatMenu} />
+      <ChatMenu
+        anchorEl={chatMenuAnchor}
+        open={isChatOpen}
+        onClose={closeChatMenu}
+      />
     );
   }
 
   function renderNotificationMenu() {
     return (
-      <NotificationMenu anchorEl={notificationMenuAnchor} open={isNotificationOpen} onClose={closeNotificationMenu} />
+      <NotificationMenu
+        anchorEl={notificationMenuAnchor}
+        open={isNotificationOpen}
+        onClose={closeNotificationMenu}
+      />
     );
   }
 
   function renderUserMenu() {
     return (
-      <UserMenu open={isUserOpen} anchorEl={userMenuAnchor} onClose={closeUserMenu} />
+      <UserMenu
+        open={isUserOpen}
+        anchorEl={userMenuAnchor}
+        onClose={closeUserMenu}
+      />
     );
   }
 
   return (
     <>
-      <Box>
-        <IconButton onClick={(e) => openChatMenu(e)}>
+      <Box className={`${style.userSec}`}>
+        <IconButton
+          size="large"
+          onClick={(e) => openChatMenu(e)}
+          className={`${style.userSec_icon}`}
+        >
           <Badge badgeContent={newChatNumber} color="error">
-            <ChatIcon />
+            <ChatIcon fontSize="medium" />
           </Badge>
         </IconButton>
-        <IconButton onClick={(e) => openNotificationMenu(e)}>
+        <IconButton
+          size="large"
+          onClick={(e) => openNotificationMenu(e)}
+          className={`${style.userSec_icon}`}
+        >
           <Badge badgeContent={newNotificationNumber} color="error">
-            <NotificationIcon />
+            <NotificationIcon fontSize="medium" />
           </Badge>
         </IconButton>
-        <IconButton onClick={(e) => openUserMenu(e)}>
+        <IconButton
+          size="large"
+          onClick={(e) => openUserMenu(e)}
+          className={`${style.userSec_icon}`}
+        >
           <Badge>
-            <AccontCircle />
+            <AccontCircle fontSize="medium" />
           </Badge>
         </IconButton>
       </Box>

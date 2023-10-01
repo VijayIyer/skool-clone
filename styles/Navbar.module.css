@@ -14,22 +14,3 @@
   color: var(--nav-font-color);
   height: 112px;
 }
-.navbar_btn {
-    color: #909090;
-    border: 1px solid #E4E4E4;
-    height: auto;
-    padding-top: 11px;
-    padding-left: 24px;
-    padding-right: 24px;
-    padding-bottom: 11px;
-    text-transform: uppercase;
-    background-color: #FFFFFF;
-    border-color: #909090;
-}
-
-.navbar_btn:hover {
-    color: #202124;
-}
-
-@meida (min-width: 701px) and (max-width: 1120px) {
-}

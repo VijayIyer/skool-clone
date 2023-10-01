@@ -1,10 +1,10 @@
 .navbar_root {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 80%;
     height: 100%;
-    max-width: 1075px;
-    min-width: 768px;
+    /* max-width: 1075px;
+    min-width: 768px; */
     position: relative;
     justify-content: space-between;
     -webkit-box-pack: justify;

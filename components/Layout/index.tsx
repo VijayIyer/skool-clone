@@ -1,6 +1,6 @@
 import React from "react";
-import NavBar from "./Navbar"
-import style from "@/styles/Navbar.module.css";
+import NavBar from "./Navbar";
+import style from "./style.module.css";
 // import { StyledEngineProvider } from "@mui/material/styles";
 
 interface LayoutProps {
@@ -11,14 +11,11 @@ export default function Layout(props: LayoutProps) {
   const { children } = props;
 
   return (
-    // <StyledEngineProvider injectFirst>
     <>
       <div className={`${style.navbar_header}`}>
         <NavBar isDisplayTabs={true} isDisplaySearch={true} />
       </div>
       <main>{children}</main>
-      {/* </StyledEngineProvider> */}
-
     </>
   );
 }
@@ -26,13 +23,11 @@ export default function Layout(props: LayoutProps) {
 export function AltLayout(props: LayoutProps) {
   const { children } = props;
   return (
-    // <StyledEngineProvider injectFirst>
     <>
       <div className={`${style.navbar_header}`}>
         <NavBar isDisplayTabs={false} isDisplaySearch={false} />
       </div>
       <main>{children}</main>
-      {/* </StyledEngineProvider> */}
     </>
   );
 }

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Box, Button, Dialog, Stack, DialogTitle, Typography } from "@mui/material";
 import LogInDialog from "@/components/login";
-import style from "@/styles/Navbar.module.css";
+// import style from "@/styles/Navbar.module.css";
+import style from "./navLogin.module.css"
 export default function LoginSignUpBar() {
   const [isLogInOpen, setLogInOpen] = useState(false);
   const [isSignUpOpen, setSignUpOpen] = useState(false);
@@ -30,13 +31,13 @@ export default function LoginSignUpBar() {
 
   return (
     <>
-      <Box sx={{ display: "flex", flexDirection: "flex-end", gap: "16px" }}>
+      <Box className={`${style.loginSec}`}>
         <Button
           variant="outlined"
           onClick={toggleLogIn}
           className={`${style.navbar_btn}`}
         >
-          <Typography>
+          <Typography sx={{fontWeight: "bold"}}>
             LOG IN
           </Typography>
         </Button>
@@ -45,7 +46,7 @@ export default function LoginSignUpBar() {
           onClick={toggleSignUp}
           className={`${style.navbar_btn}`}
         >
-          <Typography>
+          <Typography sx={{fontWeight: "bold"}}>
             SIGN UP
           </Typography>
         </Button>
