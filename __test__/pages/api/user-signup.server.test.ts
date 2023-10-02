@@ -1,5 +1,5 @@
 import httpMocks from "node-mocks-http";
-import signUpHandler from "../../../pages/api/user-signup";
+import signUpHandler from "../../../pages/api/signup/verify";
 import { dbConnect } from "@/lib/mongoClient";
 import { deleteUsers } from "../../../lib/userLib";
 
