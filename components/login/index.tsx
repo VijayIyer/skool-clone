@@ -1,74 +1,101 @@
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  TextField,
-  Typography,
-  Dialog,
-  DialogTitle,
-  FormControl,
-  Link,
-} from "@mui/material";
+import { Button, TextField, Link } from "@mui/material";
+import NextLink from "next/link";
+import styles from "./style.module.css";
+import { FieldValues, useForm } from "react-hook-form";
+import Image from "next/image";
+import skoolLogo from "@/public/skool.svg";
 
-interface LogInDialogProps {
-  open: boolean;
-  onClose: () => void;
-}
+export default function LogInForm() {
+  const {
+    register,
+    reset,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+  } = useForm();
 
-export default function LogInDialog(props: LogInDialogProps) {
-  const { open, onClose } = props;
-  const [ isOpen, setOpen ] = useState(open);
-  const [ email, setEmail ] = useState(null);
-  const [ password, setPassword] = useState(null);
+  const emailErr = errors.email != undefined;
+  const passwordErr = errors.password != undefined;
 
+  const customeSubmit = (data: FieldValues) => {
+    console.log(data);
 
-  function handleSubmit () {
+    // validate with the server
 
-  }
-
-  function openSignUpDialog () {
-
-  }
-
+    // reset the form
+    reset();
+  };
   return (
-    <Dialog open={isOpen}>
-      <Typography>
-        <Link href="/">logo</Link>
-      </Typography>
-      <DialogTitle>Log in to Skool Clone</DialogTitle>
-      <FormControl>
+    <div className={styles.formContainer}>
+      <div style={{ textAlign: "center", fontSize: "1.5rem" }}>
+        <h2 className={styles.h2}>
+          <NextLink href="/">
+            <Image
+              src={skoolLogo}
+              width={72}
+              alt="logo of skool"
+              className={styles.signup_logo}
+            />
+          </NextLink>
+        </h2>
+        <p style={{ marginTop: "1.5rem", fontWeight: "bold" }}>
+          Log in to Skool
+        </p>
+      </div>
+      <form className={styles.form} onSubmit={handleSubmit(customeSubmit)}>
         <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="email"
           label="Email"
-          name="email"
-          autoComplete="email"
-          autoFocus
+          type="email"
+          error={emailErr}
+          {...register("email", { required: "Enter an email" })}
         />
+        {errors.email && (
+          <p className={styles.errMsg}>{`${errors.email?.message}`}</p>
+        )}
         <TextField
-          margin="normal"
-          required
-          fullWidth
-          type="password"
-          id="password"
           label="Password"
-          name="password"
-          autoComplete="password"
+          type="password"
+          error={passwordErr}
+          {...register("password", {
+            required: "Enter a password",
+            minLength: {
+              value: 5,
+              message: "Password must be at least 5 characters",
+            },
+          })}
         />
-        {/* <Link onClick ></Link> */}
-
-        <Button type="submit" fullWidth variant="contained">
+        {errors.password && (
+          <p className={styles.errMsg}>{`${errors.password?.message}`}</p>
+        )}
+        <p style={{ color: "blue" }}>
+          <Link
+            component={NextLink}
+            href="/reset-password"
+            style={{ color: "#3875f6" }}
+          >
+            Forgot password?
+          </Link>
+        </p>
+        <Button
+          variant="contained"
+          className={styles.btn}
+          type="submit"
+          disabled={isSubmitting}
+          fullWidth
+        >
           LOG IN
         </Button>
-      </FormControl>
+      </form>
 
-      <Typography>
-        <span>{"Don't have an accoutn ?"}</span>
-        <Button>
-          <span>Sign up for free</span>
-        </Button>
-      </Typography>
-    </Dialog>
+      <p style={{ textAlign: "center" }}>
+        Don&apos;t have an account?{" "}
+        <Link
+          component={NextLink}
+          href={"/signup"}
+          style={{ color: "#3875f6" }}
+        >
+          Sign up
+        </Link>
+      </p>
+    </div>
   );
 }
