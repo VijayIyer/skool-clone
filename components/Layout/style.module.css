@@ -1,9 +1,10 @@
 .navbar_header {
-    top: 0px;
+    position:fixed !important;
+    top: 0;
     width: 100%;
     z-index: 1100;
     display: flex;
-    position: absolute;
+    /* position: absolute; */
     -webkit-box-align: center;
     align-items: center;
     -webkit-box-pack: center;
@@ -12,4 +13,5 @@
     border-bottom: 1px solid var(--nav-border-color);
     color: var(--nav-font-color);
     height: 112px;
+    transition: top 0.3s;
   }

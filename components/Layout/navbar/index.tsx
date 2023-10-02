@@ -1,19 +1,19 @@
-import { AppBar, Toolbar } from "@mui/material";
+import { AppBar, Toolbar, Slide } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
+import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Search from "../Searchbar";
 import LoginSignUpBar from "../Loginsection";
 import GroupSwitch from "../Groupswitcher";
 import UserSection from "../Usersection";
 import TabBar from "../Tabbar";
 import { useState } from "react";
-import style from "./navbar.module.css"
+import style from "./navbar.module.css";
 
 interface NavBarProps {
   className?: string;
   isDisplayTabs?: boolean;
   isDisplaySearch?: boolean;
 }
-
 
 export default function NavBar(props: NavBarProps) {
   const { className, isDisplayTabs, isDisplaySearch } = props;
@@ -29,12 +29,15 @@ export default function NavBar(props: NavBarProps) {
   ];
 
   const renderTabs = (items: { name: string; number: number }[]) => {
-    if(isDisplayTabs) {
+    if (isDisplayTabs) {
+      // const trigger = useScrollTrigger();
       return (
-        <TabBar itemsList={items}/>
+        // <Slide in={!trigger}>
+          <TabBar itemsList={items} />
+        // {/* </Slide> */}
       );
     }
-  }
+  };
 
   return (
     <StyledEngineProvider injectFirst>

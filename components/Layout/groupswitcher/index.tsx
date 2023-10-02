@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import ArrowUp from "@mui/icons-material/KeyboardArrowUp";
 import ArrowDown from "@mui/icons-material/KeyboardArrowDown";
-import AddIcon from "@mui/icons-material/Add";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import style from "./group.module.css";
 
 interface GroupsInfo {
@@ -45,6 +45,10 @@ export default function GroupSwitch() {
   }
 
   function renderGroupList() {}
+
+  function createGroup() {
+    toggleOpen();
+  }
 
   return (
     <Box className={`${style.navbar_groupswitcher}`}>
@@ -80,15 +84,15 @@ export default function GroupSwitch() {
         // className={`${style.navbar_groupswitcher_menu}`}
       >
         <MenuItem>
-          <Typography>Switch Groups</Typography>
+          <Typography sx={{fontWeight: "bold"}}>Switch Groups</Typography>
         </MenuItem>
         <Divider />
         {/* { display a list of group button with infomationin groupList } */}
 
         <Divider />
-        <MenuItem onClick={toggleOpen}>
+        <MenuItem onClick={toggleOpen} className={`${style.navbar_groupswitcher_item}`}>
           <ListItemIcon>
-            <AddIcon />
+            <AddBoxIcon fontSize="large"/>
           </ListItemIcon>
           <ListItemText>Create a group</ListItemText>
         </MenuItem>

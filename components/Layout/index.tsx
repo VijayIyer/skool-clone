@@ -1,7 +1,6 @@
 import React from "react";
 import NavBar from "./Navbar";
 import style from "./style.module.css";
-// import { StyledEngineProvider } from "@mui/material/styles";
 
 interface LayoutProps {
   children: React.ReactNode;

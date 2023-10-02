@@ -2,7 +2,7 @@
 .tabBar_tab {
     margin-right: 32px;
     color: inherit;
-    padding: 0;
+    padding: 0 !important;
 }
 
 .tabBar_tab:hover {

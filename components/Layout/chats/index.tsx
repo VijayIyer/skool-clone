@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
+import style from "./chats.module.css"
 
 interface ChatMenuProps {
   anchorEl: HTMLElement | null;
@@ -42,7 +43,7 @@ export default function ChatMenu(props: ChatMenuProps) {
 
   function renderChatFilter() {
     return (
-      <Select value={chatFilter} onChange={handleFilterChange}>
+      <Select value={chatFilter} onChange={handleFilterChange} className={`${style.chat_filter}`}>
         <MenuItem value={"All"}>{"All"}</MenuItem>
         <MenuItem value={"Unread"}> {"Unread"}</MenuItem>
       </Select>
@@ -50,12 +51,12 @@ export default function ChatMenu(props: ChatMenuProps) {
   }
 
   return (
-    <Menu anchorEl={anchorEl} open={open} onClose={onClose}>
-      <MenuItem>
-        <Typography>Chats</Typography>
+    <Menu anchorEl={anchorEl} open={open} onClose={onClose} className={`${style.chat_frame}`}>
+      <MenuItem className={`${style.chat_title}`}>
+        <Typography sx={{fontWeight: 'bold'}}>Chats</Typography>
         {renderChatFilter()}
       </MenuItem>
-      <Divider />
+      <Divider/>
       {renderSearchUsers()}
       <Divider />
       <MenuItem>No Chat yet</MenuItem>
