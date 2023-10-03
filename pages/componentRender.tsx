@@ -6,7 +6,15 @@ import { fakeUser } from "@/components/ProfileAvatar/fakeApi";
 export default function componentRender() {
   return (
     <div>
-      <ProfileAvatar user={fakeUser} />
+      <ProfileAvatar
+        user={fakeUser}
+        isAccounOwner={true}
+        handleClickEditProfileButton={() => {}}
+        handleClickFollowButton={() => {}}
+        handleClickContributions={() => {}}
+        handleClickFollowers={() => {}}
+        handleClickFollowing={() => {}}
+      />
     </div>
   );
 }
