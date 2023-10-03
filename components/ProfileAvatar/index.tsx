@@ -28,8 +28,7 @@ export interface UserProps {
 interface ProfileAvatarProps {
   user: UserProps;
   isAccounOwner: boolean;
-  profileHeight?: string;
-  profileWidth?: string;
+
   handleClickEditProfileButton: () => void;
   handleClickFollowButton: () => void;
   handleClickContributions: () => void;
@@ -39,9 +38,7 @@ interface ProfileAvatarProps {
 
 export default function ProfileAvatar({
   user,
-  isAccounOwner,
-  profileHeight = "680px",
-  profileWidth = "273px",
+  isAccounOwner = true,
   handleClickEditProfileButton,
   handleClickFollowButton,
   handleClickContributions,
@@ -51,8 +48,8 @@ export default function ProfileAvatar({
   return (
     <PaperContainer
       sx={{
-        height: profileHeight,
-        width: profileWidth,
+        height: "680px",
+        width: "273px",
       }}
     >
       <AvatarAndLevels user={user} />

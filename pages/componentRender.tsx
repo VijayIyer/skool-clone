@@ -7,11 +7,6 @@ export default function componentRender() {
   return (
     <div>
       <ProfileAvatar user={fakeUser} />
-      <ProfileAvatar
-        user={fakeUser}
-        profileHeight="800px"
-        profileWidth="1000px"
-      />
     </div>
   );
 }
