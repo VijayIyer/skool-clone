@@ -42,8 +42,6 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
             expiresIn: "2m",
           }
         );
-
-        res.status(200).json(responseFormatter(true, null));
         res.setHeader(
           "Set-Cookie",
           serialize("jwt", token, {
@@ -52,6 +50,8 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
             sameSite: "strict",
           })
         );
+        res.status(200).json(responseFormatter(true, null));
+
         return res;
       } catch (error) {
         console.error(error);
