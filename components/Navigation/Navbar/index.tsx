@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Slide } from "@mui/material";
-import { StyledEngineProvider } from "@mui/material/styles";
+// import { StyledEngineProvider } from "@mui/material/styles";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Search from "../Searchbar";
 import LoginSignUpBar from "../Loginsection";
@@ -30,17 +30,13 @@ export default function NavBar(props: NavBarProps) {
 
   const renderTabs = (items: { name: string; number: number }[]) => {
     if (isDisplayTabs) {
-      // const trigger = useScrollTrigger();
       return (
-        // <Slide in={!trigger}>
           <TabBar itemsList={items} />
-        // {/* </Slide> */}
       );
     }
   };
 
   return (
-    <StyledEngineProvider injectFirst>
       <AppBar elevation={0} className={`${style.navbar_root}`}>
         <Toolbar className={`${style.navbar_toolbar}`}>
           <GroupSwitch />
@@ -49,6 +45,5 @@ export default function NavBar(props: NavBarProps) {
         </Toolbar>
         {renderTabs(tabs)}
       </AppBar>
-    </StyledEngineProvider>
   );
 }
