@@ -1,7 +1,7 @@
 import httpMocks from "node-mocks-http";
-import signUpHandler from "../../../pages/api/signup/verify";
+import signUpHandler from "../../../../pages/api/signup/index";
 import { dbConnect } from "@/lib/mongoClient";
-import { deleteUsers } from "../../../lib/userLib";
+import { deleteUsers } from "../../../../lib/userLib";
 
 beforeAll(async () => {
   await dbConnect();
@@ -88,5 +88,19 @@ describe("POST /api/signup", () => {
     const responseBody = JSON.parse(res._getData());
     expect(responseBody.success).toBe(false);
     expect(responseBody.errorMessage).toContain("user already used this email");
+  });
+
+  // Test case 4: otp in request body does not match the latest saved otp for that email
+
+  it("should return 400 response when otp is invalid", () => {
+    expect(false).toBe(false);
+  });
+  // Test case 5: If there is an error while connecting to the mongodb database
+  it("should return 500 response when failing to connect with database", () => {
+    expect(false).toBe(false);
+  });
+
+  it("should return a response with jwt token set as a cookie", () => {
+    expect(false).toBe(false);
   });
 });
