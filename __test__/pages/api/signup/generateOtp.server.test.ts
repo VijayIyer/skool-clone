@@ -1,16 +1,13 @@
 import httpMocks from "node-mocks-http";
-import {
-  createOtpHandler,
-  dbConnectWrapper,
-} from "../../../../pages/api/signup/createOtp";
+import { createOtpHandler } from "../../../../pages/api/signup/generateOtp";
+import { dbConnectWrapper } from "@/lib/dbConnectWrapper";
 import {
   isUserEmailTaken,
   validateGenerateOtpInput,
 } from "../../../../lib/userLib";
-import createOtp from "../../../../lib/otpLib/createOtp";
+import { createOtp } from "../../../../lib/otpLib";
 import { responseFormatter } from "../../../../lib/responseLib";
 import { dbConnect } from "../../../../lib/mongoClient";
-import { waitFor } from "@testing-library/react";
 
 jest.mock("../../../../lib/userLib", () => {
   const original = jest.requireActual("../../../../lib/userLib"); // Step 2.
@@ -22,12 +19,12 @@ jest.mock("../../../../lib/userLib", () => {
   };
 });
 
-jest.mock("../../../../lib/otpLib/createOtp", () => {
-  const original = jest.requireActual("../../../../lib/otpLib/createOtp"); // Step 2.
+jest.mock("../../../../lib/otpLib", () => {
+  const original = jest.requireActual("../../../../lib/otpLib"); // Step 2.
   return {
     ...original,
     __esModule: true,
-    default: jest.fn(),
+    createOtp: jest.fn(),
   };
 });
 jest.mock("../../../../lib/mongoClient", () => {
@@ -179,49 +176,5 @@ describe("POST /api/signup/generateOtp", () => {
     expect(responseBody.errorMessage).toContain(
       "Unable to create an account in the database"
     );
-  });
-});
-
-describe("Tests dbConnectWrapper", () => {
-  beforeEach(() => {});
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-  it("should try to connect to database and then call handler method that is passed to it", async () => {
-    const handler = jest
-      .fn()
-      .mockImplementationOnce(async () => console.log("calling handler!"));
-    dbConnect.mockResolvedValueOnce({});
-    const req = httpMocks.createRequest({});
-    const res = httpMocks.createResponse({});
-    const wrappedFn = dbConnectWrapper(handler);
-    wrappedFn(req, res);
-    // handler function should get called when dbConnect is successful - but not happening here
-    expect(handler).toBeCalledTimes(1);
-    expect(handler).toBeCalledWith(req);
-
-    // should have called method to connect to db
-    expect(dbConnect).toBeCalledTimes(1);
-  });
-  it("should return 500 response when there is failure to connect to db", async () => {
-    const handler = jest
-      .fn()
-      .mockImplementationOnce(async () => console.log("calling handler!"));
-    dbConnect.mockImplementationOnce(() => {
-      throw new Error("failure to connect to db");
-    });
-    const req = httpMocks.createRequest({});
-    const res = httpMocks.createResponse({});
-    const wrappedFn = dbConnectWrapper(handler);
-    wrappedFn(req, res);
-    expect(res.statusCode).toEqual(500);
-    const responseBody = JSON.parse(res._getData());
-
-    // handler function should not get called when dbConnect is unsuccessful -
-    expect(handler).toBeCalledTimes(0);
-
-    // should have called method to connect to db
-    expect(dbConnect).toBeCalledTimes(1);
-    expect(responseBody.errorMessage).toContain("Internal Server Error");
   });
 });
