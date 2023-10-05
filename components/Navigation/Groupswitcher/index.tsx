@@ -16,8 +16,8 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import style from "./group.module.css";
 
 interface GroupsInfo {
-  groupIcon: String; // src of the icon image
-  groupName: String;
+  groupIcon: string; // src of the icon image
+  groupName: string;
   groupId: number;
 }
 
@@ -91,8 +91,8 @@ export default function GroupSwitch() {
 
         <Divider />
         <MenuItem onClick={toggleOpen} className={`${style.navbar_groupswitcher_item}`}>
-          <ListItemIcon>
-            <AddBoxIcon fontSize="large"/>
+          <ListItemIcon >
+            <AddBoxIcon className={`${style.groupswitch_addicon}`}/>
           </ListItemIcon>
           <ListItemText>Create a group</ListItemText>
         </MenuItem>

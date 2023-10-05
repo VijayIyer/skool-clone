@@ -78,3 +78,8 @@
   .navbar_groupswitcher_item {
     min-width: 295px;
   }
+
+  .groupswitch_addicon {
+    min-width: 50px;
+    min-height: 50px;
+  }

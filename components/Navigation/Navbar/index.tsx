@@ -1,12 +1,11 @@
 import { AppBar, Toolbar, Slide } from "@mui/material";
-// import { StyledEngineProvider } from "@mui/material/styles";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Search from "../Searchbar";
 import LoginSignUpBar from "../Loginsection";
 import GroupSwitch from "../Groupswitcher";
 import UserSection from "../Usersection";
 import TabBar from "../Tabbar";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import style from "./navbar.module.css";
 
 interface NavBarProps {
@@ -16,8 +15,9 @@ interface NavBarProps {
 }
 
 export default function NavBar(props: NavBarProps) {
-  const { className, isDisplayTabs, isDisplaySearch } = props;
+  const { className, isDisplayTabs = false, isDisplaySearch = false } = props;
   const [isLogedIn, setIsLogedIn] = useState(true);
+  const containerRef = useRef<HTMLElement>(null);
 
   let tabs = [
     { name: "Community", number: 1 },
@@ -27,23 +27,16 @@ export default function NavBar(props: NavBarProps) {
     { name: "LeaderBoard", number: 1 },
     { name: "About", number: 1 },
   ];
-
-  const renderTabs = (items: { name: string; number: number }[]) => {
-    if (isDisplayTabs) {
-      return (
-          <TabBar itemsList={items} />
-      );
-    }
-  };
+  const trigger = useScrollTrigger();
 
   return (
-      <AppBar elevation={0} className={`${style.navbar_root}`}>
-        <Toolbar className={`${style.navbar_toolbar}`}>
-          <GroupSwitch />
-          {isDisplaySearch ? <Search /> : <></>}
-          {isLogedIn ? <UserSection /> : <LoginSignUpBar />}
-        </Toolbar>
-        {renderTabs(tabs)}
-      </AppBar>
+    <AppBar elevation={0} className={`${style.navbar_root}`} ref={containerRef}>
+      <Toolbar className={`${style.navbar_toolbar}`}>
+        <GroupSwitch />
+        {isDisplaySearch ? <Search /> : null}
+        {isLogedIn ? <UserSection /> : <LoginSignUpBar />}
+      </Toolbar>
+      {isDisplayTabs ? <TabBar itemsList={tabs} /> : null}
+    </AppBar>
   );
 }

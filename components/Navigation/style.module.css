@@ -1,15 +1,31 @@
 .navbar_header {
-    position:fixed !important;
-    top: 0;
-    width: 100%;
-    z-index: 1100;
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
-    background-color: white;
-    border-bottom: 1px solid var(--nav-border-color);
-    color: var(--nav-font-color);
-    transition: top 0.3s;
-  }
+  top: 0;
+  width: 100%;
+  z-index: 1100;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  background-color: white;
+  border-bottom: 1px solid var(--nav-border-color);
+  color: var(--nav-font-color);
+  transition: top, 0.3s;
+}
+
+.navbar_header2 {
+  top: 0px;
+  width: 100%;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  background: rgb(255, 255, 255);
+  transition: transform 300ms ease 0s;
+  transform: translateY(0px);
+  position: sticky;
+  border-bottom: 1px solid rgb(248, 247, 245);
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px;
+  z-index: 1101;
+}

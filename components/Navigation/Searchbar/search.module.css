@@ -3,7 +3,7 @@
   flex-grow: 1;
   padding: 0px, 8px;
   margin: 8px;
-  height: 75%;
+  height: 100%;
 }
 
 .navbar_search_form {
@@ -11,7 +11,7 @@
   margin-right: 16px;
   background-color: none;
   height: 100%;
-  width: 100%
+  width: 100%  
 }
 
 .navbar_search_feild {
@@ -21,13 +21,15 @@
   border: none;
   background-color: lightgray;
   border-style: none;
-  height: 100%;
+  min-height: 50px;
   border-radius: 8px;
 }
 
 .navbar_searchIcon {
   color: gray;
   margin-left: 16px;
+  /* height: 40px;
+  width: 40px; */
 }
 
 .navbar_crossIcon {
