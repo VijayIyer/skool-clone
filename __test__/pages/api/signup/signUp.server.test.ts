@@ -1,45 +1,100 @@
 import httpMocks from "node-mocks-http";
-import signUpHandler from "../../../../pages/api/signup/index";
-import { dbConnect } from "@/lib/mongoClient";
-import { deleteUsers } from "../../../../lib/userLib";
+import signUpHandler from "../../../../pages/api/signup";
+import jwt from "jsonwebtoken";
+import { serialize } from "cookie";
+import {
+  createUser,
+  generateHashPassword,
+  isUserEmailTaken,
+  validateUserSignUpInput,
+} from "../../../../lib/userLib";
+import { getLatestOtpForEmail } from "../../../../lib/otpLib";
 
-beforeAll(async () => {
-  await dbConnect();
-  await deleteUsers();
+jest.mock("../../../../lib/userLib", () => {
+  const original = jest.requireActual("../../../../lib/userLib"); // Step 2.
+  return {
+    ...original,
+    __esModule: true,
+    isUserEmailTaken: jest.fn(),
+    validateUserSignUpInput: jest.fn(),
+    generateHashPassword: jest.fn(),
+    createUser: jest.fn(),
+  };
 });
-
+jest.mock("../../../../lib/otpLib", () => {
+  const original = jest.requireActual("../../../../lib/otpLib"); // Step 2.
+  return {
+    ...original,
+    __esModule: true,
+    createOtp: jest.fn(),
+    getLatestOtpForEmail: jest.fn(),
+  };
+});
+jest.mock("jsonwebtoken", () => {
+  const original = jest.requireActual("jsonwebtoken");
+  return {
+    ...original,
+    __esModule: true,
+    default: {
+      sign: jest.fn(),
+    },
+  };
+});
+jest.mock("cookie", () => {
+  const original = jest.requireActual("cookie");
+  return {
+    ...original,
+    serialize: jest.fn(),
+  };
+});
 describe("POST /api/signup", () => {
-  it("should create a new user", async () => {
-    // Mock user data for testing
-    const userData = {
-      firstName: "John",
-      lastName: "Doe",
-      email: "test@example.com",
-      password: "password123",
-    };
-
-    // Create a mock request and response
-    const req = httpMocks.createRequest({
-      method: "POST",
-      url: "/api/signup",
-      body: userData,
+  beforeEach(() => {});
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+  it("should return 405 method not allowed error when any method other than POST is used", async () => {
+    isUserEmailTaken.mockResolvedValueOnce(false);
+    // mock return value of validation function to be false
+    validateUserSignUpInput.mockReturnValueOnce({
+      success: true,
     });
 
+    const req = httpMocks.createRequest({
+      method: "GET",
+    });
     const res = httpMocks.createResponse();
-
-    // Call your sign-up handler with the mock request and response
     await signUpHandler(req, res);
-
-    // Assert the response status code and the response body
-
-    expect(res.statusCode).toBe(201);
-    const responseBody = JSON.parse(res._getData()); // Parse JSON response
-    expect(responseBody.success).toBe(true);
-    expect(responseBody.data).toBeDefined();
+    expect(res.statusCode).toEqual(405);
+    const responseBody = JSON.parse(res._getData());
+    expect(responseBody.errorMessage).toContain("Method Not Allowed");
+  });
+  it("should return 400 BAD REQUEST response if email is already taken", async () => {
+    isUserEmailTaken.mockResolvedValueOnce(true);
+    validateUserSignUpInput.mockReturnValueOnce({
+      success: true,
+    });
+    const req = httpMocks.createRequest({
+      method: "POST",
+      url: "/api/signup/createOtp",
+      body: { email: "email@email.com" },
+    });
+    const res = httpMocks.createResponse();
+    await signUpHandler(req, res);
+    expect(res.statusCode).toEqual(400);
+    const responseBody = JSON.parse(res._getData());
+    expect(responseBody.success).toBe(false);
+    expect(validateUserSignUpInput).toBeCalledTimes(1);
+    expect(isUserEmailTaken).toBeCalledTimes(1);
+    expect(responseBody.errorMessage).toContain("user already used this email");
   });
 
-  // Test case 2: Invalid user data
   it("should return a 400 Bad Request for invalid user data", async () => {
+    isUserEmailTaken.mockResolvedValueOnce(false);
+    // make validateUserSignUpInput return false with message
+    validateUserSignUpInput.mockReturnValueOnce({
+      success: false,
+      message: "invalid user signup data",
+    });
     // Mock invalid user data for testing
     const invalidUserData = {
       firstName: "John",
@@ -61,46 +116,83 @@ describe("POST /api/signup", () => {
     expect(res.statusCode).toBe(400);
     const responseBody = JSON.parse(res._getData());
     expect(responseBody.success).toBe(false);
-    expect(responseBody.errorMessage).toContain("Validation error");
+    expect(responseBody.errorMessage).toContain("invalid user signup data");
   });
 
-  // Test case 3: User email already taken
-  it("should return a 400 Bad Request if user email is already taken", async () => {
-    // Mock user data with an email that is already taken
-    const existingUser = {
-      firstName: "Alice",
-      lastName: "Smith",
-      email: "test@example.com",
+  it("should return 400 response when otp is invalid", async () => {
+    // return false to bypass this step
+    isUserEmailTaken.mockResolvedValueOnce(false);
+    // make validateUserSignUpInput return true to bypass this step
+    validateUserSignUpInput.mockReturnValueOnce({
+      success: true,
+    });
+    // return a different value from one passed in request
+    getLatestOtpForEmail.mockResolvedValueOnce(123457);
+    const userData = {
+      firstName: "FirstName",
+      lastName: "LastName", // Missing last name
+      email: "email@gmail.com", // Invalid email format
       password: "password123",
+      otp: "123456",
     };
 
     const req = httpMocks.createRequest({
       method: "POST",
       url: "/api/signup",
-      body: existingUser,
+      body: userData,
     });
 
     const res = httpMocks.createResponse();
 
     await signUpHandler(req, res);
+    expect(res.statusCode).toEqual(400);
+    expect(isUserEmailTaken).toBeCalledTimes(1);
+    expect(validateUserSignUpInput).toBeCalledTimes(1);
+    expect(getLatestOtpForEmail).toBeCalledTimes(1);
+    expect(getLatestOtpForEmail).toBeCalledWith("email@gmail.com");
 
-    expect(res.statusCode).toBe(400);
-    const responseBody = JSON.parse(res._getData());
+    const responseBody = res._getData();
+    console.log(typeof responseBody);
     expect(responseBody.success).toBe(false);
-    expect(responseBody.errorMessage).toContain("user already used this email");
+    expect(responseBody.errorMessage).toContain("The Otp is not valid");
   });
+  it("should create a new user if Otp is valid", async () => {
+    // return false to bypass this step
+    isUserEmailTaken.mockResolvedValueOnce(false);
+    // make validateUserSignUpInput return true to bypass this step
+    validateUserSignUpInput.mockReturnValueOnce({
+      success: true,
+    });
+    // return a different value from one passed in request
+    getLatestOtpForEmail.mockResolvedValueOnce(123456);
+    generateHashPassword.mockResolvedValueOnce("password");
+    createUser.mockResolvedValueOnce({ _id: 1 });
+    jwt.sign.mockReturnValueOnce("token");
+    serialize.mockReturnValueOnce({});
+    const userData = {
+      firstName: "FirstName",
+      lastName: "LastName", // Missing last name
+      email: "email@gmail.com", // Invalid email format
+      password: "password123",
+      otp: "123456",
+    };
 
-  // Test case 4: otp in request body does not match the latest saved otp for that email
+    const req = httpMocks.createRequest({
+      method: "POST",
+      url: "/api/signup",
+      body: userData,
+    });
 
-  it("should return 400 response when otp is invalid", () => {
-    expect(false).toBe(false);
-  });
-  // Test case 5: If there is an error while connecting to the mongodb database
-  it("should return 500 response when failing to connect with database", () => {
-    expect(false).toBe(false);
-  });
+    const res = httpMocks.createResponse();
 
-  it("should return a response with jwt token set as a cookie", () => {
-    expect(false).toBe(false);
+    await signUpHandler(req, res);
+    expect(isUserEmailTaken).toBeCalledTimes(1);
+    expect(validateUserSignUpInput).toBeCalledTimes(1);
+    expect(getLatestOtpForEmail).toBeCalledTimes(1);
+    expect(getLatestOtpForEmail).toBeCalledWith("email@gmail.com");
+
+    expect(res.statusCode).toEqual(200);
+    const responseBody = JSON.parse(res._getData());
+    expect(responseBody.success).toBe(true);
   });
 });
