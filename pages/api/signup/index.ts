@@ -76,7 +76,11 @@ export async function signUpHandler(req: NextApiRequest, res: NextApiResponse) {
 
         res
           .status(201)
-          .json(responseFormatter(true, { message: "created new user" }));
+          .json(
+            responseFormatter(true, {
+              message: `New user with email ${user.email} signed up!`,
+            })
+          );
         res.setHeader(
           "Set-Cookie",
           serialize("jwt", token, {
@@ -87,7 +91,7 @@ export async function signUpHandler(req: NextApiRequest, res: NextApiResponse) {
         );
         return res;
       } catch (error) {
-        console.error("Error during sign-up:", error);
+        console.error("Error during sign-up:", error.message);
         return res
           .status(500)
 
