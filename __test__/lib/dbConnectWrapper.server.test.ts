@@ -22,10 +22,10 @@ describe("Tests dbConnectWrapper", () => {
     const req = httpMocks.createRequest({});
     const res = httpMocks.createResponse({});
     const wrappedFn = dbConnectWrapper(handler);
-    wrappedFn(req, res);
+    await wrappedFn(req, res);
     // handler function should get called when dbConnect is successful - but not happening here
     expect(handler).toBeCalledTimes(1);
-    expect(handler).toBeCalledWith(req);
+    expect(handler).toBeCalledWith(req, res);
 
     // should have called method to connect to db
     expect(dbConnect).toBeCalledTimes(1);
@@ -40,7 +40,7 @@ describe("Tests dbConnectWrapper", () => {
     const req = httpMocks.createRequest({});
     const res = httpMocks.createResponse({});
     const wrappedFn = dbConnectWrapper(handler);
-    wrappedFn(req, res);
+    await wrappedFn(req, res);
     expect(res.statusCode).toEqual(500);
     const responseBody = JSON.parse(res._getData());
 

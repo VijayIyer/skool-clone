@@ -1,5 +1,5 @@
 import httpMocks from "node-mocks-http";
-import signUpHandler from "../../../../pages/api/signup";
+import { signUpHandler } from "../../../../pages/api/signup";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
 import {
@@ -150,9 +150,7 @@ describe("POST /api/signup", () => {
     expect(validateUserSignUpInput).toBeCalledTimes(1);
     expect(getLatestOtpForEmail).toBeCalledTimes(1);
     expect(getLatestOtpForEmail).toBeCalledWith("email@gmail.com");
-
-    const responseBody = res._getData();
-    console.log(typeof responseBody);
+    const responseBody = res._getJSONData();
     expect(responseBody.success).toBe(false);
     expect(responseBody.errorMessage).toContain("The Otp is not valid");
   });
@@ -167,9 +165,11 @@ describe("POST /api/signup", () => {
     getLatestOtpForEmail.mockResolvedValueOnce(123456);
     generateHashPassword.mockResolvedValueOnce("password");
     createUser.mockResolvedValueOnce({ _id: 1 });
+
     jwt.sign.mockReturnValueOnce("token");
     serialize.mockReturnValueOnce({});
     const userData = {
+      _id: 1,
       firstName: "FirstName",
       lastName: "LastName", // Missing last name
       email: "email@gmail.com", // Invalid email format
@@ -190,9 +190,11 @@ describe("POST /api/signup", () => {
     expect(validateUserSignUpInput).toBeCalledTimes(1);
     expect(getLatestOtpForEmail).toBeCalledTimes(1);
     expect(getLatestOtpForEmail).toBeCalledWith("email@gmail.com");
-
-    expect(res.statusCode).toEqual(200);
-    const responseBody = JSON.parse(res._getData());
+    expect(jwt.sign).toBeCalledTimes(1);
+    expect(jwt.sign).toReturnWith("token");
+    expect(res.statusCode).toEqual(201);
+    const responseBody = res._getJSONData();
     expect(responseBody.success).toBe(true);
+    expect(responseBody.data.message).toContain("New user with email");
   });
 });
