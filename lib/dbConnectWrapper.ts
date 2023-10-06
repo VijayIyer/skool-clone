@@ -5,7 +5,7 @@ export const dbConnectWrapper = (handler: NextApiHandler) => {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       await dbConnect();
-      handler(req, res);
+      await handler(req, res);
     } catch (e) {
       console.log("fail to connect with database", e);
       return res
