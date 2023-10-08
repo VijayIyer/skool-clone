@@ -14,23 +14,19 @@ import {
   Typography,
   FormHelperText,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { SubmitHandler, useController, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import SignUpVerificationForm from "./signUpVerificationForm";
-
-export type SignupFormInput = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-};
+import { SignupFormInput, VerificationFormInput } from "./signUpFormInputTypes";
+import { generateOtpService } from "@/lib/signUpService/generateOtp";
+import { signUpService } from "@/lib/signUpService/signUp";
 
 export default function SignUpForm() {
   const [awaitingVerification, setAwaitingVerification] =
     useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [otpFormError, setOtpFormError] = useState<boolean>(false);
   const [statusText, setStatusText] = useState("");
   const router = useRouter();
 
@@ -50,45 +46,28 @@ export default function SignUpForm() {
 
   const allowedCharRegex = /^[A-Za-z0-9 ]+$/;
 
-  const onSubmit: SubmitHandler<SignupFormInput> = async (data, e) => {
+  const signUp: SubmitHandler<VerificationFormInput> = async (data, e) => {
     e?.preventDefault();
-    setStatusText("");
-    let response;
-    try {
-      response = await fetch("/api/signup", {
-        method: "POST",
-        mode: "same-origin",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-    } catch (err) {
-      setStatusText(`Error: ${err} Please try again.`);
-    } finally {
-      if (response?.ok === true) {
-        router.push("/login");
-      } else if (response?.status === 400) {
-        setStatusText(`${response.statusText} Please try again.`);
-      }
-    }
+    const signUpData = {
+      ...data,
+      email: email.value,
+      firstName: firstName.value,
+      lastName: lastName.value,
+      password: password.value,
+    };
+    console.log(signUpData);
+    const response = await signUpService(signUpData);
+    if (response.success) {
+      /** perform callback or checking of token */
+      router.push("/");
+    } else setOtpFormError(true);
   };
-  const signUp: SubmitHandler<SignupFormInput> = async (data, e) => {
+  const generateOtp: SubmitHandler<SignupFormInput> = async (data, e) => {
     e?.preventDefault();
     console.log(JSON.stringify(data));
-    try {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        mode: "same-origin",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (response?.ok === true) setAwaitingVerification(true);
-    } catch (err) {
-      setStatusText(`Error: ${err} Please try again.`);
-    }
+    const response = await generateOtpService(data);
+    if (response.success) setAwaitingVerification(true);
+    else setStatusText(`Error: ${response.errorMessage} Please try again.`);
   };
 
   const { field: firstName, fieldState: firstNameState } = useController({
@@ -152,8 +131,9 @@ export default function SignUpForm() {
     return (
       <SignUpVerificationForm
         setAwaitingVerification={setAwaitingVerification}
-        verify={onSubmit}
-        resend={handleSubmit(signUp)}
+        isInvalid={otpFormError}
+        signUp={signUp}
+        resend={signUp}
         email={email.value}
       />
     );
@@ -173,7 +153,7 @@ export default function SignUpForm() {
         <form
           data-testid='sign-up-dialog-sign-up-content'
           className={styles.signup_form}
-          onSubmit={handleSubmit(signUp)}
+          onSubmit={handleSubmit(generateOtp)}
         >
           <div className={styles.signup_inputs}>
             <FormControl variant='outlined' fullWidth>
