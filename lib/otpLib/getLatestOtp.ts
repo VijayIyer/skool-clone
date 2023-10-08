@@ -10,7 +10,7 @@ export async function getLatestOtpForEmail(email: string) {
     if (result.length === 0) {
       throw new Error(`no OTP found for email - ${email}`);
     }
-    return result[0].otp;
+    return result.otp;
   } catch (err: any) {
     console.error(err.message);
     throw new Error("Error finding latest otp");

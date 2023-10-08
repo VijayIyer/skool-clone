@@ -67,20 +67,18 @@ export async function signUpHandler(req: NextApiRequest, res: NextApiResponse) {
         }
 
         const token = jwt.sign(
-          { id: user._id.toString(), email: user.email },
+          { id: newUser._id.toString(), email: user.email },
           JWT_SECRET,
           {
             expiresIn: "2m",
           }
         );
 
-        res
-          .status(201)
-          .json(
-            responseFormatter(true, {
-              message: `New user with email ${user.email} signed up!`,
-            })
-          );
+        res.status(201).json(
+          responseFormatter(true, {
+            message: `New user with email ${user.email} signed up!`,
+          })
+        );
         res.setHeader(
           "Set-Cookie",
           serialize("jwt", token, {
