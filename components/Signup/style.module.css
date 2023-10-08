@@ -25,6 +25,10 @@
   font-style: normal;
   font-size: 23px;
   line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.signup_message {
   margin-bottom: 2rem;
 }
 
@@ -42,7 +46,7 @@
 
 .signup_agreement {
   width: 100%;
-  margin: 0px 0px 24px;
+  margin: 0 0 24px;
   color: rgb(144, 144, 144);
   text-align: center;
   font-weight: normal;
@@ -52,5 +56,15 @@
 }
 
 .signup_legal {
+  text-decoration: underline;
+  color: rgb(144, 144, 144);
+}
+
+.modalSwitch_span {
+  color: rgb(46, 110, 245);
+  cursor: pointer;
+}
+
+.modalSwitch_span:hover {
   text-decoration: underline;
 }

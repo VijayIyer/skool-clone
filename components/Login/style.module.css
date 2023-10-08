@@ -36,3 +36,17 @@
 .errMsg {
   color: lightgray;
 }
+
+.link__no-deco {
+  color: #3875f6;
+  text-decoration: none;
+}
+
+.modalSwitch_span {
+  color: rgb(46, 110, 245);
+  cursor: pointer;
+}
+
+.modalSwitch_span:hover {
+  text-decoration: underline;
+}

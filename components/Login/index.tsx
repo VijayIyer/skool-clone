@@ -4,8 +4,13 @@ import styles from "./style.module.css";
 import { FieldValues, useForm } from "react-hook-form";
 import Image from "next/image";
 import skoolLogo from "@/public/skool.svg";
+import {FC} from "react";
 
-export default function LogInForm() {
+type LogInFormProps = {
+  switchToSignUp?: () => void | undefined;
+}
+
+const LogInForm:FC<LogInFormProps> = ({switchToSignUp}) => {
   const {
     register,
     reset,
@@ -16,7 +21,7 @@ export default function LogInForm() {
   const emailErr = errors.email != undefined;
   const passwordErr = errors.password != undefined;
 
-  const customeSubmit = (data: FieldValues) => {
+  const customSubmit = (data: FieldValues) => {
     console.log(data);
 
     // validate with the server
@@ -24,8 +29,9 @@ export default function LogInForm() {
     // reset the form
     reset();
   };
+
   return (
-    <div className={styles.formContainer}>
+    <div className={`${styles.formContainer} ${switchToSignUp && 'form-background-color--transparent'}`}>
       <div style={{ textAlign: "center", fontSize: "1.5rem" }}>
         <h2 className={styles.h2}>
           <NextLink href="/">
@@ -41,7 +47,7 @@ export default function LogInForm() {
           Log in to Skool
         </p>
       </div>
-      <form className={styles.form} onSubmit={handleSubmit(customeSubmit)}>
+      <form className={styles.form} onSubmit={handleSubmit(customSubmit)}>
         <TextField
           label="Email"
           type="email"
@@ -70,7 +76,10 @@ export default function LogInForm() {
           <Link
             component={NextLink}
             href="/reset-password"
-            style={{ color: "#3875f6" }}
+            style={{
+              color: "#3875f6",
+              textDecoration: "none",
+            }}
           >
             Forgot password?
           </Link>
@@ -88,14 +97,25 @@ export default function LogInForm() {
 
       <p style={{ textAlign: "center" }}>
         Don&apos;t have an account?{" "}
-        <Link
-          component={NextLink}
-          href={"/signup"}
-          style={{ color: "#3875f6" }}
-        >
-          Sign up
-        </Link>
+        {switchToSignUp ? (
+            <span onClick={switchToSignUp} className={styles.modalSwitch_span}>
+              Sign up for free
+            </span>
+        ) : (
+            <Link
+                component={NextLink}
+                href='/signup'
+                style={{
+                  color: "#3875f6",
+                  textDecoration: "none"
+                }}
+            >
+              Sign up
+            </Link>
+        )}
+
       </p>
     </div>
   );
 }
+export default LogInForm

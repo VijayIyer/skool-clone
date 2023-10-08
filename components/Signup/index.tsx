@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from "react";
+import {FC, MouseEvent, useState} from "react";
 import NextLink from "next/link";
 import Image from "next/image";
 import skoolLogo from "/public/skool.svg";
@@ -26,7 +26,12 @@ type SignupFormInput = {
   password: string;
 };
 
-export default function SignUpForm() {
+type SignupFormProps = {
+  switchToLogIn? : () => void | undefined;
+  message? : string;
+}
+
+const SignUpForm:FC<SignupFormProps> = ({switchToLogIn, message}) => {
   const [showPassword, setShowPassword] = useState(false);
   const [statusText, setStatusText] = useState("");
   const router = useRouter();
@@ -129,7 +134,7 @@ export default function SignUpForm() {
   });
 
   return (
-    <div className={styles.signup_paper}>
+    <div className={`${styles.signup_paper} ${switchToLogIn && 'form-background-color--transparent'}`}>
       <div className={styles.signup_body}>
         <NextLink href="/">
           <Image
@@ -139,7 +144,8 @@ export default function SignUpForm() {
             className={styles.signup_logo}
           />
         </NextLink>
-        <div className={styles.signup_title}>Create your Skool account</div>
+        <div className={`${styles.signup_title} ${!message && styles.signup_message}`}>Create your Skool account</div>
+        {message && <div className={styles.signup_message}>to like, post, and comment in Skool Community</div>}
         <form
           data-testid="sign-up-dialog-sign-up-content"
           className={styles.signup_form}
@@ -162,7 +168,6 @@ export default function SignUpForm() {
                 }}
                 label="First name"
                 fullWidth
-                autoFocus
               />
               {firstNameState.error && (
                 <FormHelperText
@@ -314,11 +319,26 @@ export default function SignUpForm() {
         </form>
         <Typography>
           Already have an account?{" "}
-          <Link component={NextLink} href="/login">
-            Log in
-          </Link>
+          {switchToLogIn ? (
+              <span onClick={switchToLogIn} className={styles.modalSwitch_span} data-testid='login-span'>
+                Log in
+              </span>
+              ) : (
+              <Link
+                  component={NextLink}
+                  href='/login'
+                  style={{
+                    color: "#3875f6",
+                    textDecoration: "none"
+                  }}
+              >
+                Log in
+              </Link>
+          )}
         </Typography>
       </div>
     </div>
   );
 }
+
+export default SignUpForm

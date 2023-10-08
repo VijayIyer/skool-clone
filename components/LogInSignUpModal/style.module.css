@@ -1,0 +1,23 @@
+.modalContainer__div {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.formContainer__div {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    z-index: 3;
+}
+
+.backgroundColorContainer__div {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(122, 122, 122, 0.7);
+    z-index: 2;
+}
