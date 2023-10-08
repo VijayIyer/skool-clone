@@ -12,6 +12,9 @@ import {
 import { responseFormatter } from "@/lib/responseLib";
 import { getLatestOtpForEmail } from "@/lib/otpLib";
 import { dbConnectWrapper } from "@/lib/dbConnectWrapper";
+import generateJwtToken from "@/lib/jwtLib/generateToken";
+import { Model } from "mongoose";
+import User from "@/models/User";
 
 export async function signUpHandler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
@@ -49,7 +52,6 @@ export async function signUpHandler(req: NextApiRequest, res: NextApiResponse) {
           return;
         }
 
-        console.log(`already returned`);
         const { firstName, lastName } = rest;
 
         // FIXME: Replace below code block for generating token with call to method generateToken, which is not yet merged
@@ -60,20 +62,10 @@ export async function signUpHandler(req: NextApiRequest, res: NextApiResponse) {
           email,
           hashedPassword
         );
-        const JWT_SECRET = process.env.JWT_SECRET;
-
-        if (!JWT_SECRET) {
-          throw new Error("JWT_SECRET is not defined in .env.local");
-        }
-
-        const token = jwt.sign(
-          { id: newUser._id.toString(), email: user.email },
-          JWT_SECRET,
-          {
-            expiresIn: "2m",
-          }
-        );
-
+        const token = await generateJwtToken({
+          id: newUser._id,
+          email: newUser.email,
+        });
         res.status(201).json(
           responseFormatter(true, {
             message: `New user with email ${user.email} signed up!`,
@@ -88,7 +80,7 @@ export async function signUpHandler(req: NextApiRequest, res: NextApiResponse) {
           })
         );
         return res;
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error during sign-up:", error.message);
         return res
           .status(500)
