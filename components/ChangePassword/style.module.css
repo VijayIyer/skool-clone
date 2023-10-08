@@ -1,13 +1,14 @@
 .changePasswordContainer {
-  display: flex;
-  padding: 2em;
-  flex-direction: column;
-  gap: 1em;
   box-shadow: none;
+  border-radius: 10px;
+  border: 1px solid rgb(228, 228, 228);
+  width: 100%;
+  padding: 2em;
+  overflow: hidden;
 }
+
 .changePasswordButton {
   padding: 1em 2em;
-  background-color: #e4e4e4;
   font-size: 0.875rem;
   font-weight: bold;
   font-style: normal;
@@ -16,10 +17,12 @@
   box-shadow: none;
 }
 .changePasswordButtonLabel {
-  width: 100%;
-  display: inherit;
-  align-items: inherit;
-  justify-content: inherit;
+  margin: 0px;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 1.5;
 }
 .passwordFieldsContainer {
   margin-bottom: 2em;
@@ -28,8 +31,14 @@
   gap: 1em;
 }
 .header {
+  color: #202124;
+  margin: 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: bold;
+  font-style: normal;
   font-size: 20px;
+  line-height: 1.5;
+  margin-bottom: 32px;
 }
 .headerContainer {
   margin-bottom: 2em;

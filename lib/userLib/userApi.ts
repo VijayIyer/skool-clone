@@ -1,4 +1,12 @@
-import User from '../../models/User';
+import User from "../../models/User";
+type UserType = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  passwordChangedAt: string;
+};
 
 //User CRUD function below can only be invoke when server connects with database, such as code like  "await dbConnect();" from lib/dbConnect.ts is invoked
 export async function createUser(
@@ -34,7 +42,7 @@ export async function findUserByEmail(email: String) {
     const user = await User.findOne({ email }).exec();
     return user;
   } catch (error) {
-    console.log('database error:unable to find this user \n', error);
+    console.log("database error:unable to find this user \n", error);
     throw error;
   }
 }
@@ -46,7 +54,32 @@ export async function deleteUsers() {
     const result = await User.deleteMany({});
     return result;
   } catch (error) {
-    console.error('Error deleting users:', error);
+    console.error("Error deleting users:", error);
+    throw error;
+  }
+}
+export async function getUserById(userId: string | null): Promise<UserType> {
+  try {
+    const user = await User.findById(userId);
+    if (!user) throw Error("Error finding user");
+    return {
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      password: user.password,
+      passwordChangedAt: user.passwordChangedAt,
+    };
+  } catch (error) {
+    throw error;
+  }
+}
+export async function editUser(id: string, updatedUser: UserType) {
+  const { passwordChangedAt, ...updatedUserDetails } = updatedUser;
+  try {
+    const result = await User.findOneAndUpdate({ _id: id }, updatedUserDetails);
+    return result;
+  } catch (error) {
     throw error;
   }
 }
