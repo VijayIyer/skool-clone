@@ -8,6 +8,7 @@ import {
   isUserEmailTaken,
   validateUserSignUpInput,
 } from "../../../../lib/userLib";
+import { generateJwtToken } from "../../../../lib/jwtLib";
 import { getLatestOtpForEmail } from "../../../../lib/otpLib";
 
 jest.mock("../../../../lib/userLib", () => {
@@ -38,6 +39,13 @@ jest.mock("jsonwebtoken", () => {
     default: {
       sign: jest.fn(),
     },
+  };
+});
+jest.mock("../../../../lib/jwtLib", () => {
+  const original = jest.requireActual("../../../../lib/jwtLib");
+  return {
+    ...original,
+    generateJwtToken: jest.fn(),
   };
 });
 jest.mock("cookie", () => {
@@ -165,9 +173,8 @@ describe("POST /api/signup", () => {
     getLatestOtpForEmail.mockResolvedValueOnce(123456);
     generateHashPassword.mockResolvedValueOnce("password");
     createUser.mockResolvedValueOnce({ _id: 1 });
+    generateJwtToken.mockReturnValueOnce("token");
 
-    jwt.sign.mockReturnValueOnce("token");
-    serialize.mockReturnValueOnce({});
     const userData = {
       _id: 1,
       firstName: "FirstName",
@@ -190,8 +197,8 @@ describe("POST /api/signup", () => {
     expect(validateUserSignUpInput).toBeCalledTimes(1);
     expect(getLatestOtpForEmail).toBeCalledTimes(1);
     expect(getLatestOtpForEmail).toBeCalledWith("email@gmail.com");
-    expect(jwt.sign).toBeCalledTimes(1);
-    expect(jwt.sign).toReturnWith("token");
+    expect(generateJwtToken).toBeCalledTimes(1);
+    expect(generateJwtToken).toReturnWith("token");
     expect(res.statusCode).toEqual(201);
     const responseBody = res._getJSONData();
     expect(responseBody.success).toBe(true);
