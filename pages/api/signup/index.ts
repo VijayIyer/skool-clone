@@ -54,7 +54,6 @@ export async function signUpHandler(req: NextApiRequest, res: NextApiResponse) {
 
         const { firstName, lastName } = rest;
 
-        // FIXME: Replace below code block for generating token with call to method generateToken, which is not yet merged
         const hashedPassword = await generateHashPassword(user.password);
         const newUser = await createUser(
           firstName,
@@ -62,21 +61,21 @@ export async function signUpHandler(req: NextApiRequest, res: NextApiResponse) {
           email,
           hashedPassword
         );
-        const token = await generateJwtToken({
+        const token = generateJwtToken({
           id: newUser._id,
           email: newUser.email,
         });
-        res.status(201).json(
-          responseFormatter(true, {
-            message: `New user with email ${user.email} signed up!`,
-          })
-        );
         res.setHeader(
           "Set-Cookie",
           serialize("jwt", token, {
             httpOnly: true,
             secure: true,
             sameSite: "strict",
+          })
+        );
+        res.status(201).json(
+          responseFormatter(true, {
+            message: `New user with email ${user.email} signed up!`,
           })
         );
         return res;
