@@ -1,21 +1,20 @@
+import styles from "./style.module.css";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { styled } from "@mui/material";
-import { Dispatch, useState } from "react";
+import { useState } from "react";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import { Grid, Link, Typography } from "@mui/material";
-import { SubmitHandler } from "react-hook-form";
-import { SignupFormInput } from ".";
+import { Grid, Link, Typography, FormHelperText } from "@mui/material";
+import { SubmitHandler, useController, useForm } from "react-hook-form";
+import { SignupFormInput, VerificationFormInput } from "./signUpFormInputTypes";
 type SignUpVerificationFormProps = {
   email: string;
-  verify: SubmitHandler<SignupFormInput>;
+  isInvalid: boolean;
+  signUp: SubmitHandler<VerificationFormInput>;
   setAwaitingVerification: any;
-  resend: any;
+  resend: SubmitHandler<VerificationFormInput>;
 };
+
 const StyledLink = styled(Link)({
   "& .MuiLink-root:hover": {
     textDecoration: "decoration",
@@ -23,12 +22,24 @@ const StyledLink = styled(Link)({
 });
 const SignUpVerificationForm = ({
   email,
-  verify,
+  signUp,
+  isInvalid,
   resend,
   setAwaitingVerification,
 }: SignUpVerificationFormProps) => {
   const [open, setOpen] = useState<boolean>(true);
-
+  const { control, handleSubmit } = useForm<VerificationFormInput>({
+    defaultValues: {
+      otp: "",
+    },
+  });
+  const { field: otp, fieldState: otpState } = useController({
+    name: "otp",
+    control,
+    rules: {
+      required: true,
+    },
+  });
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -38,7 +49,7 @@ const SignUpVerificationForm = ({
   };
   return (
     <Dialog open={open} onClose={handleClose}>
-      <form>
+      <form onSubmit={handleSubmit(signUp)}>
         <Grid
           container
           flexDirection={"column"}
@@ -75,18 +86,30 @@ const SignUpVerificationForm = ({
               autoFocus
               id='otp'
               label='Verification code'
-              type='email'
               fullWidth
               variant='outlined'
               sx={{
                 marginBottom: "1em",
               }}
+              inputRef={otp.ref}
+              name={otp.name}
+              value={otp.value}
+              onChange={otp.onChange}
               InputLabelProps={{
                 sx: {
                   border: "none",
                 },
               }}
             />
+            {isInvalid && (
+              <FormHelperText
+                id='otp-error-message'
+                error={isInvalid}
+                className={styles.signup_error}
+              >
+                Invalid code
+              </FormHelperText>
+            )}
           </Grid>
           <Grid item>
             <Button
@@ -97,10 +120,7 @@ const SignUpVerificationForm = ({
                 marginBottom: "1em 1em",
                 borderRadius: "4px",
               }}
-              onClick={(e) => {
-                e.preventDefault();
-                setAwaitingVerification(false);
-              }}
+              type='submit'
             >
               Submit
             </Button>
@@ -113,22 +133,21 @@ const SignUpVerificationForm = ({
             >
               Didn&#39;t get the email?{" "}
               <span>
-                <Link
+                <StyledLink
                   underline='hover'
                   color={"secondary"}
                   href='#'
                   onClick={(e) => {
                     e.preventDefault();
-                    resend();
+                    handleSubmit(signUp);
                   }}
                 >
                   Resend it
-                </Link>
+                </StyledLink>
               </span>
-              <span> </span>
-              <span>or </span>
+              <span> or </span>
               <span>
-                <Link
+                <StyledLink
                   underline='hover'
                   color={"secondary"}
                   href='#'
@@ -138,7 +157,7 @@ const SignUpVerificationForm = ({
                   }}
                 >
                   Use a different email
-                </Link>
+                </StyledLink>
               </span>
             </Typography>
           </Grid>
@@ -146,5 +165,8 @@ const SignUpVerificationForm = ({
       </form>
     </Dialog>
   );
+};
+SignUpVerificationForm.defaultProps = {
+  isInvalid: true,
 };
 export default SignUpVerificationForm;
