@@ -1,0 +1,12 @@
+.settingsPageContentContainer {
+  margin-top: 6em;
+  flex-grow: 1;
+  min-width: 768px;
+  max-width: 1075px;
+}
+.settingsPageContent {
+  background-color: #f8f7f5;
+  padding-left: 2em;
+}
+.navigationPanel {
+}
