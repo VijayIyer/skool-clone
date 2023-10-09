@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useRef, useState } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
 import skoolLogo from "/public/skool.svg";
@@ -28,6 +28,10 @@ export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [otpFormError, setOtpFormError] = useState<boolean>(false);
   const [statusText, setStatusText] = useState("");
+  const firstNameRef = useRef<string>("");
+  const lastNameRef = useRef<string>("");
+  const emailRef = useRef<string>("");
+  const passwordRef = useRef<string>("");
   const router = useRouter();
 
   const handleClickShowPassword = (event: MouseEvent<HTMLButtonElement>) => {
@@ -37,10 +41,10 @@ export default function SignUpForm() {
 
   const { control, handleSubmit } = useForm<SignupFormInput>({
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
+      firstName: firstNameRef.current,
+      lastName: lastNameRef.current,
+      email: emailRef.current,
+      password: passwordRef.current,
     },
   });
 
@@ -126,7 +130,18 @@ export default function SignUpForm() {
       },
     },
   });
-
+  useEffect(() => {
+    firstNameRef.current = firstName.value;
+  }, [firstName]);
+  useEffect(() => {
+    lastNameRef.current = lastName.value;
+  }, [lastName]);
+  useEffect(() => {
+    emailRef.current = email.value;
+  }, [email]);
+  useEffect(() => {
+    passwordRef.current = password.value;
+  }, [password]);
   if (awaitingVerification) {
     return (
       <SignUpVerificationForm
@@ -164,6 +179,7 @@ export default function SignUpForm() {
                 id='first_name'
                 data-testid='input-component'
                 onChange={firstName.onChange}
+                value={firstName.value}
                 name={firstName.name}
                 inputRef={firstName.ref}
                 error={firstNameState.invalid}
@@ -193,6 +209,7 @@ export default function SignUpForm() {
                 data-testid='input-component'
                 onChange={lastName.onChange}
                 name={lastName.name}
+                value={lastName.value}
                 inputRef={lastName.ref}
                 error={lastNameState.invalid}
                 inputProps={{
@@ -221,6 +238,7 @@ export default function SignUpForm() {
                 onChange={email.onChange}
                 name={email.name}
                 inputRef={email.ref}
+                value={email.value}
                 error={emailState.invalid}
                 inputProps={{
                   "aria-errormessage": "email-error-message",
@@ -249,6 +267,7 @@ export default function SignUpForm() {
                 name={password.name}
                 inputRef={password.ref}
                 error={passwordState.invalid}
+                value={password.value}
                 inputProps={{
                   "aria-errormessage": "password-error-message",
                 }}
