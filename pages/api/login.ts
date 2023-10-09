@@ -53,6 +53,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
           })
         );
         res.status(200).json(responseFormatter(true, user._id));
+
         return res;
       } catch (error) {
         console.error(error);
