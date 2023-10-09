@@ -1,11 +1,20 @@
-import { Button, TextField, Link } from "@mui/material";
+import { useState } from "react";
+import { Button, TextField, Link, FormHelperText } from "@mui/material";
 import NextLink from "next/link";
 import styles from "./style.module.css";
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, useForm, SubmitHandler } from "react-hook-form";
 import Image from "next/image";
 import skoolLogo from "@/public/skool.svg";
+import { useRouter } from "next/router";
+
+// type LoginFormInput = {
+//   email: string;
+//   password: string;
+// };
 
 export default function LogInForm() {
+  const router = useRouter();
+
   const {
     register,
     reset,
@@ -16,10 +25,36 @@ export default function LogInForm() {
   const emailErr = errors.email != undefined;
   const passwordErr = errors.password != undefined;
 
-  const customeSubmit = (data: FieldValues) => {
-    console.log(data);
+  const [errorMessage, setErrorMessage] = useState("");
 
+  const onSubmit: SubmitHandler<FieldValues> = async (data, e) => {
     // validate with the server
+    e?.preventDefault();
+    setErrorMessage("");
+    let response, responseData;
+    try {
+      response = await fetch("/api/login", {
+        method: "POST",
+        mode: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      responseData = await response.json();
+    } catch (err) {
+      setErrorMessage(`Error: ${err} Please try again.`);
+    } finally {
+      if (
+        response?.ok === true &&
+        responseData.success === true &&
+        responseData.data.length > 0
+      ) {
+        router.push(`/@${responseData.data}`);
+      } else {
+        setErrorMessage(`${responseData.errorMessage}. Please try again.`);
+      }
+    }
 
     // reset the form
     reset();
@@ -41,7 +76,7 @@ export default function LogInForm() {
           Log in to Skool
         </p>
       </div>
-      <form className={styles.form} onSubmit={handleSubmit(customeSubmit)}>
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <TextField
           label="Email"
           type="email"
@@ -84,6 +119,11 @@ export default function LogInForm() {
         >
           LOG IN
         </Button>
+        {!!errorMessage && (
+          <FormHelperText error={true} className={styles.signup_error}>
+            {errorMessage}
+          </FormHelperText>
+        )}
       </form>
 
       <p style={{ textAlign: "center" }}>
