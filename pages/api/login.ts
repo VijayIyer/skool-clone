@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { findUserByEmail } from "@/lib/userLib/userApi";
 import { responseFormatter } from "@/lib/responseLib";
 import { serialize } from "cookie";
+import generateJwtToken from "@/lib/jwtLib/generateToken";
 
 export default async function login(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
@@ -29,19 +30,11 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
             .json(responseFormatter(false, null, "Invalid credentials"));
         }
 
-        const JWT_SECRET = process.env.JWT_SECRET;
+        const token = generateJwtToken({
+          id: user._id.toString(),
+          email: user.email,
+        });
 
-        if (!JWT_SECRET) {
-          throw new Error("JWT_SECRET is not defined in .env.local");
-        }
-
-        const token = jwt.sign(
-          { id: user._id.toString(), email: user.email },
-          JWT_SECRET,
-          {
-            expiresIn: "2m",
-          }
-        );
         res.setHeader(
           "Set-Cookie",
           serialize("jwt", token, {
