@@ -9,7 +9,7 @@ export default function generateJwtToken({ id, email }: UserAuthDetails) {
     throw new Error(
       "Error in token generation: unable to read JWT_SECRET environment variable"
     );
-  return jwt.sign({ id: id.toString(), email: email }, JWT_SECRET, {
+  return jwt.sign({ id: id.toString(), email: email, iat: Date.now() }, JWT_SECRET, {
     expiresIn: "2m",
   });
 }
