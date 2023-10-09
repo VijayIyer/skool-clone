@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test:client": "jest --config jest.config.client.js",
+    "test:client": "jest --config jest.config.client.js ",
     "test:server": "jest --config jest.config.server.js --watch"
   },
   "dependencies": {
@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.8",
     "@mui/material": "^5.14.5",
+    "@mui/x-charts": "^6.0.0-alpha.11",
     "@types/node": "20.5.3",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
@@ -27,6 +28,7 @@
     "eslint-config-next": "13.4.19",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "mongodb-memory-server": "^8.15.1",
     "mongoose": "^7.4.4",
     "next": "13.4.19",
@@ -44,6 +46,7 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/cookie": "^0.5.2",
+    "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^29.5.4",
     "@types/jsonwebtoken": "^9.0.3",
     "@types/uuid": "^9.0.2",
