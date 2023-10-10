@@ -23,12 +23,15 @@ export async function generateOtpService(
       body: JSON.stringify(data),
     });
     if (response?.ok === true) return { success: true, data: response.json() };
-    else if (response?.status === 400)
+    else if (response?.status === 400) {
+      const responseData = await response.json();
       return {
         success: false,
-        errorMessage: `${response?.statusText} Please try again.`,
+        errorMessage: responseData?.errorMessage
+          ? responseData.errorMessage
+          : `${response?.statusText} Please try again.`,
       };
-    else
+    } else
       return {
         success: false,
         errorMessage: "Failed to generate otp for submitted data",
