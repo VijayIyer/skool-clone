@@ -39,7 +39,7 @@ export default function SignUpForm() {
     event.preventDefault();
   };
 
-  const { control, handleSubmit } = useForm<SignupFormInput>({
+  const { control, handleSubmit, setError } = useForm<SignupFormInput>({
     defaultValues: {
       firstName: firstNameRef.current,
       lastName: lastNameRef.current,
@@ -70,7 +70,14 @@ export default function SignUpForm() {
     const response = await generateOtpService(data);
     if (response.success) {
       setAwaitingVerification(true);
-    } else setStatusText(`Error: ${response.errorMessage} Please try again.`);
+    } else if (
+      response.errorMessage === `Email already in use. Please try another one`
+    ) {
+      setError("email", {
+        type: `custom`,
+        message: response.errorMessage,
+      });
+    } else setStatusText(response.errorMessage ?? `Error: Please try again`);
   };
   const resendEmail = async (): Promise<boolean> => {
     const signUpData = {

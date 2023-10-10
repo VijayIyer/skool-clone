@@ -1,4 +1,5 @@
 import styles from "./style.module.css";
+import { Dispatch, SetStateAction } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { DialogContent, styled } from "@mui/material";
@@ -6,21 +7,16 @@ import { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import { Grid, Link, Typography, FormHelperText } from "@mui/material";
 import { SubmitHandler, useController, useForm } from "react-hook-form";
-import { SignupFormInput, VerificationFormInput } from "./signUpFormInputTypes";
+import { VerificationFormInput } from "./signUpFormInputTypes";
 import TimedAlertBox from "../common/TimedAlert/TimedAlert";
+import CommonLink from "../common/TimedAlert/Link";
 type SignUpVerificationFormProps = {
   email: string;
   isInvalid: boolean;
   signUp: SubmitHandler<VerificationFormInput>;
-  setAwaitingVerification: any;
+  setAwaitingVerification: Dispatch<SetStateAction<boolean>>;
   resend: () => Promise<boolean>;
 };
-
-const StyledLink = styled(Link)({
-  "& .MuiLink-root:hover": {
-    textDecoration: "decoration",
-  },
-});
 
 const SignUpVerificationForm = ({
   email,
@@ -114,10 +110,10 @@ const SignUpVerificationForm = ({
                     },
                   }}
                 />
-                {isInvalid && (
+                {(isInvalid || otpState.invalid) && !otpState.isDirty && (
                   <FormHelperText
                     id='otp-error-message'
-                    error={isInvalid}
+                    error={(isInvalid || otpState.invalid) && !otpState.isDirty}
                     className={styles.signup_error}
                   >
                     Invalid code
@@ -146,31 +142,23 @@ const SignUpVerificationForm = ({
                 >
                   Didn&#39;t get the email?{" "}
                   <span>
-                    <StyledLink
-                      underline='hover'
-                      color={"secondary"}
-                      href='#'
+                    <CommonLink
+                      text={"Resend it"}
                       onClick={async (e) => {
                         e.preventDefault();
                         if (await resend()) renderEmailResentAlert();
                       }}
-                    >
-                      Resend it
-                    </StyledLink>
+                    />
                   </span>
                   <span> or </span>
                   <span>
-                    <StyledLink
-                      underline='hover'
-                      color={"secondary"}
-                      href='#'
+                    <CommonLink
+                      text={`Use a different email`}
                       onClick={(e) => {
                         e.preventDefault();
                         setAwaitingVerification(false);
                       }}
-                    >
-                      Use a different email
-                    </StyledLink>
+                    />
                   </span>
                 </Typography>
               </Grid>
