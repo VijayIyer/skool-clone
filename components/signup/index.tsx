@@ -59,7 +59,6 @@ export default function SignUpForm() {
       lastName: lastName.value,
       password: password.value,
     };
-    console.log(signUpData);
     const response = await signUpService(signUpData);
     if (response.success) {
       /** perform callback or checking of token */
@@ -68,7 +67,6 @@ export default function SignUpForm() {
   };
   const generateOtp: SubmitHandler<SignupFormInput> = async (data, e) => {
     e?.preventDefault();
-    console.log(JSON.stringify(data));
     const response = await generateOtpService(data);
     if (response.success) {
       setAwaitingVerification(true);
