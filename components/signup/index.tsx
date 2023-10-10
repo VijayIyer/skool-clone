@@ -70,8 +70,20 @@ export default function SignUpForm() {
     e?.preventDefault();
     console.log(JSON.stringify(data));
     const response = await generateOtpService(data);
-    if (response.success) setAwaitingVerification(true);
-    else setStatusText(`Error: ${response.errorMessage} Please try again.`);
+    if (response.success) {
+      setAwaitingVerification(true);
+    } else setStatusText(`Error: ${response.errorMessage} Please try again.`);
+  };
+  const resendEmail = async (): Promise<boolean> => {
+    const signUpData = {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      password: password.value,
+    };
+
+    const response = await generateOtpService(signUpData);
+    return response.success;
   };
 
   const { field: firstName, fieldState: firstNameState } = useController({
@@ -148,7 +160,7 @@ export default function SignUpForm() {
         setAwaitingVerification={setAwaitingVerification}
         isInvalid={otpFormError}
         signUp={signUp}
-        resend={signUp}
+        resend={resendEmail}
         email={email.value}
       />
     );
