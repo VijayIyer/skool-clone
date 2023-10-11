@@ -1,5 +1,8 @@
-import validator from 'validator';
-
+import validator from "validator";
+type ValidationResult = {
+  success: boolean;
+  message?: string;
+};
 export function validateUserSignUpInput({
   firstName,
   lastName,
@@ -15,7 +18,7 @@ export function validateUserSignUpInput({
     return {
       success: false,
       message:
-        'Validation error: First Name must be only an alphabetical string and length should be less or equal 20 charachters',
+        "Validation error: First Name must be only an alphabetical string and length should be less or equal 20 charachters",
     };
   }
 
@@ -23,21 +26,21 @@ export function validateUserSignUpInput({
     return {
       success: false,
       message:
-        'Validation error: Last Name must be only an alphabetical string and length should be less or equal 20 charachters',
+        "Validation error: Last Name must be only an alphabetical string and length should be less or equal 20 charachters",
     };
   }
 
   if (!validateEmail(email)) {
     return {
       success: false,
-      message: 'Validation error: Invalid email address format',
+      message: "Validation error: Invalid email address format",
     };
   }
 
   if (!validatePassword(password)) {
     return {
       success: false,
-      message: 'Validation error: Password must be at least 5 characters',
+      message: "Validation error: Password must be at least 5 characters",
     };
   }
 
@@ -61,4 +64,24 @@ export function validateName(name: string) {
   }
   const regName = /^[A-Za-z]+$/;
   return regName.test(name);
+}
+
+export function validateGenerateOtpInput({
+  email,
+}: {
+  email: string;
+}): ValidationResult {
+  if (!email) {
+    return {
+      success: false,
+      message: "Validation error: Email field cannot be empty",
+    };
+  }
+  if (!validateEmail(email)) {
+    return {
+      success: false,
+      message: "Validation error: Invalid email address format",
+    };
+  }
+  return { success: true };
 }

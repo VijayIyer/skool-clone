@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useRef, useState } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
 import skoolLogo from "/public/skool.svg";
@@ -14,64 +14,83 @@ import {
   Typography,
   FormHelperText,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { SubmitHandler, useController, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-
-type SignupFormInput = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-};
+import SignUpVerificationForm from "./signUpVerificationForm";
+import { SignupFormInput, VerificationFormInput } from "./signUpFormInputTypes";
+import { generateOtpService } from "@/lib/signUpService/generateOtp";
+import { signUpService } from "@/lib/signUpService/signUp";
 
 export default function SignUpForm() {
+  const [awaitingVerification, setAwaitingVerification] =
+    useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [otpFormError, setOtpFormError] = useState<boolean>(false);
   const [statusText, setStatusText] = useState("");
+  const firstNameRef = useRef<string>("");
+  const lastNameRef = useRef<string>("");
+  const emailRef = useRef<string>("");
+  const passwordRef = useRef<string>("");
   const router = useRouter();
 
   const handleClickShowPassword = (event: MouseEvent<HTMLButtonElement>) => {
-    setShowPassword(show => !show);
+    setShowPassword((show) => !show);
     event.preventDefault();
   };
 
-  const { control, handleSubmit } = useForm<SignupFormInput>({
+  const { control, handleSubmit, setError } = useForm<SignupFormInput>({
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
+      firstName: firstNameRef.current,
+      lastName: lastNameRef.current,
+      email: emailRef.current,
+      password: passwordRef.current,
     },
   });
 
   const allowedCharRegex = /^[A-Za-z0-9 ]+$/;
 
-  const onSubmit: SubmitHandler<SignupFormInput> = async (data, e) => {
+  const signUp: SubmitHandler<VerificationFormInput> = async (data, e) => {
     e?.preventDefault();
-    setStatusText("");
-    let response, responseData;
-    try {
-      response = await fetch("/api/user-signup", {
-        method: "POST",
-        mode: "same-origin",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+    const signUpData = {
+      ...data,
+      email: email.value,
+      firstName: firstName.value,
+      lastName: lastName.value,
+      password: password.value,
+    };
+    const response = await signUpService(signUpData);
+    if (response.success) {
+      /** perform callback or checking of token */
+      router.push("/");
+    } else setOtpFormError(true);
+  };
+  const generateOtp: SubmitHandler<SignupFormInput> = async (data, e) => {
+    e?.preventDefault();
+
+    const response = await generateOtpService(data);
+    if (response.success) {
+      setAwaitingVerification(true);
+    } else if (
+      response.errorMessage === `Email already in use. Please try another one`
+    ) {
+      setError("email", {
+        type: `custom`,
+        message: response.errorMessage,
       });
-      responseData = await response.json()
-      console.log(response)
-      console.log(responseData)
-    } catch (err) {
-      setStatusText(`Error: ${err} Please try again.`);
-    } finally {
-      if (response?.ok === true && responseData.success === true) {
-        router.push("/login");
-      } else {
-        setStatusText(`${responseData.errorMessage}. Please try again.`);
-      }
-    }
+    } else setStatusText(response.errorMessage ?? `Error: Please try again`);
+  };
+  const resendEmail = async (): Promise<boolean> => {
+    const signUpData = {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      password: password.value,
+    };
+
+    const response = await generateOtpService(signUpData);
+    return response.success;
+
   };
 
   const { field: firstName, fieldState: firstNameState } = useController({
@@ -130,46 +149,69 @@ export default function SignUpForm() {
       },
     },
   });
-
+  useEffect(() => {
+    firstNameRef.current = firstName.value;
+  }, [firstName]);
+  useEffect(() => {
+    lastNameRef.current = lastName.value;
+  }, [lastName]);
+  useEffect(() => {
+    emailRef.current = email.value;
+  }, [email]);
+  useEffect(() => {
+    passwordRef.current = password.value;
+  }, [password]);
+  if (awaitingVerification) {
+    return (
+      <SignUpVerificationForm
+        setAwaitingVerification={setAwaitingVerification}
+        isInvalid={otpFormError}
+        signUp={signUp}
+        resend={resendEmail}
+        email={email.value}
+      />
+    );
+  }
   return (
     <div className={styles.signup_paper}>
       <div className={styles.signup_body}>
-        <NextLink href="/">
+        <NextLink href='/'>
           <Image
             src={skoolLogo}
             width={72}
-            alt="logo of skool"
+            alt='logo of skool'
             className={styles.signup_logo}
           />
         </NextLink>
         <div className={styles.signup_title}>Create your Skool account</div>
         <form
-          data-testid="sign-up-dialog-sign-up-content"
+          data-testid='sign-up-dialog-sign-up-content'
           className={styles.signup_form}
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(generateOtp)}
         >
           <div className={styles.signup_inputs}>
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel htmlFor="first_name" error={firstNameState.invalid}>
+            <FormControl variant='outlined' fullWidth>
+              <InputLabel htmlFor='first_name' error={firstNameState.invalid}>
                 First name
               </InputLabel>
               <OutlinedInput
-                id="first_name"
-                data-testid="input-component"
+                id='first_name'
+                data-testid='input-component'
                 onChange={firstName.onChange}
+                value={firstName.value}
                 name={firstName.name}
                 inputRef={firstName.ref}
                 error={firstNameState.invalid}
                 inputProps={{
                   "aria-errormessage": "first-name-error-message",
                 }}
-                label="First name"
+                label='First name'
                 fullWidth
                 autoFocus
               />
               {firstNameState.error && (
                 <FormHelperText
-                  id="first-name-error-message"
+                  id='first-name-error-message'
                   error={firstNameState.invalid}
                   className={styles.signup_error}
                 >
@@ -177,26 +219,27 @@ export default function SignUpForm() {
                 </FormHelperText>
               )}
             </FormControl>
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel htmlFor="last_name" error={lastNameState.invalid}>
+            <FormControl variant='outlined' fullWidth>
+              <InputLabel htmlFor='last_name' error={lastNameState.invalid}>
                 Last name
               </InputLabel>
               <OutlinedInput
-                id="last_name"
-                data-testid="input-component"
+                id='last_name'
+                data-testid='input-component'
                 onChange={lastName.onChange}
                 name={lastName.name}
+                value={lastName.value}
                 inputRef={lastName.ref}
                 error={lastNameState.invalid}
                 inputProps={{
                   "aria-errormessage": "last-name-error-message",
                 }}
-                label="Last name"
+                label='Last name'
                 fullWidth
               />
               {lastNameState.error && (
                 <FormHelperText
-                  id="last-name-error-message"
+                  id='last-name-error-message'
                   error={lastNameState.invalid}
                   className={styles.signup_error}
                 >
@@ -204,26 +247,27 @@ export default function SignUpForm() {
                 </FormHelperText>
               )}
             </FormControl>
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel htmlFor="email" error={emailState.invalid}>
+            <FormControl variant='outlined' fullWidth>
+              <InputLabel htmlFor='email' error={emailState.invalid}>
                 Email
               </InputLabel>
               <OutlinedInput
-                id="email"
-                data-testid="input-component"
+                id='email'
+                data-testid='input-component'
                 onChange={email.onChange}
                 name={email.name}
                 inputRef={email.ref}
+                value={email.value}
                 error={emailState.invalid}
                 inputProps={{
                   "aria-errormessage": "email-error-message",
                 }}
                 fullWidth
-                label="Email"
+                label='Email'
               />
               {emailState.error && (
                 <FormHelperText
-                  id="email-error-message"
+                  id='email-error-message'
                   error={emailState.invalid}
                   className={styles.signup_error}
                 >
@@ -231,17 +275,18 @@ export default function SignUpForm() {
                 </FormHelperText>
               )}
             </FormControl>
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel htmlFor="password" error={passwordState.invalid}>
+            <FormControl variant='outlined' fullWidth>
+              <InputLabel htmlFor='password' error={passwordState.invalid}>
                 Password
               </InputLabel>
               <OutlinedInput
-                id="password"
-                data-testid="input-component"
+                id='password'
+                data-testid='input-component'
                 onChange={password.onChange}
                 name={password.name}
                 inputRef={password.ref}
                 error={passwordState.invalid}
+                value={password.value}
                 inputProps={{
                   "aria-errormessage": "password-error-message",
                 }}
@@ -249,23 +294,23 @@ export default function SignUpForm() {
                 type={showPassword ? "text" : "password"}
                 endAdornment={
                   password.value.length > 0 && (
-                    <InputAdornment position="end">
+                    <InputAdornment position='end'>
                       <IconButton
-                        data-testid="toggle-visibility"
-                        aria-label="toggle password visibility"
+                        data-testid='toggle-visibility'
+                        aria-label='toggle password visibility'
                         onClick={handleClickShowPassword}
-                        edge="end"
+                        edge='end'
                       >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
                   )
                 }
-                label="Password"
+                label='Password'
               />
               {passwordState.error && (
                 <FormHelperText
-                  id="password-error-message"
+                  id='password-error-message'
                   error={passwordState.invalid}
                   className={styles.signup_error}
                 >
@@ -275,16 +320,16 @@ export default function SignUpForm() {
             </FormControl>
           </div>
           <Button
-            data-testid="sign-up-btn"
-            type="submit"
-            variant="contained"
+            data-testid='sign-up-btn'
+            type='submit'
+            variant='contained'
             disabled={
               firstName.value.length === 0 ||
               lastName.value.length === 0 ||
               email.value.length === 0 ||
               password.value.length === 0
             }
-            size="large"
+            size='large'
             sx={{ marginBottom: "1rem" }}
             fullWidth
           >
@@ -298,16 +343,16 @@ export default function SignUpForm() {
           <Typography className={styles.signup_agreement}>
             <span>By signing up, you accept our </span>
             <NextLink
-              href="https://www.skool.com/legal?t=terms"
-              color="inherit"
+              href='https://www.skool.com/legal?t=terms'
+              color='inherit'
               className={styles.signup_legal}
             >
               terms
             </NextLink>
             <span> and </span>
             <NextLink
-              href="https://www.skool.com/legal?t=privacy"
-              color="inherit"
+              href='https://www.skool.com/legal?t=privacy'
+              color='inherit'
               className={styles.signup_legal}
             >
               privacy
@@ -317,7 +362,7 @@ export default function SignUpForm() {
         </form>
         <Typography>
           Already have an account?{" "}
-          <Link component={NextLink} href="/login">
+          <Link component={NextLink} href='/login'>
             Log in
           </Link>
         </Typography>

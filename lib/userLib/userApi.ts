@@ -14,7 +14,7 @@ export async function createUser(
   lastName: string,
   email: string,
   password: string
-) {
+): Promise<typeof User> {
   try {
     const newUser = new User({
       firstName,
@@ -22,8 +22,8 @@ export async function createUser(
       email,
       password,
     });
-    const user = await newUser.save();
-    return user;
+    await newUser.save();
+    return newUser;
   } catch (error) {
     throw error;
   }
