@@ -1,10 +1,12 @@
 import { EmailConfig } from "../../enums/EmailConfigEnum";
+import makeOtpEmailBody from "../emailLib/makeOtpEmailBody";
 import { mailSender } from "../mailSender";
 import { validateEmail } from "../userLib";
 
 export async function sendOtpEmail(
   otp: string,
-  recieverEmail: string
+  recieverEmail: string,
+  name: string
 ): Promise<{
   success: boolean;
   errorMessage?: string;
@@ -15,11 +17,7 @@ export async function sendOtpEmail(
   try {
     const result = await mailSender(recieverEmail, EmailConfig.GMAIL, {
       subject: `${otp} is your Skool verification code`,
-      content: `
-      <>
-      <h3>Confirm your email address</h3>
-      <p>${otp} is your verification code</p>
-      </>`,
+      content: makeOtpEmailBody(name, recieverEmail, otp),
     });
     return { success: result.success, data: result.data };
   } catch (err) {

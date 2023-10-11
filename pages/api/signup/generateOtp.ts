@@ -40,7 +40,7 @@ export async function createOtpHandler(
           success: boolean;
           errorMessage?: string;
           data?: null;
-        } = await sendOtpEmail(otp.otp, email);
+        } = await sendOtpEmail(otp.otp, email, firstName);
         if (!emailResult.success)
           console.error(
             `Error sending otp verification email to ${email} : ${emailResult?.errorMessage}`

@@ -25,31 +25,32 @@ type EmailContent = {
   subject: string;
   content: string;
 };
+type MailSenderResult = {
+  success: boolean;
+  data?: any;
+  errorMessage?: string;
+};
 const mailSender = async (
   email: string,
   config: EmailConfig,
   { subject, content }: EmailContent
-) => {
-  console.log(
-    process.env.MAIL_HOST,
-    process.env.ADMIN_EMAIL,
-    process.env.ADMIN_APP_SPECIFIC_PASSWORD
-  );
+): Promise<MailSenderResult> => {
   const emailConfig = selectConfig(config);
   try {
     // Create a Transporter to send emails
     const transporter = nodemailer.createTransport(emailConfig);
     // Send emails to users
     const info = await transporter.sendMail({
-      from: process.env.ADMIN_EMAIL,
+      from: `Skool <${process.env.ADMIN_EMAIL}>`,
       to: email,
       subject: subject,
       html: content,
     });
     console.log("Email info: ", info);
-    return info;
+    return { data: { ...info }, success: true };
   } catch (error: any) {
-    console.log(error.message);
+    console.error(error.message);
+    return { success: false, errorMessage: error?.message };
   }
 };
 export { mailSender };
