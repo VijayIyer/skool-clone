@@ -1,22 +1,50 @@
 // utils/mailSender.js
 import nodemailer from "nodemailer";
+import { EmailConfig } from "../enums/EmailConfigEnum";
 
-const mailSender = async (email: string, title: string, body: string) => {
+const gmailOptions = {
+  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.ADMIN_EMAIL,
+    pass: process.env.ADMIN_APP_SPECIFIC_PASSWORD,
+  },
+};
+
+const selectConfig = (configName: EmailConfig) => {
+  switch (configName) {
+    case EmailConfig.GMAIL:
+      return gmailOptions;
+    default:
+      return gmailOptions;
+  }
+};
+type EmailContent = {
+  subject: string;
+  content: string;
+};
+const mailSender = async (
+  email: string,
+  config: EmailConfig,
+  { subject, content }: EmailContent
+) => {
+  console.log(
+    process.env.MAIL_HOST,
+    process.env.ADMIN_EMAIL,
+    process.env.ADMIN_APP_SPECIFIC_PASSWORD
+  );
+  const emailConfig = selectConfig(config);
   try {
     // Create a Transporter to send emails
-    let transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
-      auth: {
-        user: process.env.ADMIN_EMAIL,
-        pass: process.env.ADMIN_PASSWORD,
-      },
-    });
+    const transporter = nodemailer.createTransport(emailConfig);
     // Send emails to users
-    let info = await transporter.sendMail({
-      from: "www.sandeepdev.me - Sandeep Singh",
+    const info = await transporter.sendMail({
+      from: process.env.ADMIN_EMAIL,
       to: email,
-      subject: title,
-      html: body,
+      subject: subject,
+      html: content,
     });
     console.log("Email info: ", info);
     return info;
@@ -24,4 +52,4 @@ const mailSender = async (email: string, title: string, body: string) => {
     console.log(error.message);
   }
 };
-module.exports = mailSender;
+export { mailSender };

@@ -27,12 +27,16 @@ export async function createOtpHandler(
           return res
             .status(400)
             .json(
-              responseFormatter(false, null, "A user already used this email")
+              responseFormatter(
+                false,
+                null,
+                "Email already in use. Please try another one"
+              )
             );
         }
 
         const otp = await createOtp(email);
-        // const emailResult = await sendOtpEmail(user.email);
+        const emailResult = await sendOtpEmail(otp.otp, email);
 
         return res.status(201).json(responseFormatter(true, { id: otp._id }));
       } catch (error) {
