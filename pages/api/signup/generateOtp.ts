@@ -22,23 +22,30 @@ export async function createOtpHandler(
             .status(400)
             .json(responseFormatter(false, null, validationResult.message));
         }
-        const { email } = req.body;
-        if (await isUserEmailTaken(email)) {
-          return res
-            .status(400)
-            .json(
-              responseFormatter(
-                false,
-                null,
-                "Email already in use. Please try another one"
-              )
-            );
-        }
+        const { email, firstName, lastName } = req.body;
+        // if (await isUserEmailTaken(email)) {
+        //   return res
+        //     .status(400)
+        //     .json(
+        //       responseFormatter(
+        //         false,
+        //         null,
+        //         "Email already in use. Please try another one"
+        //       )
+        //     );
+        // }
 
         const otp = await createOtp(email);
-        const emailResult = await sendOtpEmail(otp.otp, email);
-
-        return res.status(201).json(responseFormatter(true, { id: otp._id }));
+        const emailResult: {
+          success: boolean;
+          errorMessage?: string;
+          data?: null;
+        } = await sendOtpEmail(otp.otp, email);
+        if (!emailResult.success)
+          console.error(
+            `Error sending otp verification email to ${email} : ${emailResult?.errorMessage}`
+          );
+        return res.status(201).json(responseFormatter(true, null));
       } catch (error) {
         console.error("Error during sign-up:", error);
         return res
