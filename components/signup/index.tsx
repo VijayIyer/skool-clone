@@ -67,6 +67,7 @@ export default function SignUpForm() {
   };
   const generateOtp: SubmitHandler<SignupFormInput> = async (data, e) => {
     e?.preventDefault();
+
     const response = await generateOtpService(data);
     if (response.success) {
       setAwaitingVerification(true);
@@ -89,6 +90,7 @@ export default function SignUpForm() {
 
     const response = await generateOtpService(signUpData);
     return response.success;
+
   };
 
   const { field: firstName, fieldState: firstNameState } = useController({
