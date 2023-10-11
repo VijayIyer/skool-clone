@@ -23,17 +23,17 @@ export async function createOtpHandler(
             .json(responseFormatter(false, null, validationResult.message));
         }
         const { email, firstName, lastName } = req.body;
-        // if (await isUserEmailTaken(email)) {
-        //   return res
-        //     .status(400)
-        //     .json(
-        //       responseFormatter(
-        //         false,
-        //         null,
-        //         "Email already in use. Please try another one"
-        //       )
-        //     );
-        // }
+        if (await isUserEmailTaken(email)) {
+          return res
+            .status(400)
+            .json(
+              responseFormatter(
+                false,
+                null,
+                "Email already in use. Please try another one"
+              )
+            );
+        }
 
         const otp = await createOtp(email);
         const emailResult: {
