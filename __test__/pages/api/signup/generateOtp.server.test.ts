@@ -5,7 +5,7 @@ import {
   isUserEmailTaken,
   validateGenerateOtpInput,
 } from "../../../../lib/userLib";
-import { createOtp } from "../../../../lib/otpLib";
+import { createOtp, sendOtpEmail } from "../../../../lib/otpLib";
 import { responseFormatter } from "../../../../lib/responseLib";
 import { dbConnect } from "../../../../lib/mongoClient";
 
@@ -25,6 +25,7 @@ jest.mock("../../../../lib/otpLib", () => {
     ...original,
     __esModule: true,
     createOtp: jest.fn(),
+    sendOtpEmail: jest.fn(),
   };
 });
 jest.mock("../../../../lib/mongoClient", () => {
@@ -73,7 +74,7 @@ describe("POST /api/signup/generateOtp", () => {
     expect(responseBody.success).toBe(false);
     expect(validateGenerateOtpInput).toBeCalledTimes(1);
     expect(isUserEmailTaken).toBeCalledTimes(1);
-    expect(responseBody.errorMessage).toContain("user already used this email");
+    expect(responseBody.errorMessage).toContain("Email already in use");
   });
   it("should return 400 BAD REQUEST response if email is not present in request", async () => {
     isUserEmailTaken.mockResolvedValueOnce(false);
@@ -103,6 +104,7 @@ describe("POST /api/signup/generateOtp", () => {
       success: false,
       message: "Validation Error",
     });
+    sendOtpEmail.mockResolvedValueOnce({ success: true });
     const req = httpMocks.createRequest({
       method: "POST",
       url: "/api/signup/createOtp",
@@ -116,6 +118,7 @@ describe("POST /api/signup/generateOtp", () => {
     // this method should not be called as handler will return from validation step itself
     expect(isUserEmailTaken).toBeCalledTimes(0);
     expect(validateGenerateOtpInput).toBeCalledTimes(1);
+    expect(sendOtpEmail).toBeCalledTimes(0);
     // check if validation error message from mocked method is seen in response
     expect(responseBody.errorMessage).toContain("Validation Error");
   });
@@ -126,6 +129,7 @@ describe("POST /api/signup/generateOtp", () => {
       success: true,
     });
     createOtp.mockResolvedValueOnce({ _id: 1 });
+    sendOtpEmail.mockResolvedValueOnce({ success: true });
     const req = httpMocks.createRequest({
       method: "POST",
       url: "/api/signup/createOtp",
@@ -145,6 +149,7 @@ describe("POST /api/signup/generateOtp", () => {
     expect(createOtp).toBeCalledTimes(1);
     expect(createOtp).toBeCalledWith("email@gmail.com");
     expect(validateGenerateOtpInput).toBeCalledTimes(1);
+    expect(sendOtpEmail).toBeCalledTimes(1);
   });
 
   it("should return 500 response when there is any Error thrown while creating otp", async () => {
@@ -156,6 +161,7 @@ describe("POST /api/signup/generateOtp", () => {
     createOtp.mockImplementation(() => {
       throw new Error("error creating otp in database");
     });
+    sendOtpEmail.mockResolvedValueOnce({ success: true });
     const req = httpMocks.createRequest({
       method: "POST",
       url: "/api/signup/createOtp",
@@ -176,5 +182,6 @@ describe("POST /api/signup/generateOtp", () => {
     expect(responseBody.errorMessage).toContain(
       "Unable to create an account in the database"
     );
+    expect(sendOtpEmail).toBeCalledTimes(0);
   });
 });
