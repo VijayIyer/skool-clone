@@ -42,15 +42,17 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
             expiresIn: "2m",
           }
         );
+
         res.setHeader(
           "Set-Cookie",
           serialize("jwt", token, {
             httpOnly: true,
-            secure: true,
+            secure: true, // turns on only if served over HTTPS
             sameSite: "strict",
+            path: "/"
           })
         );
-        res.status(200).json(responseFormatter(true, null));
+        res.status(200).json(responseFormatter(true, user._id));
 
         return res;
       } catch (error) {
