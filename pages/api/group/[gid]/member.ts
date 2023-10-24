@@ -9,6 +9,9 @@ export default async function groupMemberHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if(!req.headers.userid) return res.status(401).json(responseFormatter(false, null, 'Miss User Auth in the request'));
+  // get user ID from headers
+  const adminID: string = req.headers.userid as string;
 
   // Connect with MongoDB database
   try {
@@ -26,6 +29,10 @@ export default async function groupMemberHandler(
 
   switch (req.method) {
     case 'POST':
+      // check current user has authorization to update members in the group
+      const adminRelation = await UserGroupRelation.findOne({gid: group._id, user: new mongoose.Types.ObjectId(adminID)});
+      if(!adminRelation || adminRelation.role === "member") return res.status(403).json(responseFormatter(false, null, 'No authorization to update members in this group'));
+
       try {
         // manipulate people in this group, should request with user _id
         const userID = new mongoose.Types.ObjectId(req.body.userID);
@@ -34,7 +41,8 @@ export default async function groupMemberHandler(
             group: group._id,
             user: userID
         })) {
-            await UserGroupRelation.findOneAndUpdate({group:group._id, user:userID}, {role})
+            await UserGroupRelation.findOneAndUpdate({group:group._id, user:userID}, {role});
+            return res.status(200).json(responseFormatter(true, {group: group._id, user: userID, role}));
         } else {
             // add user
             const newUserGroupRelation = new UserGroupRelation({
@@ -43,9 +51,10 @@ export default async function groupMemberHandler(
                 role
               });
             await newUserGroupRelation.save();
+            return res.status(201).json(responseFormatter(true, {group: group._id, user: userID, role}));
         }
         
-        return res.status(201).json(responseFormatter(true, {group: group._id, user: userID, role}));
+        
       } catch (error) {
         return res
           .status(500)
@@ -57,7 +66,7 @@ export default async function groupMemberHandler(
             )
           );
       }
-    // find group details
+    // find group member details
     case 'GET':
         try {
             const users = await UserGroupRelation.find({group: group._id});
