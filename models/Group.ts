@@ -20,10 +20,13 @@ const GroupSchema = new Schema({
         type: String,
     },
     description: {
+        type: String,
+    },
+    about: {
         text: {
             type: String,
         },
-        Media: [{
+        media: [{
             type: String,
         }]
     },
@@ -35,13 +38,15 @@ const Group = models.Group || model<Group>("Group", GroupSchema);
 
 
 interface Group extends Document {
-    groupID: string,
-    groupName: string,
-    groupType: string,
-    createdAt: Date, 
-    activeAt?: Date,
-    groupIcon?: string,
-    groupDescription?: string,
+    gid: string,
+    name: string,
+    type: string,
+    icon?: null | string,
+    description?: null|string,
+    about?: {
+        text: null | string,
+        media: null | string[]
+    },
 }
 
 export default Group;
